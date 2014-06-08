@@ -1,5 +1,5 @@
 Civic-Sentiment
 ===============
 
-#PoliticsInRealTime
+#\#PoliticsInRealTime
 Dynamic visualization of civic sentiment on political candidates, issues, and events.
