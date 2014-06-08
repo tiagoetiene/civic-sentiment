@@ -1,0 +1,76 @@
+<head>
+  <title>civic-sentiment</title>
+</head>
+
+<body>
+{{> navigation_bar}}
+{{> jumbotron}}
+{{> main}}
+{{> plot}}
+</body>
+
+<template name="navigation_bar">
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+	<div class="container">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+          		</button>
+          		<a class="navbar-brand" href="#">Civic Sentiment</a>
+        	</div>
+      </div>
+</div>
+</template>
+
+<template name="jumbotron">
+<div class="jumbotron" style="height: 200px; background: url('./resource/inauguration.png')  no-repeat center center;">
+	<div class="container">
+		<h1>#PoliticsInRealTime </h1>
+		<p> Dynamic visualization of civic sentiment on political candidates, issues, and events</p>
+	</div>
+</div>
+</template>
+
+<template name="main">
+<div class="container">
+	<div class="row">
+		<div class="col-md-3"></div>
+		<div class="col-md-6">
+			<form class="navbar-form" role="search">
+				<div class="input-group ">
+					<input type="text" class="form-control large-font" placeholder="Shaheen Brown" name="srch-term" id="srch-term"  style="height:40px;">
+					<div class="input-group-btn">
+						<button class="btn button-default" type="submit" style="height:40px"><i class="glyphicon glyphicon-search"></i></button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="col-md-3"></div>
+	</div>
+	<br>
+	<div class="row">
+		<div class="col-md-3 nopadding">
+			<iframe src="//rjihacks.wayinhub.com/cv-page-jeanne-shaheen?hidenav=true" width="100%" frameborder="0" id="1a0910b2-9765-4caf-8ae0-233ffda2fe1d" scrolling="no"></iframe><script>if (!window.WAYIN) {window.WAYIN = {hubs: []};}window.WAYIN.hubs.push({hub_iframe: document.getElementById('1a0910b2-9765-4caf-8ae0-233ffda2fe1d'),vexpand:true,not_use_outer_iframe: false,allows_dialogs: true,updates_url: false});(function() {if (document.getElementById('wayin-hub-embedd-script')) {return;} else {var script = document.createElement('script');script.id = 'wayin-hub-embedd-script';script.type = 'text/javascript';script.src = '//rjihacks.wayinhub.com/scripts/iframe-onload.js';document.body.appendChild( script );}})();</script>
+		</div>
+		<div class="col-md-3 nopadding">
+			<img src="resource/500px-Jeanne_Shaheen,_official_Senate_photo_portrait,_2009.jpg" class="img-responsive img-fit">
+		</div>
+		<div class="col-md-3"></div>
+		<div class="col-md-3"></div>
+		<!-- <div class="col-md-12">
+			<iframe src="http://rjihacks.wayinhub.com/nh-js-sb?hidenav=true" height="200" width="100%" frameborder="0" id="7bfc616e-9c97-43fe-bb7f-2dc5adb038bf"></iframe><script>if (!window.WAYIN) {window.WAYIN = {hubs: []};}window.WAYIN.hubs.push({hub_iframe: document.getElementById('7bfc616e-9c97-43fe-bb7f-2dc5adb038bf'),vexpand: true,not_use_outer_iframe: false,allows_dialogs: true,updates_url: false});(function() {if (document.getElementById('wayin-hub-embedd-script')) {return;} else {var script = document.createElement('script');script.id = 'wayin-hub-embedd-script';script.type = 'text/javascript';script.src = 'http://rjihacks.wayinhub.com/scripts/iframe-onload.js';document.body.appendChild( script );}})();</script>	
+		</div> -->
+	</div>
+	<hr>
+</div>
+</template>
+
+<template name="plot">
+<div class="container">
+	<div class="row"><div class="col-md-12" id="plot"></div></div>
+	<br>
+</div>
+</template>
