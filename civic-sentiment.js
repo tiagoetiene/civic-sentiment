@@ -12,6 +12,13 @@ ListOfCandidates = [
     candidate_image : "resource/500px-Sbrownofficial.jpg",
     iframe_src : "//rjihacks.wayinhub.com/cv-page-scott-brown?hidenav=true",
     iframe_id : "b556773a-8f12-4213-ac41-a14a0219ccec"
+  },
+  {
+    candidate : "Barack Obama",
+    party : "Democratic",
+    candidate_image : "resource/500px-President_Barack_Obama.jpg",
+    iframe_src : "//rjihacks.wayinhub.com/cv-page-obama?hidenav=true",
+    iframe_id : "2e0c206f-9dee-4edb-aafb-f9d71d12c1dc"
   }
 ]
 
