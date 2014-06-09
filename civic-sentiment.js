@@ -15,6 +15,8 @@ ListOfCandidates = [
 
 if (Meteor.isClient) {
 
+  $(document).ready(function() { $("#e1").select2(); });
+
   Template.twitter_feed.iframe_source = function() {
         return this.iframe_src;
   }
