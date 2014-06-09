@@ -55,20 +55,49 @@
 </div>
 </template>
 
+<template name="twitter_feed">
+	<iframe src="{{iframe_source}}" height="100%" width="100%" frameborder="0" id="{{iframe_id}}" scrolling="no">
+	</iframe>
+	<script>
+		if (!window.WAYIN) {
+			window.WAYIN = {hubs: []};}
+			window.WAYIN.hubs.push(
+				{
+					hub_iframe: document.getElementById('{{iframe_id}}'),
+					vexpand:true,
+					not_use_outer_iframe:false,
+					allows_dialogs:true,
+					updates_url:false
+				});
+			(function() {
+				if (document.getElementById('wayin-hub-embedd-script')) {
+					return;
+				} else {
+					var script = document.createElement('script');
+					script.id = 'wayin-hub-embedd-script';
+					script.type = 'text/javascript';
+					script.src = '//rjihacks.wayinhub.com/scripts/iframe-onload.js';
+					document.body.appendChild( script );
+				}
+			})();
+	</script>		
+</template>
+
+<template name="candidate_image">
+	<img src="{{candidate_image}}" class="img-responsive img-fit">
+</template>
+
+<template name="main">
+<div class="container">
 	<div class="row">
-		<div class="col-md-3 nopadding">
-			<iframe src="//rjihacks.wayinhub.com/cv-page-jeanne-shaheen?hidenav=true" width="100%" frameborder="0" id="1a0910b2-9765-4caf-8ae0-233ffda2fe1d" scrolling="no"></iframe><script>if (!window.WAYIN) {window.WAYIN = {hubs: []};}window.WAYIN.hubs.push({hub_iframe: document.getElementById('1a0910b2-9765-4caf-8ae0-233ffda2fe1d'),vexpand:true,not_use_outer_iframe: false,allows_dialogs: true,updates_url: false});(function() {if (document.getElementById('wayin-hub-embedd-script')) {return;} else {var script = document.createElement('script');script.id = 'wayin-hub-embedd-script';script.type = 'text/javascript';script.src = '//rjihacks.wayinhub.com/scripts/iframe-onload.js';document.body.appendChild( script );}})();</script>
-		</div>
-		<div class="col-md-3 nopadding">
-			<img src="resource/500px-Jeanne_Shaheen,_official_Senate_photo_portrait,_2009.jpg" class="img-responsive img-fit">
-		</div>
-		<div class="col-md-3"></div>
-		<div class="col-md-3"></div>
-		<!-- <div class="col-md-12">
-			<iframe src="http://rjihacks.wayinhub.com/nh-js-sb?hidenav=true" height="200" width="100%" frameborder="0" id="7bfc616e-9c97-43fe-bb7f-2dc5adb038bf"></iframe><script>if (!window.WAYIN) {window.WAYIN = {hubs: []};}window.WAYIN.hubs.push({hub_iframe: document.getElementById('7bfc616e-9c97-43fe-bb7f-2dc5adb038bf'),vexpand: true,not_use_outer_iframe: false,allows_dialogs: true,updates_url: false});(function() {if (document.getElementById('wayin-hub-embedd-script')) {return;} else {var script = document.createElement('script');script.id = 'wayin-hub-embedd-script';script.type = 'text/javascript';script.src = 'http://rjihacks.wayinhub.com/scripts/iframe-onload.js';document.body.appendChild( script );}})();</script>	
-		</div> -->
+		{{#each list_of_candidates}}
+			<div class="col-md-3 nopadding">{{> twitter_feed}}</div>
+			<div class="col-md-3 nopadding">{{> candidate_image}}</div>
+		{{/each}}
 	</div>
-	<hr>
+	<!-- <div class="col-md-12">
+		<iframe src="http://rjihacks.wayinhub.com/nh-js-sb?hidenav=true" height="200" width="100%" frameborder="0" id="7bfc616e-9c97-43fe-bb7f-2dc5adb038bf"></iframe><script>if (!window.WAYIN) {window.WAYIN = {hubs: []};}window.WAYIN.hubs.push({hub_iframe: document.getElementById('7bfc616e-9c97-43fe-bb7f-2dc5adb038bf'),vexpand: true,not_use_outer_iframe: false,allows_dialogs: true,updates_url: false});(function() {if (document.getElementById('wayin-hub-embedd-script')) {return;} else {var script = document.createElement('script');script.id = 'wayin-hub-embedd-script';script.type = 'text/javascript';script.src = 'http://rjihacks.wayinhub.com/scripts/iframe-onload.js';document.body.appendChild( script );}})();</script>	
+	</div> -->
 </div>
 </template>
 
