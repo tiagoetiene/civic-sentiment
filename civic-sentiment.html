@@ -87,8 +87,10 @@
 <div class="container">
 	<div class="row">
 		{{#each list_of_candidates}}
-			<div class="col-md-3 nopadding">{{> twitter_feed}}</div>
-			<div class="col-md-3 nopadding">{{> candidate_image}}</div>
+			<div class="col-md-6">
+				<div class="col-md-6 nopadding">{{> twitter_feed}}</div>
+				<div class="col-md-6 nopadding">{{> candidate_image}}</div>
+			</div>
 		{{/each}}
 	</div>
 </div>
