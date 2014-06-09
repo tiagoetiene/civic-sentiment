@@ -1,4 +1,4 @@
-ListOfCandidates = [
+AllCandidates = [
   {
     candidate : "Jeanne Shaheen",
     party : 'Democratic',
@@ -29,10 +29,28 @@ ListOfCandidates = [
   }
 ]
 
+SelectedCandidates = []
+
 if (Meteor.isClient) {
 
-  $(document).ready(function() { $("#e1").select2(); });
-
+  $(document).ready(function() { 
+    $("#e1").select2({placeholder: "Select a politician"})
+                .on("change", function(e) {
+                  var found = false; 
+                  for(var i = 0; i < SelectedCandidates.length; ++i)
+                    if(e.val.indexOf(SelectedCandidates[i].candidate) != -1)
+                      found = true;
+                  if(found == true)
+                    return
+                  for(var i = 0; i < AllCandidates.length; ++i)
+                    if(e.val.indexOf(AllCandidates[i].candidate) != -1) {
+                      SelectedCandidates.push(AllCandidates[i]);
+                      Session.set('ListOfCandidates', !(Session.get('ListOfCandidates') == true) );
+                      return
+                    }
+                })
+  });
+  
   Template.twitter_feed.iframe_source = function() {
         return this.iframe_src;
   }
@@ -42,13 +60,13 @@ if (Meteor.isClient) {
   }
 
   Template.main.list_of_candidates = function() {
-    return ListOfCandidates;
+    Session.get('ListOfCandidates')
+    return SelectedCandidates;
   }
 
   Template.candidate_image.candidate_image = function() {
     return this.candidate_image;
   }
-
 
   // var size_0 = candidate_0.output.length;
   // for(var repeat = 0; repeat < 100; ++repeat)
