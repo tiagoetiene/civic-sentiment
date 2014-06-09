@@ -19,6 +19,13 @@ ListOfCandidates = [
     candidate_image : "resource/500px-President_Barack_Obama.jpg",
     iframe_src : "//rjihacks.wayinhub.com/cv-page-obama?hidenav=true",
     iframe_id : "2e0c206f-9dee-4edb-aafb-f9d71d12c1dc"
+  },
+  {
+    candidate : "Dilma Rousseff",
+    party : "Partido dos Trabalhadores",
+    candidate_image : "resource/500px-Dilma_Rousseff.jpg",
+    iframe_src : "//rjihacks.wayinhub.com/cv-page-dilma-rousseff?hidenav=true",
+    iframe_id : "63ac1d56-e8fe-4a70-8dfd-f344e7fc2fc7"
   }
 ]
 
