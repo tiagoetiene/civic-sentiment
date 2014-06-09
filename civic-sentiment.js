@@ -1,3 +1,18 @@
+ListOfCandidates = [
+  {
+    candidate : "Jeanne Shaheen",
+    candidate_image : "resource/500px-Jeanne_Shaheen,_official_Senate_photo_portrait,_2009.jpg",
+    iframe_src : "//rjihacks.wayinhub.com/cv-page-jeanne-shaheen?hidenav=true",
+    iframe_id : "1a0910b2-9765-4caf-8ae0-233ffda2fe1d"
+  },
+  {
+    candidate : "Scott Brown",
+    candidate_image : "resource/500px-Sbrownofficial.jpg",
+    iframe_src : "//rjihacks.wayinhub.com/cv-page-scott-brown?hidenav=true",
+    iframe_id : "b556773a-8f12-4213-ac41-a14a0219ccec"
+  }
+]
+
 if (Meteor.isClient) {
   var size_0 = candidate_0.output.length;
   for(var repeat = 0; repeat < 100; ++repeat)
