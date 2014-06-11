@@ -68,6 +68,14 @@ if (Meteor.isClient) {
     return this.candidate_image;
   }
 
+  Template.candidate_image.image_height = function() {
+    Session.get('UpdateImageHeight');
+    var height = $('#'+this.iframe_id).height();
+    if(height == null)
+      return '268px';
+    return height + 'px';
+  }
+
   function tmp_plot() {
     var size_0 = candidate_0.output.length;
     for(var repeat = 0; repeat < 100; ++repeat)
@@ -109,6 +117,10 @@ if (Meteor.isClient) {
     }
 
     setInterval(generateData, 1000)
+
+    // Hack to fix image size. I've been trying to get the Wayin widget to be shaped as a perfect square
+    // but I did not succeed. Thus, this hack will solve the problem.
+    setInterval(function() {Session.set('UpdateImageHeight', !(Session.get('UpdateImageHeight') == true));}, 1000);
   }
   tmp_plot();
 
