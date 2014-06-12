@@ -59,6 +59,10 @@ if (Meteor.isClient) {
         return this.iframe_id;
   }
 
+  Template.candidate_name.name = function() {
+    return this.name;
+  }
+
   Template.main.list_of_candidates = function() {
     Session.get('ListOfCandidates')
     return SelectedCandidates;

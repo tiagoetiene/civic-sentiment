@@ -82,17 +82,34 @@
 </template>
 
 <template name="candidate_image">
-	<img src="{{candidate_image}}" class="img-responsive img-fit"  style="height:{{image_height}}">
+	<div style="overflow:hidden;height:{{image_height}}">
+		<img src="{{candidate_image}}" class="img-responsive img-fit"  style="width=100%;">
+	</div>
+</template>
+
+<template name="candidate_name">
+	<h2 class="text-center"> {{name}} </h2>
 </template>
 
 <template name="main">
 <div class="container">
 	<div class="row">
 		{{#each list_of_candidates}}
-			<div class="col-md-6">
-				<div class="col-md-6 nopadding">{{> twitter_feed}}</div>
-				<div class="col-md-6 nopadding">{{> candidate_image}}</div>
-			</div>
+				<div class="col-md-6">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-12">
+								{{> candidate_name}}	
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="col-md-6 nopadding">{{> twitter_feed}}</div>
+							<div class="col-md-6 nopadding">{{> candidate_image}}</div>
+						</div>
+					</div>
+				</div>
 		{{/each}}
 	</div>
 </div>
