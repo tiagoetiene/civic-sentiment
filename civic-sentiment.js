@@ -1,29 +1,29 @@
 AllCandidates = [
   {
-    candidate : "Jeanne Shaheen",
+    name : "Jeanne Shaheen",
     party : 'Democratic',
-    candidate_image : "resource/500px-Jeanne_Shaheen,_official_Senate_photo_portrait,_2009.jpg",
+    image : "resource/500px-Jeanne_Shaheen,_official_Senate_photo_portrait,_2009.jpg",
     iframe_src : "//rjihacks.wayinhub.com/cv-page-jeanne-shaheen?hidenav=true",
     iframe_id : "1a0910b2-9765-4caf-8ae0-233ffda2fe1d"
   },
   {
-    candidate : "Scott Brown",
+    name : "Scott Brown",
     party : 'Republican',
-    candidate_image : "resource/500px-Sbrownofficial.jpg",
+    image : "resource/500px-Sbrownofficial.jpg",
     iframe_src : "//rjihacks.wayinhub.com/cv-page-scott-brown?hidenav=true",
     iframe_id : "b556773a-8f12-4213-ac41-a14a0219ccec"
   },
   {
-    candidate : "Barack Obama",
+    name : "Barack Obama",
     party : "Democratic",
-    candidate_image : "resource/500px-President_Barack_Obama.jpg",
+    image : "resource/500px-President_Barack_Obama.jpg",
     iframe_src : "//rjihacks.wayinhub.com/cv-page-obama?hidenav=true",
     iframe_id : "2e0c206f-9dee-4edb-aafb-f9d71d12c1dc"
   },
   {
-    candidate : "Dilma Rousseff",
+    name : "Dilma Rousseff",
     party : "Partido dos Trabalhadores",
-    candidate_image : "resource/500px-Dilma_Rousseff.jpg",
+    image : "resource/500px-Dilma_Rousseff.jpg",
     iframe_src : "//rjihacks.wayinhub.com/cv-page-dilma-rousseff?hidenav=true",
     iframe_id : "63ac1d56-e8fe-4a70-8dfd-f344e7fc2fc7"
   }
@@ -38,12 +38,12 @@ if (Meteor.isClient) {
                 .on("change", function(e) {
                   var found = false; 
                   for(var i = 0; i < SelectedCandidates.length; ++i)
-                    if(e.val.indexOf(SelectedCandidates[i].candidate) != -1)
+                    if(e.val.indexOf(SelectedCandidates[i].name) != -1)
                       found = true;
                   if(found == true)
                     return
                   for(var i = 0; i < AllCandidates.length; ++i)
-                    if(e.val.indexOf(AllCandidates[i].candidate) != -1) {
+                    if(e.val.indexOf(AllCandidates[i].name) != -1) {
                       SelectedCandidates.push(AllCandidates[i]);
                       Session.set('ListOfCandidates', !(Session.get('ListOfCandidates') == true) );
                       return
@@ -65,7 +65,7 @@ if (Meteor.isClient) {
   }
 
   Template.candidate_image.candidate_image = function() {
-    return this.candidate_image;
+    return this.image;
   }
 
   Template.candidate_image.image_height = function() {
