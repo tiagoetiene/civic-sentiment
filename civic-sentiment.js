@@ -26,7 +26,14 @@ AllCandidates = [
     image : "resource/500px-Dilma_Rousseff.jpg",
     iframe_src : "//rjihacks.wayinhub.com/cv-page-dilma-rousseff?hidenav=true",
     iframe_id : "63ac1d56-e8fe-4a70-8dfd-f344e7fc2fc7"
-  }
+  },
+  {
+    name : "Eric Cantor",
+    party : "Republican",
+    image : "resource/500px-Eric_Cantor,_official_113th_Congress_photo_portrait.jpg",
+    iframe_src : "//rjihacks.wayinhub.com/cv-page-eric-cantor?hidenav=true",
+    iframe_id : "eb7564ba-4e32-46b9-b30f-eef5a85f6727"
+  },
 ]
 
 SelectedCandidates = []
