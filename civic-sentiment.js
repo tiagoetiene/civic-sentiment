@@ -34,6 +34,27 @@ AllCandidates = [
     iframe_src : "//rjihacks.wayinhub.com/cv-page-eric-cantor?hidenav=true",
     iframe_id : "eb7564ba-4e32-46b9-b30f-eef5a85f6727"
   },
+  {
+    name : "Gerard Beloin",
+    party : "Republican",
+    image : ".",
+    iframe_src : "//rjihacks.wayinhub.com/cv-page-gerard-beloin?hidenav=true",
+    iframe_id : "0c80f9f3-bb50-4534-a7d7-7217b6a5443d"
+  },
+  {
+    name : "Robert D'Arcy",
+    party : "Republican",
+    image : ".",
+    iframe_src : "//rjihacks.wayinhub.com/cv-page-robert-darcy?hidenav=true",
+    iframe_id : "a22a7b4c-5125-4254-8c07-49ac1549d774"
+  },
+  {
+    name : "Bob Smith",
+    party : "Republican",
+    image : "http://bobsmithforussenate.com/wp-content/gallery/march-4-campaign-kickoff/003.png",
+    iframe_src : "//rjihacks.wayinhub.com/cv-page-bob-smith?hidenav=true",
+    iframe_id : "e41192a2-070c-456f-b9b8-8c18ead29d20"
+  },
 ]
 
 SelectedCandidates = []
