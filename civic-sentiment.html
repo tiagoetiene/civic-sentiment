@@ -95,6 +95,10 @@
 	<h2 class="text-center"> {{name}} </h2>
 </template>
 
+<template name="close_button">
+	<h5 class="close">close</h5> 
+</template>
+
 <template name="main">
 <div class="container">
 	<div class="row">
@@ -102,8 +106,12 @@
 				<div class="col-md-6">
 					<div class="row">
 						<div class="col-md-12">
-							<div class="col-md-12">
+							<div class="col-md-1 nopadding"></div>
+							<div class="col-md-10 nopadding">
 								{{> candidate_name}}	
+							</div>
+							<div class="col-md-1 nopadding">
+								{{> close_button}}
 							</div>
 						</div>
 					</div>
