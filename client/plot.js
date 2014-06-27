@@ -21,27 +21,21 @@ Plot = function( ) {
                 .attr('height', 2);
 
             var axis = cell.append('g')
-                                    .attr('transform', 'translate(' + padding + ',' + 0 + ')')
-                                    .attr('font-size', 25)
-                                    .call(d3.svg.axis().scale(y).orient('right'));
-            axis
-                .selectAll('.domain')
-                .attr('stroke', 'lightgray')
-                .attr('stroke-width', '3px')
-                .attr('fill', 'none');
-
-            axis
-                .selectAll('text')
-                .style('text-anchor', 'start')
-                .attr('transform', 'translate(' + 0 + ',' + 0 + ')rotate(0)')
-                .attr('stroke', 'white');   
-
+                                    .attr('transform', 'translate(' + padding + ',' + 0 + ')')  
+                                    .append('line')
+                                    .attr('x1', 0.0)
+                                    .attr('y1', 0.0)
+                                    .attr('x2', 0.0)
+                                    .attr('y2', height)
+                                    .attr('stroke', 'lightgray')
+                                    .attr('stroke-width', '3px')
+            
             cell.append("text")
                 .attr("text-anchor", "start")
                 .attr("y", 6)
                 // .attr("dy", ".75em")
                 .attr("font-size", 35)
-                .attr("transform", "translate(" + (padding-25) + "," + (height-120) + ")" + "rotate(-90)")
+                .attr("transform", "translate(" + (padding-25) + "," + (height*0.75) + ")" + "rotate(-90)")
                 .text("Sentiment");
 
             cell.append("text")
@@ -49,16 +43,16 @@ Plot = function( ) {
                 .attr("y", 6)
                 // .attr("dy", ".75em")
                 .attr("font-size", 35)
-                .attr("transform", "translate(" + (2*padding) + "," + (20) + ")" + "rotate(0)")
-                .text("Positive");
+                .attr("transform", "translate(" + (padding+10) + "," + (20) + ")" + "rotate(0)")
+                .text("Like");
 
             cell.append("text")
                 .attr("text-anchor", "start")
                 .attr("y", 6)
                 // .attr("dy", ".75em")
                 .attr("font-size", 35)
-                .attr("transform", "translate(" + (2*padding) + "," + (height-15) + ")" + "rotate(0)")
-                .text("Negative");
+                .attr("transform", "translate(" + (padding+10) + "," + (height-15) + ")" + "rotate(0)")
+                .text("Diskile");
         }
 
         selection.each( function( data, idx ) {  
