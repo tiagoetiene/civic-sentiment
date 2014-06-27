@@ -130,7 +130,32 @@
 
 <template name="plot">
 <div class="container">
-	<div class="row"><div class="col-md-12" id="plot"></div></div>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="btn-group" data-toggle="buttons">
+				<label class="btn btn-sm btn-primary active" id="pastWeek">
+					<input type="radio" name="options" checked> Past Week
+				</label>
+				<label class="btn btn-sm btn-primary">
+					<input type="radio" name="options" id="pastDay"> Past Day
+				</label>
+				<label class="btn btn-sm btn-primary">
+					<input type="radio" name="options" id="pastHour"> Past Hour
+				</label>
+				<label class="btn btn-sm btn-primary">
+					<input type="radio" name="options" id="past5Min"> Past 5 min
+				</label>
+				<label class="btn btn-sm btn-primary">
+					<input type="radio" name="options" id="past1Min"> Past 1 min
+				</label>
+			</div>
+		</div>
+	</div>
+	<br>
+	<div class="row">
+		<div class="col-md-12" id="plot">
+		</div>
+	</div>
 	<br>
 </div>
 </template>

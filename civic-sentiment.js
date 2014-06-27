@@ -77,6 +77,12 @@ if (Meteor.isClient) {
                       return
                     }
                 })
+
+    $("#pastWeek").change( function(e) { console.log($(this).attr('id')) })
+    $("#pastDay").change( function(e) { console.log($(this).attr('id')) })
+    $("#pastHour").change( function(e) { console.log($(this).attr('id')) })
+    $("#past5Min").change( function(e) { console.log($(this).attr('id')) })
+    $("#past1Min").change( function(e) { console.log($(this).attr('id')) })
   });
   
   Template.twitter_feed.iframe_source = function() {
