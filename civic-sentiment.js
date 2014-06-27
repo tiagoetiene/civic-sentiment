@@ -134,9 +134,6 @@ if (Meteor.isClient) {
       for(var i = 0; i < size_1; ++i)
         candidate_1.output.push(candidate_1.output[i]);
 
-    console.log(candidate_0);
-    console.log(candidate_1);
-
     var data_0 = [];
     var data_1 = [];
 
