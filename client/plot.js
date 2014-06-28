@@ -52,7 +52,7 @@ Plot = function( ) {
                 // .attr("dy", ".75em")
                 .attr("font-size", 35)
                 .attr("transform", "translate(" + (padding+10) + "," + (height-15) + ")" + "rotate(0)")
-                .text("Diskile");
+                .text("Dislike");
         }
 
         selection.each( function( data, idx ) {  
