@@ -59,7 +59,21 @@ AllCandidates = [
 
 SelectedCandidates = []
 
+CandidateData = {};
+
 if (Meteor.isClient) {
+  var past = [-7, 0, 0, 0];
+
+  setInterval(function() {
+    _.each(AllCandidates, function(candidate) {
+      if(_.isEmpty(CandidateData[candidate.name]))
+        CandidateData[candidate.name] = [];
+      for(var i = 0; i < 5; ++i)
+        CandidateData[candidate.name].push(addRandomDatum());
+      CandidateData[candidate.name] = _.sortBy(CandidateData[candidate.name], function(d) { return d.date } );
+    })
+  }, 1000);
+
 
   $(document).ready(function() { 
     $("#e1").select2({placeholder: "Select a politician"})
@@ -78,11 +92,11 @@ if (Meteor.isClient) {
                     }
                 })
 
-    $("#pastWeek").change( function(e) { console.log($(this).attr('id')) })
-    $("#pastDay").change( function(e) { console.log($(this).attr('id')) })
-    $("#pastHour").change( function(e) { console.log($(this).attr('id')) })
-    $("#past5Min").change( function(e) { console.log($(this).attr('id')) })
-    $("#past1Min").change( function(e) { console.log($(this).attr('id')) })
+    $("#pastWeek").change( function(e) { past = [-7,  0,  0,  0] })
+    $("#pastDay").change( function(e)  { past = [ 0,-24,  0,  0] })
+    $("#pastHour").change( function(e) { past = [ 0,  0,-60,  0] })
+    $("#past5Min").change( function(e) { past = [ 0,  0, -5,  0] })
+    $("#past1Min").change( function(e) { past = [ 0,  0,  0,-60] })
   });
   
   Template.twitter_feed.iframe_source = function() {
@@ -130,47 +144,35 @@ if (Meteor.isClient) {
   }
 
   function tmp_plot() {
-    var size_0 = candidate_0.output.length;
-    for(var repeat = 0; repeat < 100; ++repeat)
-      for(var i = 0; i < size_0; ++i)
-        candidate_0.output.push(candidate_0.output[i]);
-
-    var size_1 = candidate_1.output.length;
-    for(var repeat = 0; repeat < 100; ++repeat)
-      for(var i = 0; i < size_1; ++i)
-        candidate_1.output.push(candidate_1.output[i]);
-
-    var data_0 = [];
-    var data_1 = [];
-
-    var idx_0 = 1;
-    var idx_1 = 1;
 
     var plot = Plot();
 
     function generateData() {
-      var jeanne = candidate_0.output;
-      var scott = candidate_1.output;
-
-      for(var i =data_0.length; i < Math.min(jeanne.length,idx_0); ++i)
-        data_0.push( {sentiment : jeanne[i].score, date : new Date() } );
-      idx_0 += 1;
-
-      for(var i =data_1.length; i < Math.min(scott.length,idx_0); ++i)
-        data_1.push( {sentiment : scott[i].score, date : new Date() } );
-      idx_1 += 1;
-
-      var plot_div = d3.select('#plot');
-      plot_div.data( [ [ data_0, data_1] ] )
-
-      plot(plot_div);
+      var data = [];
+      _.each(SelectedCandidates, function(candidate) { 
+        data.push(CandidateData[candidate.name]);
+      })
+      
+      if(data.length) {
+        var plot_div = d3.select('#plot');
+        var _now = new Date();
+        var _past = getPast( _now, past[0], past[1], past[2], past[3] );
+      
+        plot_div.data( [ data ] );
+        plot.domain( [  _past , _now ]  )
+            .x( function(d) { return +d.date; } )
+            .y( function(d) { return d.score; } )
+            (plot_div);
+      }
     }
 
     setInterval(generateData, 1000)
 
     // Hack to fix image size. I've been trying to get the Wayin widget to be shaped as a perfect square
     // but I did not succeed. Thus, this hack will solve the problem.
-    setInterval(function() {Session.set('UpdateImageHeight', !(Session.get('UpdateImageHeight') == true));}, 1000);
+    setInterval(function() {
+      Session.set('UpdateImageHeight', !(Session.get('UpdateImageHeight') == true));
+    }, 1000);
   }
   tmp_plot();
 
