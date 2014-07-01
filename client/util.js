@@ -8,10 +8,10 @@ function normal( param ) {
 }
 addRandomDate = function() {
 	var d = new Date();
-	var days    = Math.round( Math.abs( normal( {mean:0, dev: 0.1} )));
-	var hours   = Math.round( Math.abs( normal( {mean:0, dev:0.1} )));
-	var minutes = Math.round( Math.abs( normal( {mean:0, dev:0.1} )));
-	var seconds = Math.round( Math.abs( normal( {mean:0, dev:30} )));
+	var days    = Math.round(  Math.random() * 7  );
+	var hours   = Math.round(  Math.random() * 24 );
+	var minutes = Math.round( Math.random() * 60 );
+	var seconds = Math.round(  Math.random() * 60 );
 	var ret = new Date(
 		d.getFullYear(),
 		d.getMonth(),
@@ -27,7 +27,7 @@ addRandomDate = function() {
 addRandomDatum = function() {
 	var d = addRandomDate();
 	return {
-		score : Math.sin( Math.random()*0.2 + d.getDay() + d.getHours() / 24 ),
+		score : Math.random()*2-1,
 		date  : d,
 	}
 }
