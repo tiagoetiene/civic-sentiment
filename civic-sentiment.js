@@ -150,6 +150,9 @@ if (Meteor.isClient) {
         var data = [];
         var _now = new Date();
         var _past = getPast( _now, past[0], past[1], past[2], past[3] );
+        var domain = [ _past, _now ];
+        var numBins = 40;
+        var delta = ((+_now) - (+_past)) / numBins;
 
         _.each(SelectedCandidates, function(candidate) { 
             var query_param = { 
@@ -161,16 +164,28 @@ if (Meteor.isClient) {
             TwitterDB.find(query_param).forEach( function(obj) {  
                 datum.push(obj); 
             });
-            data.push( _.sortBy( datum, 'date' ) );
-        });
+            
+            var values = [];
+            for(var i = 0; i < numBins; ++i) values[i] = 0.0;
 
+            _.each(datum, function(d) { 
+                var idx = Math.floor( (+d.date - (+_past)) / delta );
+
+                if(idx < numBins) values[idx] += d.sentiment;
+            });
+
+            var max = d3.max(values, function(d) { return Math.abs(d) } );
+            if(max != 0)
+                _.each(values, function(d, i) { values[i] /= max; } );
+
+            data.push( values );
+        });
         console.log(data);
       
         var plot_div = d3.select('#plot');
         plot_div.data( [ data ] );
-        plot.domain( [  _past , _now ]  )
-            .x( function(d) { return +d.date; } )
-            .y( function(d) { return d.sentiment; } )
+        plot.domain( [  +_past , +_now ]  )
+            .x( function(d, idx) { return (+_past) + idx * delta; } )
             (plot_div);
     }
 
@@ -196,7 +211,7 @@ if (Meteor.isServer) {
     function getData( name, url ) {
         var param = { timeout : 32000 }
 
-        console.log(name, ': ', url);
+        // console.log(name, ': ', url);
 
         HTTP.get(url, param, function(ret, result) {
             if( result == null)
@@ -229,8 +244,8 @@ if (Meteor.isServer) {
     }
 
     Meteor.startup(function () {
-        _.each(AllCandidates, function( candidate ) {
-            getData( candidate.name, candidate.url_feed );
-        });
+        // _.each(AllCandidates, function( candidate ) {
+        //     getData( candidate.name, candidate.url_feed );
+        // });
     });
 }
