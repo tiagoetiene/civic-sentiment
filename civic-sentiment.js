@@ -184,4 +184,44 @@ if (Meteor.isServer) {
     TwitterDB._ensureIndex( { id : 1}, { unique : true } );
 
 
+    function getData( name, url ) {
+        var param = { timeout : 32000 }
+
+        console.log(name, ': ', url);
+
+        HTTP.get(url, param, function(ret, result) {
+            if( result == null)
+                return;
+
+            _.each(result.data.results, function(d) {
+                var s = Sentiment(d.item.message);
+                TwitterDB.update( 
+                    {
+                        id : d.id 
+                    },
+                    {
+                        id           : d.id,
+                        name     : name,
+                        // message : d.item.message,
+                        date       : new Date(d.tweet_creation_time),
+                        sentiment : s.comparative,
+                    }, 
+                    {
+                        upsert:true
+                    });
+            });
+
+            if( _.isEmpty( result.data.next_url ) == false )
+                getData( name, result.data.next_url );
+
+            if( _.isEmpty( result.data.prev_url ) == false )
+                getData( name,  result.data.prev_url );
+        });
+    }
+
+    Meteor.startup(function () {
+        _.each(AllCandidates, function( candidate ) {
+            getData( candidate.name, candidate.url_feed );
+        });
+    });
 }
