@@ -147,22 +147,31 @@ if (Meteor.isClient) {
     var plot = Plot();
 
     function generateData() {
-      var data = [];
-      _.each(SelectedCandidates, function(candidate) { 
-        data.push(CandidateData[candidate.name]);
-      })
-      
-      if(data.length) {
-        var plot_div = d3.select('#plot');
+        var data = [];
         var _now = new Date();
         var _past = getPast( _now, past[0], past[1], past[2], past[3] );
+
+        _.each(SelectedCandidates, function(candidate) { 
+            var query_param = { 
+                date : { $gt : _past },  
+                name : candidate.name
+            }
+
+            var datum = [];
+            TwitterDB.find(query_param).forEach( function(obj) {  
+                datum.push(obj); 
+            });
+            data.push( _.sortBy( datum, 'date' ) );
+        });
+
+        console.log(data);
       
+        var plot_div = d3.select('#plot');
         plot_div.data( [ data ] );
         plot.domain( [  _past , _now ]  )
             .x( function(d) { return +d.date; } )
-            .y( function(d) { return d.score; } )
+            .y( function(d) { return d.sentiment; } )
             (plot_div);
-      }
     }
 
     setInterval(generateData, 1000)
