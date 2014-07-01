@@ -72,17 +72,6 @@ CandidateData = {};
 if (Meteor.isClient) {
   var past = [-7, 0, 0, 0];
 
-  setInterval(function() {
-    _.each(AllCandidates, function(candidate) {
-      if(_.isEmpty(CandidateData[candidate.name]))
-        CandidateData[candidate.name] = [];
-      for(var i = 0; i < 5; ++i)
-        CandidateData[candidate.name].push(addRandomDatum());
-      CandidateData[candidate.name] = _.sortBy(CandidateData[candidate.name], function(d) { return d.date } );
-    })
-  }, 1000);
-
-
   $(document).ready(function() { 
     $("#e1").select2({placeholder: "Select a politician"})
                 .on("change", function(e) {
