@@ -1,3 +1,5 @@
+TwitterDB = new Meteor.Collection("events-db")
+
 AllCandidates = [
   {
     name : "Jeanne Shaheen",
@@ -176,7 +178,10 @@ if (Meteor.isClient) {
 }
 
 if (Meteor.isServer) {
-  Meteor.startup(function () {
-    // code to run on server at startup
-  });
+    // TwitterDB.remove({});
+    Sentiment = Npm.require("sentiment");
+
+    TwitterDB._ensureIndex( { id : 1}, { unique : true } );
+
+
 }
