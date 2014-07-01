@@ -2,8 +2,8 @@ Plot = function( ) {
     var width = undefined;
     var height = 300;
     var padding = 60;
-    var x_valuer = undefined;
-    var y_valuer = undefined;
+    var x_valuer = Number;
+    var y_valuer = Number;
     var colors = ['#2980B9', '#C0392B', 'darkgreen', 'yellow'];
     var x, y
     var domain = undefined;
@@ -39,8 +39,8 @@ Plot = function( ) {
             
             var line = d3.svg.line()
                 .interpolate('linear') 
-                .x( function( v ) { return x( x_valuer(v) ); } )
-                .y( function( v ) { return y( y_valuer(v) ); } );
+                .x( function( v, idx ) { return x( x_valuer.call(this, v, idx) ); } )
+                .y( function( v, idx ) { return y( y_valuer.call(this, v, idx) ); } );
 
             for(var i = 0; i < data.length; ++i) {
                 plot
@@ -48,7 +48,7 @@ Plot = function( ) {
                     .attr( 'stroke', colors[i] )
                     .attr( 'stroke-width', '5px' )
                     .attr( 'fill', 'none')
-                    .attr( 'd', line(data[i].slice(idx)) );
+                    .attr( 'd', line(data[i]) );
             }
 
             render_axis(plot, data);
