@@ -167,28 +167,34 @@ if (Meteor.isClient) {
             console.log(datum.length);
             
             var values = [];
-            for(var i = 0; i < numBins; ++i) 
-              values[i] = 0.0;
+            // for(var i = 0; i < numBins; ++i) 
+            //   values[i] = 0.0;
 
-            _.each(datum, function(d) { 
-                var idx = Math.floor( (+d.date - (+_past)) / delta );
-                if(idx >= numBins)
-                  idx = numBins-1;
+            // _.each(datum, function(d) { 
+            //     var idx = Math.floor( (+d.date - (+_past)) / delta );
+            //     if(idx >= numBins)
+            //       idx = numBins-1;
 
-                if(idx < numBins) values[idx] += d.sentiment;
+            //     if(idx < numBins) values[idx] += d.sentiment;
+            // });
+
+            // var max = d3.max(values, function(d) { return Math.abs(d) } );
+            // if(max != 0)
+            //     _.each(values, function(d, i) { values[i] /= max; } );
+
+            _.each(datum, function( d ) {
+              values.push( { score : d.sentiment, date : d.date }  );
             });
 
-            var max = d3.max(values, function(d) { return Math.abs(d) } );
-            if(max != 0)
-                _.each(values, function(d, i) { values[i] /= max; } );
-
-            data.push( values );
+            data.push( _.sortBy(values, 'date') );
         });
       
         var plot_div = d3.select('#plot');
         plot_div.data( [ data ] );
         plot.domain( [  +_past , +_now ]  )
-            .x( function(d, idx) { return (+_past) + idx * delta; } )
+            // .x( function(d, idx) { return (+_past) + idx * delta; } )
+            .x( function(d) { return d.date; } )
+            .y( function(d) { return d.score; } )
             (plot_div);
     }
 
@@ -247,13 +253,13 @@ if (Meteor.isServer) {
     }
 
     Meteor.startup(function () {
-        _.each(AllCandidates, function( candidate ) {
-            getData( candidate.name, candidate.url_feed, true, true );
-        });
+        // _.each(AllCandidates, function( candidate ) {
+        //     getData( candidate.name, candidate.url_feed, true, true );
+        // });
 
         Meteor.setInterval( function() {
             _.each(AllCandidates, function( candidate ) {
-              getData( candidate.name, candidate.url_feed, false, false );
+              getData( candidate.name, candidate.url_feed, true, false );
             });
         }, 1000 );
 

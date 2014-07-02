@@ -38,7 +38,7 @@ Plot = function( ) {
                         .domain( [-1, 1] );
             
             var line = d3.svg.line()
-                .interpolate('linear') 
+                .interpolate('basis') 
                 .x( function( v, idx ) { return x( x_valuer.call(this, v, idx) ); } )
                 .y( function( v, idx ) { return y( y_valuer.call(this, v, idx) ); } );
 
