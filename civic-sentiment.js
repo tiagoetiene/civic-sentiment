@@ -208,10 +208,10 @@ if (Meteor.isServer) {
     TwitterDB._ensureIndex( { id : 1}, { unique : true } );
 
 
-    function getData( name, url ) {
+    function getData( name, url, forward, backward ) {
         var param = { timeout : 32000 }
 
-        // console.log(name, ': ', url);
+        console.log(name, ': ', url);
 
         HTTP.get(url, param, function(ret, result) {
             if( result == null)
@@ -235,17 +235,24 @@ if (Meteor.isServer) {
                     });
             });
 
-            if( _.isEmpty( result.data.next_url ) == false )
+            if( forward == true && _.isEmpty( result.data.next_url ) == false )
                 getData( name, result.data.next_url );
 
-            if( _.isEmpty( result.data.prev_url ) == false )
+            if( backward == true && _.isEmpty( result.data.prev_url ) == false )
                 getData( name,  result.data.prev_url );
         });
     }
 
     Meteor.startup(function () {
-        // _.each(AllCandidates, function( candidate ) {
-        //     getData( candidate.name, candidate.url_feed );
-        // });
+        _.each(AllCandidates, function( candidate ) {
+            getData( candidate.name, candidate.url_feed, true, true );
+        });
+
+        Meteor.setInterval( function() {
+            _.each(AllCandidates, function( candidate ) {
+              getData( candidate.name, candidate.url_feed, false, false );
+            });
+        }, 1000 );
+
     });
 }
