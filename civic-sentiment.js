@@ -164,12 +164,16 @@ if (Meteor.isClient) {
             TwitterDB.find(query_param).forEach( function(obj) {  
                 datum.push(obj); 
             });
+            console.log(datum.length);
             
             var values = [];
-            for(var i = 0; i < numBins; ++i) values[i] = 0.0;
+            for(var i = 0; i < numBins; ++i) 
+              values[i] = 0.0;
 
             _.each(datum, function(d) { 
                 var idx = Math.floor( (+d.date - (+_past)) / delta );
+                if(idx >= numBins)
+                  idx = numBins-1;
 
                 if(idx < numBins) values[idx] += d.sentiment;
             });
@@ -180,7 +184,6 @@ if (Meteor.isClient) {
 
             data.push( values );
         });
-        console.log(data);
       
         var plot_div = d3.select('#plot');
         plot_div.data( [ data ] );
