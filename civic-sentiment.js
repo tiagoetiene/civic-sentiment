@@ -1,78 +1,20 @@
 TwitterDB = new Meteor.Collection("events-db")
 
-AllCandidates = [
-  {
-    name : "Jeanne Shaheen",
-    party : 'Democratic',
-    image : "resource/500px-Jeanne_Shaheen,_official_Senate_photo_portrait,_2009.jpg",
-    iframe_src : "//rjihacks.wayinhub.com/cv-page-jeanne-shaheen?hidenav=true",
-    iframe_id : "1a0910b2-9765-4caf-8ae0-233ffda2fe1d",
-    url_feed : "http://rjihacks.wayinhub.com/api/1/bites?feed=fd-5n1q39ji7ffcro4xhl&limit=200&format=json"
-  },
-  {
-    name : "Scott Brown",
-    party : 'Republican',
-    image : "resource/500px-Sbrownofficial.jpg",
-    iframe_src : "//rjihacks.wayinhub.com/cv-page-scott-brown?hidenav=true",
-    iframe_id : "b556773a-8f12-4213-ac41-a14a0219ccec",
-    url_feed : "http://rjihacks.wayinhub.com/api/1/bites?feed=fd-2i8rllbn4nswdwznr6c&limit=200&format=json"
-  },
-  {
-    name : "Barack Obama",
-    party : "Democratic",
-    image : "resource/500px-President_Barack_Obama.jpg",
-    iframe_src : "//rjihacks.wayinhub.com/cv-page-obama?hidenav=true",
-    iframe_id : "2e0c206f-9dee-4edb-aafb-f9d71d12c1dc",
-    url_feed : "http://rjihacks.wayinhub.com/api/1/bites?feed=fd-2ia8kfr7v18vl20p3mu&limit=200&format=json"
-  },
-  {
-    name : "Dilma Rousseff",
-    party : "Partido dos Trabalhadores",
-    image : "resource/500px-Dilma_Rousseff.jpg",
-    iframe_src : "//rjihacks.wayinhub.com/cv-page-dilma-rousseff?hidenav=true",
-    iframe_id : "63ac1d56-e8fe-4a70-8dfd-f344e7fc2fc7",
-    url_feed : "http://rjihacks.wayinhub.com/api/1/bites?feed=fd-2ia98a68acnyqj01ur9&limit=200&format=json"
-  },
-  {
-    name : "Eric Cantor",
-    party : "Republican",
-    image : "resource/500px-Eric_Cantor,_official_113th_Congress_photo_portrait.jpg",
-    iframe_src : "//rjihacks.wayinhub.com/cv-page-eric-cantor?hidenav=true",
-    iframe_id : "eb7564ba-4e32-46b9-b30f-eef5a85f6727",
-    url_feed : "http://rjihacks.wayinhub.com/api/1/bites?feed=fd-2ib273ddr294xe32ije&limit=200&format=json"
-  },
-  {
-    name : "Gerard Beloin",
-    party : "Republican",
-    image : ".",
-    iframe_src : "//rjihacks.wayinhub.com/cv-page-gerard-beloin?hidenav=true",
-    iframe_id : "0c80f9f3-bb50-4534-a7d7-7217b6a5443d",
-    url_feed : "http://rjihacks.wayinhub.com/api/1/bites?feed=fd-2ib6v707v4ibp35o62c&limit=200&format=json"
-  },
-  {
-    name : "Robert D'Arcy",
-    party : "Republican",
-    image : ".",
-    iframe_src : "//rjihacks.wayinhub.com/cv-page-robert-darcy?hidenav=true",
-    iframe_id : "a22a7b4c-5125-4254-8c07-49ac1549d774",
-    url_feed : "http://rjihacks.wayinhub.com/api/1/bites?feed=fd-2ib6y7ku6bmge2ne9oe&limit=200&format=json"
-  },
-  {
-    name : "Bob Smith",
-    party : "Republican",
-    image : "http://bobsmithforussenate.com/wp-content/gallery/march-4-campaign-kickoff/003.png",
-    iframe_src : "//rjihacks.wayinhub.com/cv-page-bob-smith?hidenav=true",
-    iframe_id : "e41192a2-070c-456f-b9b8-8c18ead29d20",
-    url_feed : "http://rjihacks.wayinhub.com/api/1/bites?feed=fd-2ib7730wfg3ghbr8srq&limit=200&format=json"
-  },
-]
+function setCandidateCursors(past) {
+	_.each(AllCandidates, function( candidate ) {
+		var selected_fields = { fields : {  sentiment : 1,  date : 1 } };
+    	var query_param = { date : { $gt : past },  name : candidate.name };
+    	candidate.cursor = TwitterDB.find(query_param, selected_fields);
+  });
+}
 
-SelectedCandidates = []
-
-CandidateData = {};
+function setCandidateTwitterData() {
+	_.each(AllCandidates, function( candidate ) {
+		candidate.tweets = TwitterData( candidate.cursor );
+  });	
+}
 
 if (Meteor.isClient) {
-  var past = -7 * 24 * 60 * 60 * 1000;
 
   $(document).ready(function() { 
     $("#e1").select2({placeholder: "Select a politician"})
@@ -130,43 +72,56 @@ if (Meteor.isClient) {
     }
   }
 
-  Template.candidate_image.candidate_image = function() {
-    return this.image;
-  }
+	Template.candidate_image.candidate_image = function() {
+    	return this.image;
+	}
 
-  Template.candidate_image.image_height = function() {
-    Session.get('UpdateImageHeight');
-    var height = $('#'+this.iframe_id).height();
-    if(height == null)
-      return '268px';
-    return height + 'px';
-  }
+	Template.candidate_image.image_height = function() {
+		Session.get('UpdateImageHeight');
+		var height = $('#'+this.iframe_id).height();
+		if(height == null)
+	  		return '268px';
+		return height + 'px';
+	}
 
-  function tmp_plot() {
 
-    var plot = Plot();
+	function update_data(a, b, c, d) {
+  		console.log(a, b, c, d);
+  	}
 
-    function generateData() {
+	var past = -7 * 24 * 60 * 60 * 1000;
+	var plot = Plot();
+  	
+  	setCandidateCursors(getPast(new Date(), past));
+  	setCandidateTwitterData();
+
+  	_.each(AllCandidates, function(candidate) {
+  		candidate.cursor.observeChanges( 
+	  		{
+	  			added : function(id, obj) {
+	  				candidate.tweets.add( obj );
+	  				Session.set('UpdatePlot', !(Session.get('UpdatePlot') == true) );
+	  			}
+	  		});});
+
+
+    function plotData() {
+
+    	Session.get('UpdatePlot');
+
         var data = [];
         var _now = new Date();
         var _past = getPast( _now, past );
         var domain = [ _past, _now ];
-        var numBins = 60;
-        var selected_fields = { fields : {  sentiment : 1,  date : 1,  _id : 0 } };
+        var bins = 30;
+  
 
-        _.each(SelectedCandidates, function(candidate) { 
-            var query_param = { 
-                date : { $gt : _past },  
-                name : candidate.name
-            }
+		_.each(SelectedCandidates, function(candidate) { 
+
+			console.log(candidate.tweets.all().length);
             
-
-            var datum = [];
-            var candidateCursor = TwitterDB.find(query_param, selected_fields);
-            candidateCursor.forEach( function(obj) {  
-                datum.push(obj); 
-            });            
-
+            var datum = candidate.tweets.data( _past );
+  
             // BUILDING HISTOGRAM
             var time_interval = Math.abs( past / 1000 );
             var bins = 30;
@@ -217,16 +172,11 @@ if (Meteor.isClient) {
             (plot_div);
     }
 
-    setInterval(generateData, 1000)
-
-    // Hack to fix image size. I've been trying to get the Wayin widget to be shaped as a perfect square
+	// Hack to fix image size. I've been trying to get the Wayin widget to be shaped as a perfect square
     // but I did not succeed. Thus, this hack will solve the problem.
     setInterval(function() {
       Session.set('UpdateImageHeight', !(Session.get('UpdateImageHeight') == true));
     }, 1000);
-  }
-  tmp_plot();
-
 }
 
 if (Meteor.isServer) {
@@ -273,15 +223,14 @@ if (Meteor.isServer) {
     }
 
     Meteor.startup(function () { 
-        // _.each(AllCandidates, function( candidate ) {
-        //     getData( candidate.name, candidate.url_feed, true, true );
-        // });
+        _.each(AllCandidates, function( candidate ) {
+            getData( candidate.name, candidate.url_feed, true, true );
+        });
 
         Meteor.setInterval( function() {
             _.each(AllCandidates, function( candidate ) {
               getData( candidate.name, candidate.url_feed, true, false );
             });
         }, 1000 );
-
     });
 }
