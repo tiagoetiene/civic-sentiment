@@ -32,12 +32,6 @@ addRandomDatum = function() {
 	}
 }
 
-getPast = function( ref, day, hour, min, sec ) {
-	return new Date(ref.getFullYear(),
-                    ref.getMonth(),
-                    ref.getDate() + day,
-                    ref.getHours() + hour,
-                    ref.getMinutes() + min,
-                    ref.getSeconds() + sec,
-                    ref.getMilliseconds());
+getPast = function( ref, milliseconds ) {
+	return new Date(ref.valueOf() + milliseconds);
 }

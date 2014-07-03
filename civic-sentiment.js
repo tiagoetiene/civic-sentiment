@@ -72,7 +72,7 @@ SelectedCandidates = []
 CandidateData = {};
 
 if (Meteor.isClient) {
-  var past = [-7, 0, 0, 0];
+  var past = -7 * 24 * 60 * 60 * 1000;
 
   $(document).ready(function() { 
     $("#e1").select2({placeholder: "Select a politician"})
@@ -91,11 +91,11 @@ if (Meteor.isClient) {
                     }
                 })
 
-    $("#pastWeek").change( function(e) { past = [-7,  0,  0,  0] })
-    $("#pastDay").change( function(e)  { past = [ 0,-24,  0,  0] })
-    $("#pastHour").change( function(e) { past = [ 0,  0,-60,  0] })
-    $("#past5Min").change( function(e) { past = [ 0,  0, -5,  0] })
-    $("#past1Min").change( function(e) { past = [ 0,  0,  0,-60] })
+    $("#pastWeek").change( function(e)	{ past = -7 * 24 * 60 * 60 * 1000; })
+    $("#pastDay").change( function(e)	{ past =      - 24 * 60 * 60 * 1000; })
+    $("#pastHour").change( function(e)	{ past =          - 1 * 60 * 60 * 1000; })
+    $("#past5Min").change( function(e)	{ past =                 -  5 * 60 * 1000; })
+    $("#past1Min").change( function(e)	{ past =                      -  60 * 1000; })
   });
   
   Template.twitter_feed.iframe_source = function() {
