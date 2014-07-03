@@ -1,4 +1,4 @@
-TwitterDB = new Meteor.Collection("events-db")
+TwitterDB = new Meteor.Collection("tweets")
 
 function setCandidateCursors(past) {
 	_.each(AllCandidates, function( _ , idx ) {
