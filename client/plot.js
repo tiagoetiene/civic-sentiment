@@ -45,8 +45,9 @@ Plot = function( ) {
             for(var i = 0; i < data.length; ++i) {
                 plot
                     .append( 'path' )
-                    // .attr( 'stroke', colors[i] )
-                    // .attr( 'stroke-width', '5px' )
+                    .attr( 'stroke', colors[i] )
+                    .attr( 'stroke-width', '2px' )
+                    // .attr( 'fill', 'none')
                     .attr( 'fill', colors[i])
                     .attr( 'fill-opacity', 0.5)
                     .attr( 'd', line(data[i]) );

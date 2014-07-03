@@ -14,6 +14,8 @@ function setCandidateTwitterData() {
 }
 
 if (Meteor.isClient) {
+	var past = -7 * 24 * 60 * 60 * 1000;
+
 	$(document).ready(function() { 
 		$("#e1").select2({placeholder: "Select a politician"})
 			.on("change", function(e) {
@@ -31,7 +33,7 @@ if (Meteor.isClient) {
 				}
 			})
 
-		$("#pastWeek").change( function(e)	{ past = -7 * 24 * 60 * 60 * 1000; })
+		$("#pastWeek").change( function(e){ past = -7 * 24 * 60 * 60 * 1000; })
 		$("#pastDay").change( function(e)	{ past =      - 24 * 60 * 60 * 1000; })
 		$("#pastHour").change( function(e)	{ past =          - 1 * 60 * 60 * 1000; })
 		$("#past5Min").change( function(e)	{ past =                 -  5 * 60 * 1000; })
@@ -82,7 +84,6 @@ if (Meteor.isClient) {
 		return height + 'px';
 	}
 
-	var past = -7 * 24 * 60 * 60 * 1000;
 	var plot = Plot();
   	  	
   	setCandidateCursors(getPast(new Date(), past));
@@ -95,7 +96,6 @@ if (Meteor.isClient) {
 	  		}
 	  	});
   	});
-
 
 	function plotData() {
 		var data = [];
@@ -168,8 +168,6 @@ if (Meteor.isServer) {
 
     // TwitterDB._ensureIndex( { id : 1}, { unique : true } );
     // TwitterDB._ensureIndex( { date : 1 , name : 1 } );
-
-
     function getData( name, url, forward, backward ) {
         var param = { timeout : 32000 }
 
