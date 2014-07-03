@@ -149,52 +149,71 @@ if (Meteor.isClient) {
     function generateData() {
         var data = [];
         var _now = new Date();
-        var _past = getPast( _now, past[0], past[1], past[2], past[3] );
+        var _past = getPast( _now, past );
         var domain = [ _past, _now ];
-        var numBins = 40;
-        var delta = ((+_now) - (+_past)) / numBins;
+        var numBins = 60;
+        var selected_fields = { fields : {  sentiment : 1,  date : 1,  _id : 0 } };
 
         _.each(SelectedCandidates, function(candidate) { 
             var query_param = { 
                 date : { $gt : _past },  
                 name : candidate.name
             }
+            
 
             var datum = [];
-            TwitterDB.find(query_param).forEach( function(obj) {  
+            var candidateCursor = TwitterDB.find(query_param, selected_fields);
+            candidateCursor.forEach( function(obj) {  
                 datum.push(obj); 
-            });
-            console.log(datum.length);
-            
-            var values = [];
-            // for(var i = 0; i < numBins; ++i) 
-            //   values[i] = 0.0;
+            });            
 
-            // _.each(datum, function(d) { 
-            //     var idx = Math.floor( (+d.date - (+_past)) / delta );
-            //     if(idx >= numBins)
-            //       idx = numBins-1;
+            // BUILDING HISTOGRAM
+            var time_interval = Math.abs( past / 1000 );
+            var bins = 30;
 
-            //     if(idx < numBins) values[idx] += d.sentiment;
-            // });
+            while(time_interval % bins != 0)
+                bins++;
 
-            // var max = d3.max(values, function(d) { return Math.abs(d) } );
-            // if(max != 0)
-            //     _.each(values, function(d, i) { values[i] /= max; } );
+            var delta  = time_interval / bins; 
+            var interval_size = delta * 1000;
+            var interval_start = new Date( _past );
 
-            _.each(datum, function( d ) {
-              values.push( { score : d.sentiment, date : d.date }  );
-            });
+            interval_start.setDate( interval_start.getDate() - 7 );
+            interval_start.setHours( 0 );
+            interval_start.setMinutes( 0 );
+            interval_start.setSeconds( 0 );
+            interval_start.setMilliseconds( 0 );
 
-            data.push( _.sortBy(values, 'date') );
+            var ref_idx = Math.floor( (_past.valueOf() - interval_start.valueOf()) / interval_size );
+
+            var histogram = [];
+            for(var i = 0; i < bins ; ++i)
+                histogram.push({  
+                    x : new Date(  interval_start.valueOf() + (i + ref_idx) * interval_size ), 
+                    sentiment : 0.0 
+                });
+
+            _.each(datum, function(d) {
+                var idx = Math.floor( (d.date.valueOf() - interval_start.valueOf()) / interval_size );
+                idx -= ref_idx;
+                console.assert( idx >= 0);
+
+                if(idx < histogram.length)
+                    histogram[idx].sentiment += d.sentiment;
+            })
+
+            var max = d3.max( histogram, function(d) { return Math.abs(d.sentiment); } );
+            if(max != 0)
+                _.each(histogram, function(d, idx) { histogram[idx].sentiment /= max } );
+
+            data.push( histogram );
         });
       
         var plot_div = d3.select('#plot');
         plot_div.data( [ data ] );
-        plot.domain( [  +_past , +_now ]  )
-            // .x( function(d, idx) { return (+_past) + idx * delta; } )
-            .x( function(d) { return d.date; } )
-            .y( function(d) { return d.score; } )
+        plot.domain( [  _past , _now ]  )
+            .x( function(d) { return d.x; } )
+            .y( function(d) { return d.sentiment; } )
             (plot_div);
     }
 
@@ -214,7 +233,8 @@ if (Meteor.isServer) {
     // TwitterDB.remove({});
     Sentiment = Npm.require("sentiment");
 
-    TwitterDB._ensureIndex( { id : 1}, { unique : true } );
+    // TwitterDB._ensureIndex( { id : 1}, { unique : true } );
+    // TwitterDB._ensureIndex( { date : 1 , name : 1 } );
 
 
     function getData( name, url, forward, backward ) {
@@ -252,7 +272,7 @@ if (Meteor.isServer) {
         });
     }
 
-    Meteor.startup(function () {
+    Meteor.startup(function () { 
         // _.each(AllCandidates, function( candidate ) {
         //     getData( candidate.name, candidate.url_feed, true, true );
         // });

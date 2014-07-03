@@ -26,9 +26,8 @@ Plot = function( ) {
             var plot = pplot.append("g")
                             .attr('id', 'sentimentplot');
             
-
-            x = d3.scale
-                    .linear()
+            x = d3.time
+                    .scale()
                     .range( [ padding , width ] )
                     .domain( domain );
 
@@ -37,17 +36,19 @@ Plot = function( ) {
                         .range( [ height-10, 10 ] )
                         .domain( [-1, 1] );
             
-            var line = d3.svg.line()
+            var line = d3.svg.area()
                 .interpolate('basis') 
                 .x( function( v, idx ) { return x( x_valuer.call(this, v, idx) ); } )
-                .y( function( v, idx ) { return y( y_valuer.call(this, v, idx) ); } );
+                .y0( 0.5 * height )
+                .y1( function( v, idx ) { return y( y_valuer.call(this, v, idx) ); } );
 
             for(var i = 0; i < data.length; ++i) {
                 plot
                     .append( 'path' )
-                    .attr( 'stroke', colors[i] )
-                    .attr( 'stroke-width', '5px' )
-                    .attr( 'fill', 'none')
+                    // .attr( 'stroke', colors[i] )
+                    // .attr( 'stroke-width', '5px' )
+                    .attr( 'fill', colors[i])
+                    .attr( 'fill-opacity', 0.5)
                     .attr( 'd', line(data[i]) );
             }
 
@@ -55,8 +56,10 @@ Plot = function( ) {
 
         });
 
-        function render_axis(cell, data) {
+        function render_axis(cell) {
             
+
+            // PLOT HORIZONTAL AXIS
             cell
                 .append('g')
                 .attr('transform', 'translate(' + padding + ',' + height / 2 + ')')
@@ -74,7 +77,8 @@ Plot = function( ) {
                                     .attr('y2', height)
                                     .attr('stroke', 'lightgray')
                                     .attr('stroke-width', '3px')
-            
+
+            // PLOT TEXT: SENTIMENT
             cell.append("text")
                 .attr("text-anchor", "start")
                 .attr("y", 6)
@@ -83,6 +87,7 @@ Plot = function( ) {
                 .attr("transform", "translate(" + (padding-25) + "," + (height*0.75) + ")" + "rotate(-90)")
                 .text("Sentiment");
 
+            // PLOT TEXT: LIKE
             cell.append("text")
                 .attr("text-anchor", "start")
                 .attr("y", 6)
@@ -91,6 +96,7 @@ Plot = function( ) {
                 .attr("transform", "translate(" + (padding+10) + "," + (20) + ")" + "rotate(0)")
                 .text("Like");
 
+            // PLOT TEXT: DISLIKE
             cell.append("text")
                 .attr("text-anchor", "start")
                 .attr("y", 6)
@@ -98,6 +104,13 @@ Plot = function( ) {
                 .attr("font-size", 35)
                 .attr("transform", "translate(" + (padding+10) + "," + (height-15) + ")" + "rotate(0)")
                 .text("Dislike");
+
+            cell.append('g')
+                 .attr('transform', 'translate(' + 0 + ',' + height / 2 + ')')
+                 .attr('fill', 'lightgray')
+                 .call(d3.svg.axis().scale(x).orient("bottom"))
+                 .selectAll('text')
+                 .attr('fill', 'black');
         }
     }
 
