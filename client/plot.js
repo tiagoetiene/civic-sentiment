@@ -7,7 +7,7 @@ Plot = function( ) {
     var colors = ['#2980B9', '#C0392B', 'darkgreen', 'yellow'];
     var x, y
     var domain = undefined;
-    var pplot = undefined;
+    var pplot = undefined; 
     
     function chart( selection ) {
 

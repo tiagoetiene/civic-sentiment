@@ -104,7 +104,7 @@ if (Meteor.isClient) {
 		var domain = [ _past, _now ];
 		var bins = 30;
 	  
-		_.each(SelectedCandidates, function(candidate) { 		            
+		_.each(SelectedCandidates, function(candidate) { 
 			var datum = candidate.tweets.data( _past );
 		  
 			// BUILDING HISTOGRAM
