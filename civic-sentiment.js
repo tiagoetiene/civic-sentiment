@@ -106,6 +106,8 @@ if (Meteor.isClient) {
 	  
 		_.each(SelectedCandidates, function(candidate) { 
 			var datum = candidate.tweets.data( _past );
+
+			console.log( candidate.tweets.all().length ); 
 		  
 			// BUILDING HISTOGRAM
 			var time_interval = Math.abs( past / 1000 );
@@ -164,14 +166,12 @@ if (Meteor.isServer) {
 	// TwitterDB.remove({});   
 	Sentiment = Npm.require("sentiment");
 
-	console.log("Total number of entries: ", TwitterDB.find().count());
-
 	// TwitterDB._ensureIndex( { id : 1}, { unique : true } );
 	// TwitterDB._ensureIndex( { date : 1 , name : 1 } );
 	function getData( name, url, forward, backward ) {
 		var param = { timeout : 32000 }
 
-		console.log(name, ': ', url);
+		console.log(name, ': ', url, TwitterDB.find().count());
 
 		HTTP.get(url, param, function(ret, result) {
 			if( result == null)
@@ -195,7 +195,7 @@ if (Meteor.isServer) {
 				});
 			});
 
-			if( forward == true && _.isEmpty( result.data.next_url ) == false )
+			if( forward == true && _.isEmpty( result.data.next_url ) == false ) 
 				getData( name, result.data.next_url, forward, backward );
 
 			if( backward == true && _.isEmpty( result.data.prev_url ) == false )
