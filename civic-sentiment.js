@@ -160,58 +160,56 @@ if (Meteor.isClient) {
     	setInterval(function() { Session.set('UpdateImageHeight', !(Session.get('UpdateImageHeight') == true)); }, 1000);
 }
 
-if (Meteor.isServer) {
-    // TwitterDB.remove({});
-    Sentiment = Npm.require("sentiment");
+if (Meteor.isServer) { 	
+	// TwitterDB.remove({});   
+	Sentiment = Npm.require("sentiment");
 
-    console.log("Total number of entries: ", TwitterDB.find().count());
+	console.log("Total number of entries: ", TwitterDB.find().count());
 
-    // TwitterDB._ensureIndex( { id : 1}, { unique : true } );
-    // TwitterDB._ensureIndex( { date : 1 , name : 1 } );
-    function getData( name, url, forward, backward ) {
-        var param = { timeout : 32000 }
+	// TwitterDB._ensureIndex( { id : 1}, { unique : true } );
+	// TwitterDB._ensureIndex( { date : 1 , name : 1 } );
+	function getData( name, url, forward, backward ) {
+		var param = { timeout : 32000 }
 
-        // console.log(name, ': ', url);
+		console.log(name, ': ', url);
 
-        HTTP.get(url, param, function(ret, result) {
-            if( result == null)
-                return;
+		HTTP.get(url, param, function(ret, result) {
+			if( result == null)
+				return;
 
-            _.each(result.data.results, function(d) {
-                var s = Sentiment(d.item.message);
-                TwitterDB.update( 
-                    {
-                        id : d.id 
-                    },
-                    {
-                        id           : d.id,
-                        name     : name,
-                        // message : d.item.message,
-                        date       : new Date(d.tweet_creation_time),
-                        sentiment : s.comparative,
-                    }, 
-                    {
-                        upsert:true
-                    });
-            });
+			_.each(result.data.results, function(d) {
+				var s = Sentiment(d.item.message);
+				TwitterDB.update( 
+				{
+					id : d.id 
+				},
+				{
+					id : d.id,
+					name     : name,
+					// message : d.item.message,
+					date       : new Date(d.tweet_creation_time),
+					sentiment : s.comparative,
+				}, 
+				{
+					upsert : true
+				});
+			});
 
-            if( forward == true && _.isEmpty( result.data.next_url ) == false )
-                getData( name, result.data.next_url );
+			if( forward == true && _.isEmpty( result.data.next_url ) == false )
+				getData( name, result.data.next_url, forward, backward );
 
-            if( backward == true && _.isEmpty( result.data.prev_url ) == false )
-                getData( name,  result.data.prev_url );
-        });
-    }
+			if( backward == true && _.isEmpty( result.data.prev_url ) == false )
+				getData( name,  result.data.prev_url, forward, backward ); 
+		});
+	}
 
-    Meteor.startup(function () { 
-        _.each(AllCandidates, function( candidate ) {
-            getData( candidate.name, candidate.url_feed, true, true );
-        });
+	function getPastData( name, url ) {
+		getData( name, url, true, false );
+	}
 
-        Meteor.setInterval( function() {
-            _.each(AllCandidates, function( candidate ) {
-              getData( candidate.name, candidate.url_feed, true, false );
-            });
-        }, 1000 );
-    });
+	Meteor.startup(function () { 
+		_.each( AllCandidates, function( candidate ) {
+			getPastData( candidate.name, candidate.url_feed );
+		});
+	});
 }
