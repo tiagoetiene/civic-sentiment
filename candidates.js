@@ -1,5 +1,5 @@
 AllCandidates = [
-  {
+  { 
     name : "Jeanne Shaheen",
     party : 'Democratic',
     image : "resource/500px-Jeanne_Shaheen,_official_Senate_photo_portrait,_2009.jpg",
@@ -63,6 +63,22 @@ AllCandidates = [
     iframe_id : "e41192a2-070c-456f-b9b8-8c18ead29d20",
     url_feed : "http://rjihacks.wayinhub.com/api/1/bites?feed=fd-2ib7730wfg3ghbr8srq&limit=200&format=json"
   },
+  {
+    name : "Argentine",
+    party : "-",
+    image : "http://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Flag_of_Argentina.svg/500px-Flag_of_Argentina.svg.png",
+    iframe_src : "//rjihacks.wayinhub.com/cv-page-arg?hidenav=true",
+    iframe_id : "735fdfdc-81ef-4aff-9315-573fd52e48a3",
+    url_feed : "http://rjihacks.wayinhub.com/api/1/bites?feed=fd-5nh01dn0n1rkvrjr0f&limit=200&format=json"
+  },
+  {
+    name : "Brazil",
+    party : "-",
+    image : "http://upload.wikimedia.org/wikipedia/en/thumb/0/05/Flag_of_Brazil.svg/500px-Flag_of_Brazil.svg.png",
+    iframe_src : "//rjihacks.wayinhub.com/cv-page-brazil?hidenav=true",
+    iframe_id : "b3b04e65-966a-4386-815c-563d4a58f493",
+    url_feed : "http://rjihacks.wayinhub.com/api/1/bites?feed=fd-2ifd6uw7xhap0cwn8vo&limit=200&format=json"
+  }, 
 ]
 
 SelectedCandidates = []
