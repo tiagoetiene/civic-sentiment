@@ -1,9 +1,12 @@
 TwitterDB = new Meteor.Collection("tweets")
+WeekDB = Slice( "weeks" ).interval( millisecondsInAWeek / 30 )
+
 
 function setCandidateCursors(past) {
 	_.each(AllCandidates, function( _ , idx ) {
     		var query_param = { date : { $gt : past },  name : AllCandidates[idx].name };
     		AllCandidates[idx].cursor = TwitterDB.find(query_param);
+    		AllCandidates[idx].weekCursor = WeekDB.find( query_param );
   	});
 }
 
@@ -23,7 +26,7 @@ if (Meteor.isClient) {
 			for(var i = 0; i < SelectedCandidates.length; ++i)
 				if(e.val.indexOf(SelectedCandidates[i].name) != -1)
 					found = true;
-			if(found == true)
+			if(found == true) 
 				return
 			for(var i = 0; i < AllCandidates.length; ++i)
 				if(e.val.indexOf(AllCandidates[i].name) != -1) {
@@ -178,6 +181,11 @@ if (Meteor.isServer) {
 				return;
 
 			_.each(result.data.results, function(d) {
+
+				d.name = name;
+
+				WeekDB.datum( d );
+
 				var s = Sentiment(d.item.message);
 				TwitterDB.update( 
 				{
