@@ -108,7 +108,7 @@ if (Meteor.isClient) {
 
 if (Meteor.isServer) {
 
-	Sentiment = Npm.require("sentiment");
+	Sentiment = Meteor.require("sentiment");
 	var CandidateTree = {};
 
 	// TwitterDB.remove({});
