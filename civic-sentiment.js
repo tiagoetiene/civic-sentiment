@@ -106,59 +106,60 @@ if (Meteor.isClient) {
     	setInterval(function() { Session.set('UpdateImageHeight', !(Session.get('UpdateImageHeight') == true)); }, 1000);
 }
 
-if (Meteor.isServer) { 	
-	// TwitterDB.remove({});   
-	Sentiment = Npm.require("sentiment");
+if (Meteor.isServer) {
 
+	Sentiment = Npm.require("sentiment");
+	var CandidateTree = {};
+
+	// TwitterDB.remove({});
 	// TwitterDB._ensureIndex( { id : 1}, { unique : true } );
 	// TwitterDB._ensureIndex( { date : 1 , name : 1 } );
-	function getData( name, url, forward, backward ) {
-		var param = { timeout : 32000 }
-
-		console.log(name, ': ', url, TwitterDB.find().count());
-
-		HTTP.get(url, param, function(ret, result) {
-			if( result == null)
-				return;
-
-			_.each(result.data.results, function(d) {
-
-				d.name = name;
-
-				WeekDB.datum( d );
-
-				var s = Sentiment(d.item.message);
-				TwitterDB.update( 
-				{
-					id : d.id 
-				},
-				{
-					id : d.id,
-					name     : name,
-					// message : d.item.message,
-					date       : new Date(d.tweet_creation_time),
-					sentiment : s.comparative,
-				}, 
-				{
-					upsert : true
-				});
-			});
-
-			if( forward == true && _.isEmpty( result.data.next_url ) == false ) 
-				getData( name, result.data.next_url, forward, backward );
-
-			if( backward == true && _.isEmpty( result.data.prev_url ) == false )
-				getData( name,  result.data.prev_url, forward, backward ); 
-		});
-	}
-
-	function getPastData( name, url ) {
-		getData( name, url, true, false );
-	}
-
+	
 	Meteor.startup(function () { 
+
+		console.log( 'Setting search tree... ' );
+		_.each( AllCandidates, function( _ , idx) {
+			CandidateTree[ _.name ] = TimeTree();
+			CandidateTree[ _.name ]
+								 .depth( 24 )
+								 .dateValuer( function( d ) { return d.date; } )
+								 .sentimentValuer( function( d ) { return d.sentiment; } );
+		}); 
+
+
+		console.log( 'Setting database observers... ' );
+		_.each(AllCandidates, function( _ , idx) {
+			var name = _.name;
+			var query_param = { name : name };
+    			AllCandidates[ idx ].cursor = TwitterDB.find( query_param );
+			AllCandidates[ idx ].cursor.observeChanges( {
+				added : function(id, obj) {
+					CandidateTree[ name ].add( obj ); 
+	  			}
+	  		});
+  		});
+
+		console.log( 'Setting feedback methods... ' );
+		Meteor.methods({
+			data : function( name, interval, past ) {
+				if( _.has( CandidateTree, name ) )
+					return CandidateTree[ name ].get( interval, past );
+				return [];
+            	},
+            });
+
+		console.log( 'Getting past data... ' );
 		_.each( AllCandidates, function( candidate ) {
 			getPastData( candidate.name, candidate.url_feed );
 		});
+
+		Meteor.setInterval( function() {
+			_.each( AllCandidates, function( candidate ) {
+				var ttl = 3;
+				getPastData( candidate.name, candidate.url_feed, ttl );
+			});  
+		}, 1000);
+
+		console.log( 'Server has started... ' );
 	});
 }
