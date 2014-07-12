@@ -37,7 +37,7 @@ Plot = function( ) {
                         .domain( [-1, 1] );
             
             var line = d3.svg.area()
-                .interpolate('basis') 
+                .interpolate('linear') 
                 .x( function( v, idx ) { return x( x_valuer.call(this, v, idx) ); } )
                 .y0( 0.5 * height )
                 .y1( function( v, idx ) { return y( y_valuer.call(this, v, idx) ); } );
@@ -46,10 +46,10 @@ Plot = function( ) {
                 plot
                     .append( 'path' )
                     .attr( 'stroke', colors[i] )
-                    .attr( 'stroke-width', '2px' )
+                    .attr( 'stroke-width', '1px' )
                     // .attr( 'fill', 'none')
                     .attr( 'fill', colors[i])
-                    .attr( 'fill-opacity', 0.5)
+                    .attr( 'fill-opacity', 0.7)
                     .attr( 'd', line(data[i]) );
             }
 
