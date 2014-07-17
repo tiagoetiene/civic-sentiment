@@ -12,7 +12,6 @@ Plot = function( ) {
     function chart( selection ) {
 
         selection.each( function( data, idx ) {  
-        
             if( width == undefined )
                 width = parseInt(selection.style('width'));
 
@@ -42,7 +41,7 @@ Plot = function( ) {
                 .y0( 0.5 * height )
                 .y1( function( v, idx ) { return y( y_valuer.call(this, v, idx) ); } );
 
-            for(var i = 0; i < data.length; ++i) {
+            for(var i = 0; i < data.length; ++i)
                 plot
                     .append( 'path' )
                     .attr( 'stroke', colors[i] )
@@ -51,7 +50,6 @@ Plot = function( ) {
                     .attr( 'fill', colors[i])
                     .attr( 'fill-opacity', 0.7)
                     .attr( 'd', line(data[i]) );
-            }
 
             render_axis(plot, data);
 
