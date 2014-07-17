@@ -1,6 +1,10 @@
 TwitterDB = new Meteor.Collection("tweets")
 
 if (Meteor.isClient) {
+
+	for(var i = 0; i < AllCandidates.length; ++i)
+		AllCandidates[i].tweets_count = 0;
+
 	var past = -7 * 24 * 60 * 60 * 1000;
 
 	$(document).ready(function() { 
@@ -39,6 +43,11 @@ if (Meteor.isClient) {
 		return this.name;
 	}
 
+	Template.candidate_name.tweets_count = function() {
+		Session.get(this.name);
+		return this.tweets_count;
+	}
+
 	Template.main.list_of_candidates = function() {
 		Session.get('ListOfCandidates')
 		return SelectedCandidates;
@@ -72,34 +81,65 @@ if (Meteor.isClient) {
 	}
 
 	var plot = Plot();
+	var data = { };
   	  	
-	function plotData() {
-		var data = [];
+	function retrieveData() {
 		var _now = new Date();
 		var _past = getPast( _now, past );
-		var domain = [ _past, _now ];
 		var bins = 30;
 		var time_interval = Math.floor( Math.abs( past / bins ) );
 
-		_.each(SelectedCandidates, function(candidate) { 
+		for(var i = 0; i < AllCandidates.length; ++i) {
+			var found = false;
+			for(var j = 0; j < SelectedCandidates.length; ++j)
+				if(AllCandidates[i].name === SelectedCandidates[j].name)
+					found = true
+			if(found == false)
+				data[AllCandidates[i].name] = undefined;
+		}
+
+		_.each(SelectedCandidates, function(candidate, idx) { 
 			Meteor.call('data', candidate.name, time_interval, _past, function(error, ret) {
-				
+				data[ candidate.name ] = [];
 				var max = d3.max( ret, function(d) { return Math.abs(d.sentiment) } );
 				if( max != 0 ) _.each( ret, function(d, idx) { ret[ idx ].sentiment /= max } );
-				
-				data.push( ret );
-
-				var plot_div = d3.select('#plot');
-				plot_div.data( [ data ] );
-				plot.domain( [  _past , _now ]  )
-					.x( function(d) { return d.date; } )
-					.y( function(d) { return d.sentiment; } )
-					(plot_div);
+				data[ candidate.name ].push( ret );
+				SelectedCandidates[ idx ].tweets_count = 0;
+				_.each(ret, function(d) {
+					SelectedCandidates[ idx ].tweets_count += d.counter;
+				})
+				Session.set(candidate.name, SelectedCandidates[ idx ].tweets_count);
 			});
 		});
 	}
 
-	setInterval(plotData, 1000);
+	function pplot() {
+		if(_.isEmpty(data))
+			return;
+
+		var plot_data = [];
+		var _now = new Date();
+		var _past = getPast( _now, past );
+		var domain = [ _past, _now ];
+
+		_.each(data, function(value, key) {
+			if(value != undefined) {
+				plot_data.push( value[0] );
+			}
+		});
+
+		var plot_div = d3.select('#plot');
+		plot_div.data( [ plot_data ] );
+		plot.domain( [  _past , _now ]  )
+					.x( function(d) { return d.date; } )
+					.y( function(d) { return d.sentiment; } )
+					(plot_div);
+	}
+
+	retrieveData();
+	setInterval(retrieveData, 5000);
+	pplot();
+	setInterval(pplot, 1000);
 
 	// Hack to fix image size. I've been trying to get the Wayin widget to be shaped as a perfect square
 	// but I did not succeed. Thus, this hack will solve the problem.
@@ -118,47 +158,56 @@ if (Meteor.isServer) {
 	Meteor.startup(function () { 
 
 		console.log( 'Setting search tree... ' );
-		_.each( AllCandidates, function( _ , idx) {
+		_.each(AllCandidates, function( _ , idx) {
 			CandidateTree[ _.name ] = TimeTree();
 			CandidateTree[ _.name ]
-								 .depth( 24 )
+								 .depth( 14 )
 								 .dateValuer( function( d ) { return d.date; } )
-								 .sentimentValuer( function( d ) { return d.sentiment; } );
-		}); 
+								 .sentimentValuer( function( d ) { return d.sentiment; } )
+								 .build();
+		});
 
 
 		console.log( 'Setting database observers... ' );
 		_.each(AllCandidates, function( _ , idx) {
 			var name = _.name;
 			var query_param = { name : name };
-    			AllCandidates[ idx ].cursor = TwitterDB.find( query_param );
-			AllCandidates[ idx ].cursor.observeChanges( {
-				added : function(id, obj) {
-					CandidateTree[ name ].add( obj ); 
-	  			}
-	  		});
+
+			Meteor.setTimeout(function() {
+				console.log( '\tLoading', name, 'data...' );
+				var counter = 0;
+	    			AllCandidates[ idx ].cursor = TwitterDB.find( query_param );
+				AllCandidates[ idx ].cursor.observeChanges({
+					added : function(id, obj) {
+						console.log(name, 'has', counter, 'tweets');
+						counter++;
+						CandidateTree[ name ].add( obj ); 
+		  			}
+		  		})
+				console.log( '\tDone with ', name, '.');
+			}, 50);
   		});
 
 		console.log( 'Setting feedback methods... ' );
 		Meteor.methods({
 			data : function( name, interval, past ) {
 				if( _.has( CandidateTree, name ) )
-					return CandidateTree[ name ].get( interval, past );
+					return  CandidateTree[ name ].get( interval, past );
 				return [];
-            	},
+            	}, 
             });
 
-		console.log( 'Getting past data... ' );
-		_.each( AllCandidates, function( candidate ) {
-			getPastData( candidate.name, candidate.url_feed );
-		});
+		// console.log( 'Getting past data... ' );
+		// _.each( AllCandidates, function( candidate ) {
+		// 	getPastData( candidate.name, candidate.url_feed );
+		// });
 
-		Meteor.setInterval( function() {
-			_.each( AllCandidates, function( candidate ) {
-				var ttl = 3;
-				getPastData( candidate.name, candidate.url_feed, ttl );
-			});  
-		}, 1000);
+		// Meteor.setInterval( function() {
+		// 	_.each( AllCandidates, function( candidate ) {
+		// 		var ttl = 3;
+		// 		getPastData( candidate.name, candidate.url_feed, ttl );
+		// 	});  
+		// }, 1000);
 
 		console.log( 'Server has started... ' );
 	});
