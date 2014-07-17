@@ -23,7 +23,6 @@ TimeTree = function( ) {
 
 
 	var _depth = 24;
-	var _hasTree = false;
 	var _dateValuer = Number;
 	var _sentimentValuer = Number;
 	var _intervals = [];
@@ -37,10 +36,12 @@ TimeTree = function( ) {
 			set._members[ index ].sentiment += sentiment;
 			return;
 		}
-		console.assert(0);
 	}
 
 	function tree() { 
+	}
+
+	tree.build = function( ) {
 		var milliseconds = 1000.0;
 		_intervals = [];
 		_tree = [];
@@ -50,13 +51,9 @@ TimeTree = function( ) {
 			_intervals[ i ] = milliseconds; 
 			milliseconds *= 2;
 		}
-		_hasTree = true;
 	}
 
 	tree.add = function( _ ) {
-		if( _hasTree == false )
-			tree();
-
 		var bin;
 		var node;
 		var tmp;
