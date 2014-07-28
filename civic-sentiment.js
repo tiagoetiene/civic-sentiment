@@ -119,15 +119,16 @@ if (Meteor.isClient) {
 		}
 		
 		_.each(SelectedCandidates, function(candidate, idx) { 
-			var query = { "name" : candidate.name, depth : depth, date : {$gt : _past } };
-			var cursor = TwitterCollection.find( query );
-			var ret = [];
-			
-			SelectedCandidates[ idx ].tweets_count = 0;
-			cursor.forEach(function(d) {
-				ret.push( d );
-				SelectedCandidates[ idx ].tweets_count += d.counter;
+			var query = { name : candidate.name, depth : depth };
+			var r = TwitterCollection.findOne( query );
+			var ret = _.filter(r.data, function(d) { 
+				return +d.date >= +_past; 
 			});
+						
+			SelectedCandidates[ idx ].tweets_count = 0;
+			_.each(ret, function(d) {
+				SelectedCandidates[ idx ].tweets_count += d.counter;
+			})
 
 			Session.set( candidate.name, SelectedCandidates[ idx ].tweets_count );
 			setTimeout( function() {
@@ -138,7 +139,7 @@ if (Meteor.isClient) {
 			if( max != 0 ) _.each( ret, function(d, idx) { ret[ idx ].sentiment /= max } );
 
 			data[ candidate.name ] = [];
-			data[ candidate.name ].push( _.sortBy(ret, 'date') );
+			data[ candidate.name ].push( ret );
 		});
 	}
 
