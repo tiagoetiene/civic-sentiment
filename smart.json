@@ -1,9 +1,6 @@
 {
   "packages": {
     "bootstrap-3": {},
-    "select2": {},
-    "sentiment": {},
-    "npm": {},
-    "kadira": {}
+    "select2": {}
   }
 }
