@@ -183,7 +183,7 @@ if (Meteor.isClient) {
 		if(lastRefreshingTime != refreshingTime) {
 			clearInterval(retrievedDataId);
 			lastRefreshingTime = refreshingTime;
-			console.log('current refreshing time: ', refreshingTime / 1000);
+			console.log('current refreshing time: ', refreshingTime / 1000, 'seconds...');
 			retrievedDataId = setInterval(retrieveData, refreshingTime);
 		}
 	}, 500);
