@@ -25,12 +25,12 @@ if (Meteor.isClient) {
 				retrieveData();
 			})
 
-		$("#pastMonth").change( function(e)	{ past = -31 * 24 * 60 * 60 * 1000; retrieveData(); })
-		$("#pastWeek").change( function(e)	{ past = -7 * 24 * 60 * 60 * 1000; retrieveData(); })
-		$("#pastDay").change( function(e)		{ past =      - 24 * 60 * 60 * 1000; retrieveData(); })
-		$("#pastHour").change( function(e)		{ past =          - 8 * 60 * 60 * 1000; retrieveData(); })
-		$("#past5Min").change( function(e)		{ past =           -1 * 60 * 60 * 1000; retrieveData(); })
-		$("#past1Min").change( function(e)		{ past =                  - 5 * 60 * 1000; retrieveData(); })
+		$("#pastMonth").change( function(e)	{ past = -31 * 24 * 60 * 60 * 1000; retrieveData(); refreshingTime = 28800000; });
+		$("#pastWeek").change( function(e)	{ past = -7  * 24 * 60 * 60 * 1000; retrieveData(); refreshingTime = 3600000; });
+		$("#pastDay").change( function(e)	{ past =     - 24 * 60 * 60 * 1000; retrieveData();	refreshingTime = 1800000;});
+		$("#pastHour").change( function(e)	{ past =     -  8 * 60 * 60 * 1000; retrieveData(); refreshingTime = 300000;});
+		$("#past5Min").change( function(e)	{ past =     -  1 * 60 * 60 * 1000; retrieveData(); refreshingTime = 60000;});
+		$("#past1Min").change( function(e)	{ past =          -  5 * 60 * 1000; retrieveData(); refreshingTime = 2000;});
   	});
   
 	Template.twitter_feed.iframe_source = function() {
@@ -166,9 +166,23 @@ if (Meteor.isClient) {
 	}
 
 	retrieveData();
-	setInterval(retrieveData, 10000);
+
+	lastRefreshingTime = undefined;
+	retrievedDataId = undefined;
+	refreshingTime  = 10;	
 	pplot();
 	setInterval(pplot, 1000);
+
+
+	setInterval(function() {
+		if(lastRefreshingTime != refreshingTime) {
+			clearInterval(retrievedDataId);
+			lastRefreshingTime = refreshingTime;
+			console.log('current refreshing time: ', refreshingTime / 1000);
+			retrievedDataId = setInterval(retrieveData, refreshingTime)
+
+		}
+	}, 500);
 
 	// Hack to fix image size. I've been trying to get the Wayin widget to be shaped as a perfect square
 	// but I did not succeed. Thus, this hack will solve the problem.
