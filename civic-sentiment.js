@@ -27,7 +27,7 @@ if (Meteor.isClient) {
 			})
 
 		$("#pastMonth").change( function(e)	{ past = -31 * 24 * 60 * 60 * 1000; retrieveData(); refreshingTime = 28800000; });
-		$("#pastWeek").change( function(e)	{ past = -7  * 24 * 60 * 60 * 1000; retrieveData(); refreshingTime = 3600000; });
+		$("#pastWeek").change( function(e)	{ past = - 7 * 24 * 60 * 60 * 1000; retrieveData(); refreshingTime = 3600000; });
 		$("#pastDay").change( function(e)	{ past =     - 24 * 60 * 60 * 1000; retrieveData();	refreshingTime = 1800000;});
 		$("#pastHour").change( function(e)	{ past =     -  8 * 60 * 60 * 1000; retrieveData(); refreshingTime = 300000;});
 		$("#past5Min").change( function(e)	{ past =     -  1 * 60 * 60 * 1000; retrieveData(); refreshingTime = 60000;});
@@ -184,14 +184,13 @@ if (Meteor.isClient) {
 			clearInterval(retrievedDataId);
 			lastRefreshingTime = refreshingTime;
 			console.log('current refreshing time: ', refreshingTime / 1000);
-			retrievedDataId = setInterval(retrieveData, refreshingTime)
-
+			retrievedDataId = setInterval(retrieveData, refreshingTime);
 		}
 	}, 500);
 
 	// Hack to fix image size. I've been trying to get the Wayin widget to be shaped as a perfect square
 	// but I did not succeed. Thus, this hack will solve the problem.
-    	setInterval(function() { Session.set('UpdateImageHeight', !(Session.get('UpdateImageHeight') == true)); }, 1000);
+    setInterval(function() { Session.set('UpdateImageHeight', !(Session.get('UpdateImageHeight') == true)); }, 1000);
 }
 
 if (Meteor.isServer) {	
