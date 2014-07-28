@@ -6,6 +6,7 @@ AllCandidates = [
     iframe_src : "//rjihacks.wayinhub.com/cv-page-jeanne-shaheen?hidenav=true",
     iframe_id : "1a0910b2-9765-4caf-8ae0-233ffda2fe1d",
     url_feed : "http://rjihacks.wayinhub.com/api/1/bites?feed=fd-5n1q39ji7ffcro4xhl&limit=200&format=json",
+    color : '#2980B9'
   },
   { 
     name : "Scott Brown",
@@ -13,7 +14,8 @@ AllCandidates = [
     image : "resource/500px-Sbrownofficial.jpg",
     iframe_src : "//rjihacks.wayinhub.com/cv-page-scott-brown?hidenav=true",
     iframe_id : "b556773a-8f12-4213-ac41-a14a0219ccec",
-    url_feed : "http://rjihacks.wayinhub.com/api/1/bites?feed=fd-2i8rllbn4nswdwznr6c&limit=200&format=json"
+    url_feed : "http://rjihacks.wayinhub.com/api/1/bites?feed=fd-2i8rllbn4nswdwznr6c&limit=200&format=json",
+    color : '#C0392B'
   },
   {
     name : "Barack Obama",
@@ -21,7 +23,8 @@ AllCandidates = [
     image : "resource/500px-President_Barack_Obama.jpg",
     iframe_src : "//rjihacks.wayinhub.com/cv-page-obama?hidenav=true",
     iframe_id : "2e0c206f-9dee-4edb-aafb-f9d71d12c1dc",
-    url_feed : "http://rjihacks.wayinhub.com/api/1/bites?feed=fd-2ia8kfr7v18vl20p3mu&limit=200&format=json"
+    url_feed : "http://rjihacks.wayinhub.com/api/1/bites?feed=fd-2ia8kfr7v18vl20p3mu&limit=200&format=json",
+    color : '#2980B9'
   },
   {
     name : "Dilma Rousseff",
@@ -29,7 +32,8 @@ AllCandidates = [
     image : "resource/500px-Dilma_Rousseff.jpg",
     iframe_src : "//rjihacks.wayinhub.com/cv-page-dilma-rousseff?hidenav=true",
     iframe_id : "63ac1d56-e8fe-4a70-8dfd-f344e7fc2fc7",
-    url_feed : "http://rjihacks.wayinhub.com/api/1/bites?feed=fd-2ia98a68acnyqj01ur9&limit=200&format=json"
+    url_feed : "http://rjihacks.wayinhub.com/api/1/bites?feed=fd-2ia98a68acnyqj01ur9&limit=200&format=json",
+    color : 'darkgreen'
   },
   // {
   //   name : "Eric Cantor",

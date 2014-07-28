@@ -5,7 +5,7 @@ Plot = function( ) {
     var x_valuer = Number;
     var y_valuer = Number;
     var colors = ['#2980B9', '#C0392B', 'darkgreen', 'yellow'];
-    var x, y
+    var x, y;
     var domain = undefined;
     var pplot = undefined; 
     
@@ -46,7 +46,6 @@ Plot = function( ) {
                     .append( 'path' )
                     .attr( 'stroke', colors[i] )
                     .attr( 'stroke-width', '1px' )
-                    // .attr( 'fill', 'none')
                     .attr( 'fill', colors[i])
                     .attr( 'fill-opacity', 0.5)
                     .attr( 'd', line(data[i]) );
@@ -138,6 +137,13 @@ Plot = function( ) {
         if( !arguments.length)
             return domain;
         domain = _;
+        return chart;
+    }
+
+    chart.colors = function(_) {
+        if( !arguments.length)
+            return colors;
+        colors = _;
         return chart;
     }
 

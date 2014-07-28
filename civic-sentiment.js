@@ -1,6 +1,7 @@
 TwitterCollection = new Meteor.Collection("tweets-summary")
 
 if (Meteor.isClient) {
+	var plot_colors = [];
 
 	for(var i = 0; i < AllCandidates.length; ++i)
 		AllCandidates[i].tweets_count = 0;
@@ -118,6 +119,7 @@ if (Meteor.isClient) {
 				data[AllCandidates[i].name] = undefined;
 		}
 		
+		plot_colors = [];
 		_.each(SelectedCandidates, function(candidate, idx) { 
 			var query = { name : candidate.name, depth : depth };
 			var r = TwitterCollection.findOne( query );
@@ -140,6 +142,8 @@ if (Meteor.isClient) {
 
 			data[ candidate.name ] = [];
 			data[ candidate.name ].push( ret );
+
+			plot_colors.push( candidate.color );
 		});
 	}
 
@@ -163,14 +167,14 @@ if (Meteor.isClient) {
 		plot.domain( [  _past , _now ]  )
 					.x( function(d) { return d.date; } )
 					.y( function(d) { return d.sentiment; } )
+					.colors(plot_colors)
 					(plot_div);
 	}
 
-	retrieveData();
-
-	lastRefreshingTime = undefined;
+	lastRefreshingTime = -1;
 	retrievedDataId = undefined;
-	refreshingTime  = 10;	
+	refreshingTime  = undefined;
+	retrieveData();
 	pplot();
 	setInterval(pplot, 1000);
 
