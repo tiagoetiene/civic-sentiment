@@ -36,7 +36,7 @@ Plot = function( ) {
                         .domain( [-1, 1] );
             
             var line = d3.svg.area()
-                .interpolate('linear') 
+                .interpolate('basis') 
                 .x( function( v, idx ) { return x( x_valuer.call(this, v, idx) ); } )
                 .y0( 0.5 * height )
                 .y1( function( v, idx ) { return y( y_valuer.call(this, v, idx) ); } );
@@ -48,7 +48,7 @@ Plot = function( ) {
                     .attr( 'stroke-width', '1px' )
                     // .attr( 'fill', 'none')
                     .attr( 'fill', colors[i])
-                    .attr( 'fill-opacity', 0.7)
+                    .attr( 'fill-opacity', 0.5)
                     .attr( 'd', line(data[i]) );
 
             render_axis(plot, data);

@@ -45,15 +45,15 @@
 		    		<option value="Jeanne Shaheen">Jeanne Shaheen</option>
         			<option value="Scott Brown">Scott Brown</option>
 				<option value="Barack Obama">Barack Obama</option>
-        			<!-- <option value="Eric Cantor">Eric Cantor</option>
-        			<option value="Gerard Beloin">Gerard Beloin</option>
-        			<option value="Robert D'Arcy">Robert D'Arcy</option>
-        			<option value="Bob Smith">Bob Smith</option>
+        			<!-- <option value="Eric Cantor">Eric Cantor</option> -->
+        			<!-- <option value="Gerard Beloin">Gerard Beloin</option> -->
+        			<!-- <option value="Robert D'Arcy">Robert D'Arcy</option> -->
+        			<!-- <option value="Bob Smith">Bob Smith</option> -->
         			<option value="Dilma Rousseff">Dilma Rousseff</option>
-        			<option value="Brazil">Brazil</option>
-        			<option value="Colombia">Colombia</option>
-        			<option value="Argentine">Argentine</option>
-        			<option value="Belgium">Belgium</option> -->
+        			<!-- <option value="Brazil">Brazil</option> -->
+        			<!-- <option value="Colombia">Colombia</option> -->
+        			<!-- <option value="Argentine">Argentine</option> -->
+        			<!-- <option value="Belgium">Belgium</option> -->
     			</select>
 		</div>
 		<div class="col-md-3"></div>
@@ -97,7 +97,7 @@
 </template>
 
 <template name="candidate_name">
-	<h2 class="text-center"> {{name}} ({{tweets_count}} tweets) </h2>
+	<h2 class="text-center" style="{{color}}"> {{name}} ({{tweets_count}} tweets) </h2>
 </template>
 
 <template name="close_button">
@@ -138,20 +138,23 @@
 	<div class="row">
 		<div class="col-md-12">
 			<div class="btn-group" data-toggle="buttons">
-				<label class="btn btn-sm btn-primary active" id="pastWeek">
+				<label class="btn btn-sm btn-primary active" id="pastMonth">
+					<input type="radio" name="options" checked> Past Month
+				</label>
+				<label class="btn btn-sm btn-primary " id="pastWeek">
 					<input type="radio" name="options" checked> Past Week
 				</label>
 				<label class="btn btn-sm btn-primary">
 					<input type="radio" name="options" id="pastDay"> Past Day
 				</label>
 				<label class="btn btn-sm btn-primary">
-					<input type="radio" name="options" id="pastHour"> Past Hour
+					<input type="radio" name="options" id="pastHour"> Past 8 Hours
 				</label>
 				<label class="btn btn-sm btn-primary">
-					<input type="radio" name="options" id="past5Min"> Past 5 min
+					<input type="radio" name="options" id="past5Min"> Past 1 Hour
 				</label>
 				<label class="btn btn-sm btn-primary">
-					<input type="radio" name="options" id="past1Min"> Past 1 min
+					<input type="radio" name="options" id="past1Min"> Past 5 min
 				</label>
 			</div>
 		</div>

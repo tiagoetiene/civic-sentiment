@@ -23,14 +23,14 @@ AllCandidates = [
     iframe_id : "2e0c206f-9dee-4edb-aafb-f9d71d12c1dc",
     url_feed : "http://rjihacks.wayinhub.com/api/1/bites?feed=fd-2ia8kfr7v18vl20p3mu&limit=200&format=json"
   },
-  // {
-  //   name : "Dilma Rousseff",
-  //   party : "Partido dos Trabalhadores",
-  //   image : "resource/500px-Dilma_Rousseff.jpg",
-  //   iframe_src : "//rjihacks.wayinhub.com/cv-page-dilma-rousseff?hidenav=true",
-  //   iframe_id : "63ac1d56-e8fe-4a70-8dfd-f344e7fc2fc7",
-  //   url_feed : "http://rjihacks.wayinhub.com/api/1/bites?feed=fd-2ia98a68acnyqj01ur9&limit=200&format=json"
-  // },
+  {
+    name : "Dilma Rousseff",
+    party : "Partido dos Trabalhadores",
+    image : "resource/500px-Dilma_Rousseff.jpg",
+    iframe_src : "//rjihacks.wayinhub.com/cv-page-dilma-rousseff?hidenav=true",
+    iframe_id : "63ac1d56-e8fe-4a70-8dfd-f344e7fc2fc7",
+    url_feed : "http://rjihacks.wayinhub.com/api/1/bites?feed=fd-2ia98a68acnyqj01ur9&limit=200&format=json"
+  },
   // {
   //   name : "Eric Cantor",
   //   party : "Republican",
