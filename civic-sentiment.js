@@ -119,7 +119,7 @@ if (Meteor.isClient) {
 				data[AllCandidates[i].name] = undefined;
 		}
 		
-		plot_colors = [];
+
 		_.each(SelectedCandidates, function(candidate, idx) { 
 			var query = { name : candidate.name, depth : depth };
 			var r = TwitterCollection.findOne( query );
@@ -141,9 +141,8 @@ if (Meteor.isClient) {
 			if( max != 0 ) _.each( ret, function(d, idx) { ret[ idx ].sentiment /= max } );
 
 			data[ candidate.name ] = [];
-			data[ candidate.name ].push( ret );
+			data[ candidate.name ].push( { data : ret, color : candidate.color } );
 
-			plot_colors.push( candidate.color );
 		});
 	}
 
@@ -156,9 +155,11 @@ if (Meteor.isClient) {
 		var _past = getPast( _now, past );
 		var domain = [ _past, _now ];
 
+		plot_colors = [];
 		_.each(data, function(value, key) {
 			if(value != undefined) {
-				plot_data.push( value[0] );
+				plot_data.push( value[0].data );
+				plot_colors.push( value[0].color );
 			}
 		});
 
