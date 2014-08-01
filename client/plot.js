@@ -1,7 +1,7 @@
 Plot = function( ) {
     var width = undefined;
     var height = 300;
-    var padding = 60;
+    var padding = 45;
     var x_valuer = Number;
     var y_valuer = Number;
     var colors = ['#2980B9', '#C0392B', 'darkgreen', 'yellow'];
@@ -12,18 +12,13 @@ Plot = function( ) {
     function chart( selection ) {
 
         selection.each( function( data, idx ) {  
-            if( width == undefined )
-                width = parseInt(selection.style('width'));
-
+            width = parseInt(selection.style('width'));
             var svg = selection.selectAll("svg").data([data]);
             if(pplot == undefined)
-                pplot = svg.enter()
-                            .append( 'svg' )
-                            .attr( 'width' ,  width)
-                            .attr( 'height' , height);
+                pplot = svg.enter().append( 'svg' );
+            pplot.attr( 'width' ,  width-padding).attr( 'height' , height);
             pplot.select('#sentimentplot').remove();
-            var plot = pplot.append("g")
-                            .attr('id', 'sentimentplot');
+            var plot = pplot.append("g").attr('id', 'sentimentplot');
             
             x = d3.time
                     .scale()
@@ -56,16 +51,6 @@ Plot = function( ) {
 
         function render_axis(cell) {
             
-
-            // PLOT HORIZONTAL AXIS
-            cell
-                .append('g')
-                .attr('transform', 'translate(' + padding + ',' + height / 2 + ')')
-                .append('rect')
-                .attr('fill', 'lightgray')
-                .attr('width', width-padding)
-                .attr('height', 2);
-
             var axis = cell.append('g')
                                     .attr('transform', 'translate(' + padding + ',' + 0 + ')')  
                                     .append('line')
@@ -74,7 +59,7 @@ Plot = function( ) {
                                     .attr('x2', 0.0)
                                     .attr('y2', height)
                                     .attr('stroke', 'lightgray')
-                                    .attr('stroke-width', '3px')
+                                    .attr('stroke-width', '3px');
 
             // PLOT TEXT: SENTIMENT
             cell.append("text")
@@ -103,6 +88,7 @@ Plot = function( ) {
                 .attr("transform", "translate(" + (padding+10) + "," + (height-15) + ")" + "rotate(0)")
                 .text("Dislike");
 
+            // x.range( [ padding , width ] );
             cell.append('g')
                  .attr('transform', 'translate(' + 0 + ',' + height / 2 + ')')
                  .attr('fill', 'lightgray')
