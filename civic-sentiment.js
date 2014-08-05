@@ -28,10 +28,11 @@ if (Meteor.isClient) {
 
 		$("#pastMonth").change( function(e)	{ past = -31 * 24 * 60 * 60 * 1000; retrieveData(); refreshingTime = 28800000; });
 		$("#pastWeek").change( function(e)	{ past = - 7 * 24 * 60 * 60 * 1000; retrieveData(); refreshingTime = 3600000; });
-		$("#pastDay").change( function(e)	{ past =     - 24 * 60 * 60 * 1000; retrieveData();	refreshingTime = 1800000;});
-		$("#pastHour").change( function(e)	{ past =     -  8 * 60 * 60 * 1000; retrieveData(); refreshingTime = 300000;});
-		$("#past5Min").change( function(e)	{ past =     -  1 * 60 * 60 * 1000; retrieveData(); refreshingTime = 60000;});
-		$("#past1Min").change( function(e)	{ past =          -  5 * 60 * 1000; retrieveData(); refreshingTime = 2000;});
+		$("#past3Day").change( function(e)		{ past =   - 3 * 24 * 60 * 60 * 1000; retrieveData(); refreshingTime = 6000000;});
+		$("#pastDay").change( function(e)		{ past =     - 24 * 60 * 60 * 1000; retrieveData(); refreshingTime = 1800000;});
+		$("#past8Hour").change( function(e)	{ past =     -  8 * 60 * 60 * 1000; retrieveData(); refreshingTime = 300000;});
+		$("#past1Hour").change( function(e)	{ past =     -  4 * 60 * 60 * 1000; retrieveData(); refreshingTime = 60000;});
+		$("#past5Min").change( function(e)		{ past =          -  5 * 60 * 1000; retrieveData(); refreshingTime = 2000;});
   	});
   
 	Template.twitter_feed.iframe_source = function() {
@@ -100,15 +101,15 @@ if (Meteor.isClient) {
 				break;
 			milliseconds *= 2;
 		}
-		return Math.min( depth - 1, idx );
+		return { depth : Math.min( depth - 1, idx ), interval : milliseconds };
 	}
 
 	function retrieveData() {
 		var _now = new Date();
 		var _past = getPast( _now, past );
-		var bins = 200;
+		var bins = 100;
 		var time_interval = Math.floor( Math.abs( past / bins ) );
-		var depth = getIndex( time_interval );
+		var pair = getIndex( time_interval );
 
 		for(var i = 0; i < AllCandidates.length; ++i) {
 			var found = false;
@@ -119,9 +120,8 @@ if (Meteor.isClient) {
 				data[AllCandidates[i].name] = undefined;
 		}
 		
-
 		_.each(SelectedCandidates, function(candidate, idx) { 
-			var query = { name : candidate.name, depth : depth };
+			var query = { name : candidate.name, depth : pair.depth };
 			var r = TwitterCollection.findOne( query );
 			var ret = _.filter(r.data, function(d) { 
 				return +d.date >= +_past; 
@@ -130,7 +130,7 @@ if (Meteor.isClient) {
 			SelectedCandidates[ idx ].tweets_count = 0;
 			_.each(ret, function(d) {
 				SelectedCandidates[ idx ].tweets_count += d.counter;
-			})
+			});
 
 			Session.set( candidate.name, SelectedCandidates[ idx ].tweets_count );
 			setTimeout( function() {
@@ -142,7 +142,6 @@ if (Meteor.isClient) {
 
 			data[ candidate.name ] = [];
 			data[ candidate.name ].push( { data : ret, color : candidate.color } );
-
 		});
 	}
 
@@ -174,7 +173,7 @@ if (Meteor.isClient) {
 
 	lastRefreshingTime = -1;
 	retrievedDataId = undefined;
-	refreshingTime  = undefined;
+	refreshingTime  = -1;
 	retrieveData();
 	pplot();
 	setInterval(pplot, 1000);
