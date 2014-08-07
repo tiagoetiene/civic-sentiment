@@ -191,6 +191,13 @@ if (Meteor.isClient) {
 	// Hack to fix image size. I've been trying to get the Wayin widget to be shaped as a perfect square
 	// but I did not succeed. Thus, this hack will solve the problem.
     setInterval(function() { Session.set('UpdateImageHeight', !(Session.get('UpdateImageHeight') == true)); }, 1000);
+
+    Meteor.Router.add({
+  		'/': function() {
+    			GAnalytics.pageview();
+    			return 'home';
+    		}
+    });
 }
 
 if (Meteor.isServer) {	
