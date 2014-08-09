@@ -68,7 +68,7 @@ Plot = function( ) {
                 // .attr("dy", ".75em")
                 .attr("font-size", 35)
                 .attr("transform", "translate(" + (padding-25) + "," + (height*0.75) + ")" + "rotate(-90)")
-                .text("Sentiment");
+                .text(i18n("sentiment"));
 
             // PLOT TEXT: LIKE
             cell.append("text")
@@ -77,7 +77,7 @@ Plot = function( ) {
                 // .attr("dy", ".75em")
                 .attr("font-size", 35)
                 .attr("transform", "translate(" + (padding+10) + "," + (20) + ")" + "rotate(0)")
-                .text("Like");
+                .text(i18n("like"));
 
             // PLOT TEXT: DISLIKE
             cell.append("text")
@@ -86,7 +86,7 @@ Plot = function( ) {
                 // .attr("dy", ".75em")
                 .attr("font-size", 35)
                 .attr("transform", "translate(" + (padding+10) + "," + (height-15) + ")" + "rotate(0)")
-                .text("Dislike");
+                .text(i18n("dislike"));
 
             // x.range( [ padding , width ] );
             cell.append('g')

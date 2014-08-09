@@ -1,6 +1,9 @@
 TwitterCollection = new Meteor.Collection("tweets-summary")
 
 if (Meteor.isClient) {
+	configInternationalization();
+	document.title =i18n('title');
+
 	var plot_colors = [];
 
 	for(var i = 0; i < AllCandidates.length; ++i)
@@ -9,7 +12,7 @@ if (Meteor.isClient) {
 	var past = -31 * 24 * 60 * 60 * 1000;
 
 	$(document).ready(function() { 
-		$("#e1").select2({placeholder: "Select a politician"})
+		$("#e1").select2({placeholder: i18n("selectPolitician")})
 			.on("change", function(e) {
 				var found = false; 
 				for(var i = 0; i < SelectedCandidates.length; ++i)
@@ -35,6 +38,10 @@ if (Meteor.isClient) {
 		$("#past5Min").change( function(e)		{ past =          -  5 * 60 * 1000; retrieveData(); refreshingTime = 2000;});
   	});
   
+	Template.jumbotron.background_image = function() {
+		return i18n('backgroundImage');
+	}
+
 	Template.twitter_feed.iframe_source = function() {
 		return this.iframe_src;
 	}

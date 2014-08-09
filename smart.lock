@@ -4,7 +4,7 @@
     "basePackages": {
       "bootstrap-3": {},
       "select2": {},
-      "GAnalytics": {}
+      "just-i18n": {}
     },
     "packages": {
       "bootstrap-3": {
@@ -17,10 +17,10 @@
         "tag": "v3.4.5",
         "commit": "4a8d05582b949a14f0ee217c185166abbf112822"
       },
-      "GAnalytics": {
-        "git": "https://github.com/datariot/meteor-ganalytics.git",
-        "tag": "v0.2.0",
-        "commit": "2d5e48d5cc4c2f88edd40c0b2341d378bd4a702b"
+      "just-i18n": {
+        "git": "https://github.com/subhog/meteor-just-i18n.git",
+        "tag": "v0.3.0",
+        "commit": "a60e7f4350fb9648d6f6b4a01acbbc114c4f4343"
       }
     }
   }
