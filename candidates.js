@@ -29,15 +29,15 @@ AllCandidates = [
     image : "resource/500px-Dilma_Rousseff.jpg",
     iframe_src : "//rjihacks.wayinhub.com/cv-page-dilma-rousseff?hidenav=true",
     iframe_id : "63ac1d56-e8fe-4a70-8dfd-f344e7fc2fc7",
-    color : 'darkgreen'
+    color : 'darkred'
   },
   {
 	name : 'Aécio Neves',
 	party : 'PSDB',
 	image : 'http://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Aécio_Neves_em_junho_de_2013_-_2.jpg/320px-Aécio_Neves_em_junho_de_2013_-_2.jpg',
-	iframe_src : "//rjihacks.wayinhub.com/cv-page-dilma-rousseff?hidenav=true",
-	iframe_id : "63ac1d56-e8fe-4a70-8dfd-f344e7fc2fc7",
-	color : 'darkgreen'
+	iframe_src : "//rjihacks.wayinhub.com/cv-page-aecio-neves?hidenav=true",
+	iframe_id : "4edd4db7-6b61-4100-baaf-881a065ad10d",
+	color : '#2980B9'
   }
   // {
   //   name : "Eric Cantor",
