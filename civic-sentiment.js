@@ -180,7 +180,7 @@ if (Meteor.isClient) {
 
 	lastRefreshingTime = -1;
 	retrievedDataId = undefined;
-	refreshingTime  = -1;
+	refreshingTime  = 10000;
 	retrieveData();
 	pplot();
 	setInterval(pplot, 1000);
