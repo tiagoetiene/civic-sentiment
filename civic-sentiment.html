@@ -1,12 +1,11 @@
 <head>
-  <title>Civic Sentiment: tracking public feelings toward politicians </title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<title>Civic Sentiment: tracking public feelings toward politicians </title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 </head>
 
 <body>
 {{> navigation_bar}}
 {{> jumbotron}}
-{{> plot}}
 {{> search}}
 {{> main}}
 </body>
@@ -38,11 +37,39 @@
 
 <template name="search">
 <div class="container">
+<div class="row">
 	<div class="row">
-		<div class="col-md-3"></div>
-		<div class="col-md-6">
-		    <select id="e1" style="width:100%">
-		    		<option value=""></option>
+		<div class="col-md-8 col-md-offset-2 text-center">
+			<div class="btn-group btn-md"  data-toggle="buttons">
+				<label class="btn btn-primary active">
+					<input type="radio" name="options" id="pastMonth" checked> {{i18n "pastMonth"}}
+				</label>
+				<label class="btn btn-primary">
+					<input type="radio" name="options" id="pastWeek" checked> {{i18n "pastWeek"}}
+				</label>
+				<label class="btn btn-primary">
+					<input type="radio" name="options" id="past3Day"> {{i18n "past3Days"}}
+				</label>
+				<label class="btn btn-primary">
+					<input type="radio" name="options" id="pastDay"> {{i18n "pastDay"}}
+				</label>
+				<label class="btn btn-primary">
+					<input type="radio" name="options" id="past8Hour"> {{i18n "past8Hours"}}
+				</label>
+				<label class="btn btn-primary">
+					<input type="radio" name="options" id="past1Hour"> {{i18n "pastHour"}}
+				</label>
+				<label class="btn btn-primary">
+					<input type="radio" name="options" id="past5Min"> {{i18n "past5Min"}}
+				</label>
+			</div>
+		</div>
+	</div>
+	<div style="height:3px;"></div>
+	<div class="row text-center">
+		<div class="col-md-6 col-md-offset-3 text-center">
+		    <select id="e1" class="input-lg text-center" style="width:100%; ">
+		    		<option value="" disabled selected>{{i18n "selectPolitician"}}</option>
 		    		<optgroup label={{i18n "americanPoliticians"}}>
 			    		<option value="Jeanne Shaheen">Jeanne Shaheen</option>
 	        			<option value="Scott Brown">Scott Brown</option>
@@ -54,9 +81,9 @@
         			</optgroup>
     			</select>
 		</div>
-		<div class="col-md-3"></div>
 	</div>
 	<br>
+</div>
 </div>
 </template>
 
@@ -95,20 +122,22 @@
 </template>
 
 <template name="candidate_name">
-	<h2 class="text-center" style="{{color}};">{{name}}</h2>
-	<h3 class="text-center" style="{{color}};"> {{tweets_count}} {{i18n "tweets"}} </h3>
-	
+	<h3 class="text-center" style="{{color}};"> 
+		{{name}} <br/>
+		{{tweets_count}} {{i18n "tweets"}}
+	</h3>
 </template>
 
 <template name="close_button">
-	<h5 class="close"> {{i18n "close"}} </h5> 
+	<h5 class="close"> <br/> {{i18n "close"}} </h5> 
 </template>
 
 <template name="main">
 <div class="container">
 	<div class="row">
 		{{#each list_of_candidates}}
-				<div class="col-md-6">
+			<div class="row">
+				<div class="col-md-3">
 					<div class="row">
 						<div class="col-md-12">
 							<div class="col-md-1 nopadding"></div>
@@ -122,11 +151,16 @@
 					</div>
 					<div class="row">
 						<div class="col-md-12">
-							<div class="col-md-6 nopadding">{{> twitter_feed}}</div>
-							<div class="col-md-6 nopadding">{{> candidate_image}}</div>
+							<div>{{> twitter_feed}}</div>
+							<!-- <div class="col-md-6 nopadding">{{> candidate_image}}</div> -->
 						</div>
 					</div>
+
 				</div>
+				<div class="col-md-9">
+					{{> plot}}
+				</div>
+			</div>
 		{{/each}}
 	</div>
 </div>
@@ -134,40 +168,9 @@
 </template>
 
 <template name="plot">
-<div class="container">
+	<br>
 	<div class="row">
-		<div class="col-md-12">
-			<div class="btn-group" data-toggle="buttons">
-				<label class="btn btn-sm btn-primary active" id="pastMonth">
-					<input type="radio" name="options" checked> {{i18n "pastMonth"}}
-				</label>
-				<label class="btn btn-sm btn-primary " id="pastWeek">
-					<input type="radio" name="options" checked> {{i18n "pastWeek"}}
-				</label>
-				<label class="btn btn-sm btn-primary">
-					<input type="radio" name="options" id="past3Day"> {{i18n "past3Days"}}
-				</label>
-				<label class="btn btn-sm btn-primary">
-					<input type="radio" name="options" id="pastDay"> {{i18n "pastDay"}}
-				</label>
-				<label class="btn btn-sm btn-primary">
-					<input type="radio" name="options" id="past8Hour"> {{i18n "past8Hours"}}
-				</label>
-				<label class="btn btn-sm btn-primary">
-					<input type="radio" name="options" id="past1Hour"> {{i18n "pastHour"}}
-				</label>
-				<label class="btn btn-sm btn-primary">
-					<input type="radio" name="options" id="past5Min"> {{i18n "past5Min"}}
-				</label>
-			</div>
+		<div class="col-md-12" id="{{plot}}">
 		</div>
 	</div>
-	<br>
-	
-	<div class="row">
-		<div class="col-md-12" id="plot">
-		</div>
-	</div>
-	<br>
-</div>
 </template>

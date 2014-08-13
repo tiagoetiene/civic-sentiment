@@ -12,32 +12,40 @@ if (Meteor.isClient) {
 	var past = -31 * 24 * 60 * 60 * 1000;
 
 	$(document).ready(function() { 
-		$("#e1").select2({placeholder: i18n("selectPolitician")})
+		$("#e1").select({placeholder: i18n("selectPolitician")})
 			.on("change", function(e) {
 				var found = false; 
-				for(var i = 0; i < SelectedCandidates.length; ++i)
-					if(e.val.indexOf(SelectedCandidates[i].name) != -1)
+				for(var i = 0; i < SelectedCandidates.length; ++i) {
+					console.log(e.val);
+					if($(this).val().indexOf(SelectedCandidates[i].name) != -1)
 						found = true;
+				}
 				if(found == true) 
 					return
-				for(var i = 0; i < AllCandidates.length; ++i)
-					if(e.val.indexOf(AllCandidates[i].name) != -1) {
+				for(var i = 0; i < AllCandidates.length; ++i) {
+					if($(this).val().indexOf(AllCandidates[i].name) != -1) {
 						SelectedCandidates.push(AllCandidates[i]);
 						Session.set('ListOfCandidates', !(Session.get('ListOfCandidates') == true) );
 						return
 					}
+				}
 				retrieveData();
-			})
+			});
 
 		$("#pastMonth").change( function(e)	{ past = -31 * 24 * 60 * 60 * 1000; retrieveData(); refreshingTime = 28800000; });
 		$("#pastWeek").change( function(e)	{ past = - 7 * 24 * 60 * 60 * 1000; retrieveData(); refreshingTime = 3600000; });
-		$("#past3Day").change( function(e)	{ past = - 3 * 24 * 60 * 60 * 1000; retrieveData(); refreshingTime = 6000000;});
-		$("#pastDay").change( function(e)	{ past =     - 24 * 60 * 60 * 1000; retrieveData(); refreshingTime = 1800000;});
-		$("#past8Hour").change( function(e)	{ past =     -  8 * 60 * 60 * 1000; retrieveData(); refreshingTime = 300000;});
-		$("#past1Hour").change( function(e)	{ past =     -  4 * 60 * 60 * 1000; retrieveData(); refreshingTime = 60000;});
-		$("#past5Min").change( function(e)	{ past =          -  5 * 60 * 1000; retrieveData(); refreshingTime = 2000;});
+		$("#past3Day").change( function(e)		{ past = - 3 * 24 * 60 * 60 * 1000; retrieveData(); refreshingTime = 6000000; });
+		$("#pastDay").change( function(e)		{ past =      - 24 * 60 * 60 * 1000; retrieveData(); refreshingTime = 1800000; });
+		$("#past8Hour").change( function(e)	{ past =     -  8 * 60 * 60 * 1000; retrieveData(); refreshingTime = 300000; });
+		$("#past1Hour").change( function(e)	{ past =     -  4 * 60 * 60 * 1000; retrieveData(); refreshingTime = 60000; });
+		$("#past5Min").change( function(e)		{ past =          -  5 * 60 * 1000; retrieveData(); refreshingTime = 2000; });
   	});
   
+	Template.plot.plot = function() {
+		if(this.plot === undefined)  this.plot = Plot();
+		return this.id;
+	}
+
 	Template.jumbotron.background_image = function() {
 		return i18n('backgroundImage');
 	}
@@ -73,13 +81,13 @@ if (Meteor.isClient) {
 		'click h5': function (event) {
 			var _this = this;
 			SelectedCandidates = _.filter(SelectedCandidates, function(data) {
-					return data.iframe_id.localeCompare(_this.iframe_id) != 0;
-      				});
+				return data.iframe_id.localeCompare(_this.iframe_id) != 0;
+      		});
 
 			// Updating WAYIN data
 			window.WAYIN.hubs = _.filter(window.WAYIN.hubs, function(hub) {
 				return hub.hub_iframe.id.localeCompare(_this.iframe_id) != 0;
-      			})
+      		});
 			Session.set('ListOfCandidates', !(Session.get('ListOfCandidates') == true) );
 		}
 	}
@@ -96,7 +104,6 @@ if (Meteor.isClient) {
 		return height + 'px';
 	}
 
-	var plot = Plot();
 	var data = { };
   	  	
 	function getIndex( interval ) {
@@ -124,35 +131,28 @@ if (Meteor.isClient) {
 				if(AllCandidates[i].name === SelectedCandidates[j].name)
 					found = true
 			if(found == false)
-				data[AllCandidates[i].name] = undefined;
+				data[ AllCandidates[ i ].name ] = undefined;
 		}
 		
-		_.each(SelectedCandidates, function(candidate, idx) { 
+		_.each( SelectedCandidates, function(candidate, idx) { 
 			var query = { name : candidate.name, depth : pair.depth };
 			var r = TwitterCollection.findOne( query );
-			var ret = _.filter(r.data, function(d) { 
-				return +d.date >= +_past; 
-			});
+			var ret = _.filter(r.data, function(d) {  return +d.date >= +_past; });
 						
 			SelectedCandidates[ idx ].tweets_count = 0;
-			_.each(ret, function(d) {
-				SelectedCandidates[ idx ].tweets_count += d.counter;
-			});
+			_.each(ret, function(d) { SelectedCandidates[ idx ].tweets_count += d.counter; });
 
 			Session.set( candidate.name, SelectedCandidates[ idx ].tweets_count );
-			setTimeout( function() {
-				Session.set(candidate.name+':color', 'color:black');
-			}, 3000);
+			setTimeout( function() { Session.set(candidate.name+':color', 'color:black'); }, 3000);
 
 			var max = d3.max( ret, function(d) { return Math.abs(d.sentiment) } );
 			if( max != 0 ) _.each( ret, function(d, idx) { ret[ idx ].sentiment /= max } );
 
-			data[ candidate.name ] = [];
-			data[ candidate.name ].push( { data : ret, color : candidate.color } );
+			SelectedCandidates[ idx ].data = ret;
 		});
 	}
 
-	function pplot() {
+	function pplot(  name ) {
 		if(_.isEmpty(data))
 			return;
 
@@ -161,30 +161,21 @@ if (Meteor.isClient) {
 		var _past = getPast( _now, past );
 		var domain = [ _past, _now ];
 
-		plot_colors = [];
-		_.each(data, function(value, key) {
-			if(value != undefined) {
-				plot_data.push( value[0].data );
-				plot_colors.push( value[0].color );
-			}
+		_.each(SelectedCandidates, function(d) {
+			var plot_div = d3.select( "#"+ d.id );
+			plot_div.data( [ d.data ] );
+			d.plot.domain( [  _past , _now ]  )
+				.x( function(d) { return d.date; } )
+				.y( function(d) { return d.sentiment; } )
+				(plot_div);
 		});
-
-		var plot_div = d3.select('#plot');
-		plot_div.data( [ plot_data ] );
-		plot.domain( [  _past , _now ]  )
-					.x( function(d) { return d.date; } )
-					.y( function(d) { return d.sentiment; } )
-					.colors(plot_colors)
-					(plot_div);
 	}
 
 	lastRefreshingTime = -1;
 	retrievedDataId = undefined;
 	refreshingTime  = 10000;
 	retrieveData();
-	pplot();
 	setInterval(pplot, 1000);
-
 
 	setInterval(function() {
 		if(lastRefreshingTime != refreshingTime) {
@@ -200,7 +191,4 @@ if (Meteor.isClient) {
     setInterval(function() { Session.set('UpdateImageHeight', !(Session.get('UpdateImageHeight') == true)); }, 1000);
 }
 
-if (Meteor.isServer) {	
-	Meteor.startup(function () { 
-	});
-}
+if (Meteor.isServer) { Meteor.startup(function () { }); }

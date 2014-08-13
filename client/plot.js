@@ -1,18 +1,18 @@
 Plot = function( ) {
     var width = undefined;
-    var height = 300;
+    var height = 350;
     var padding = 45;
     var x_valuer = Number;
     var y_valuer = Number;
-    var colors = ['#2980B9', '#C0392B', 'darkgreen', 'yellow'];
+    var colors = ['#2980B9', '#C0392B' ];
     var x, y;
     var domain = undefined;
     var pplot = undefined; 
 
     var months_abbreviated_en	= [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     var months_abbreviated_pt 	= [ 'Jan', 'Fev', 'Mar', 'Abril', 'Maio', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
-    var months_full_en    		= [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    var months_full_pt       		= [ 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+    var months_full_en    	= [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    var months_full_pt       	= [ 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
     var weekday_abbreviated_en= [ 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun' ];
     var weekday_abbreviated_pt= [ 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom' ];
 
@@ -44,6 +44,7 @@ Plot = function( ) {
     function chart( selection ) {
 
         selection.each( function( data, idx ) {  
+
             width = parseInt(selection.style('width'));
             var svg = selection.selectAll("svg").data([data]);
             if(pplot == undefined)
@@ -51,34 +52,40 @@ Plot = function( ) {
             pplot.attr( 'width' ,  width-padding).attr( 'height' , height);
             pplot.select('#sentimentplot').remove();
             var plot = pplot.append("g").attr('id', 'sentimentplot');
-            
+
             x = d3.time
                     .scale()
                     .range( [ padding , width ] )
                     .domain( domain );
 
-            y = d3.scale
-                        .linear()
-                        .range( [ height-10, 10 ] )
-                        .domain( [-1, 1] );
+		y = d3.scale
+			.linear()
+			.range( [ height-10, 10 ] )
+			.domain( [-1, 1] );
             
-            var line = d3.svg.area()
-                .interpolate('basis') 
-                .x( function( v, idx ) { return x( x_valuer.call(this, v, idx) ); } )
-                .y0( 0.5 * height )
-                .y1( function( v, idx ) { return y( y_valuer.call(this, v, idx) ); } );
+		var line = d3.svg.area()
+					.interpolate('basis') 
+					.x( function( v, idx ) { 
+						var val = x( x_valuer.call(this, v, idx) ); 
+						// console.log(val, x_valuer.call(this, v, idx) );
+						return val;
+					} )
+					.y0( 0.5 * height )
+					.y1( function( v, idx ) { 
+						var val = y( y_valuer.call(this, v, idx) ); 
+						// console.log(val);
+						return val;
+					});
 
-            for(var i = 0; i < data.length; ++i)
-                plot
-                    .append( 'path' )
-                    .attr( 'stroke', colors[i] )
-                    .attr( 'stroke-width', '1px' )
-                    .attr( 'fill', colors[i])
-                    .attr( 'fill-opacity', 0.5)
-                    .attr( 'd', line(data[i]) );
+		if( data !== undefined )
+			plot.append( 'path' )
+				.attr( 'stroke', colors[0] )
+				.attr( 'stroke-width', '1px' )
+				.attr( 'fill', colors[0])
+				.attr( 'fill-opacity', 0.5)
+				.attr( 'd', line( data ) );
 
-            render_axis(plot, data);
-
+		render_axis(plot, data); 
         });
 
         function render_axis(cell) {
@@ -134,13 +141,6 @@ Plot = function( ) {
         }
     }
 
-    chart.width = function( _ ) {
-        if ( !arguments.length ) 
-            return width;
-        width = _;
-        return chart;
-    };
-
     chart.x = function(_) {
         if( !arguments.length )
             return x_valuer;
@@ -159,13 +159,6 @@ Plot = function( ) {
         if( !arguments.length)
             return domain;
         domain = _;
-        return chart;
-    }
-
-    chart.colors = function(_) {
-        if( !arguments.length)
-            return colors;
-        colors = _;
         return chart;
     }
 
