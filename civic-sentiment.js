@@ -145,7 +145,10 @@ if (Meteor.isClient) {
 			Session.set( candidate.name, SelectedCandidates[ idx ].tweets_count );
 			setTimeout( function() { Session.set(candidate.name+':color', 'color:black'); }, 3000);
 
-			var max = d3.max( ret, function(d) { return Math.abs(d.sentiment) } );
+			var max = d3.max( ret, function(d) { return d.positive_sentiment } );
+			max = Math.max(max, d3.max( ret, function(d) { return Math.abs(d.negative_sentiment)} ));
+			if( max != 0 ) _.each( ret, function(d, idx) { ret[ idx ].positive_sentiment /= max } );
+			if( max != 0 ) _.each( ret, function(d, idx) { ret[ idx ].negative_sentiment /= max } );
 			if( max != 0 ) _.each( ret, function(d, idx) { ret[ idx ].sentiment /= max } );
 
 			SelectedCandidates[ idx ].data = ret;
@@ -167,6 +170,8 @@ if (Meteor.isClient) {
 			d.plot.domain( [  _past , _now ]  )
 				.x( function(d) { return d.date; } )
 				.y( function(d) { return d.sentiment; } )
+				.yPos( function(d) { return d.positive_sentiment; } )
+				.yNeg( function(d) { return d.negative_sentiment; } )
 				(plot_div);
 		});
 	}

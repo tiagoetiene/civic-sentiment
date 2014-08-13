@@ -3,8 +3,10 @@ Plot = function( ) {
     var height = 350;
     var padding = 45;
     var x_valuer = Number;
-    var y_valuer = Number;
-    var colors = ['#2980B9', '#C0392B' ];
+    var y_pos_valuer = Number;
+    var y_neg_valuer = Number;
+    var y_sum_valuer = Number;
+    var colors = ['#2980B9', '#C0392B', 'green' ];
     var x, y;
     var domain = undefined;
     var pplot = undefined; 
@@ -58,35 +60,33 @@ Plot = function( ) {
                     .range( [ padding , width ] )
                     .domain( domain );
 
-		y = d3.scale
-			.linear()
-			.range( [ height-10, 10 ] )
-			.domain( [-1, 1] );
+    		y = d3.scale
+    			.linear()
+    			.range( [ height-10, 10 ] )
+    			.domain( [-1, 1] );
             
-		var line = d3.svg.area()
-					.interpolate('basis') 
-					.x( function( v, idx ) { 
-						var val = x( x_valuer.call(this, v, idx) ); 
-						// console.log(val, x_valuer.call(this, v, idx) );
-						return val;
-					} )
-					.y0( 0.5 * height )
-					.y1( function( v, idx ) { 
-						var val = y( y_valuer.call(this, v, idx) ); 
-						// console.log(val);
-						return val;
-					});
+            plotCurves(plot, data, y_pos_valuer, colors[0], 0.5);
+            plotCurves(plot, data, y_neg_valuer, colors[1], 0.5);    
+            // plotCurves(plot, data, y_sum_valuer, colors[2], 0.9);
 
-		if( data !== undefined )
-			plot.append( 'path' )
-				.attr( 'stroke', colors[0] )
-				.attr( 'stroke-width', '1px' )
-				.attr( 'fill', colors[0])
-				.attr( 'fill-opacity', 0.5)
-				.attr( 'd', line( data ) );
-
-		render_axis(plot, data); 
+    		render_axis(plot, data);
         });
+
+        function plotCurves( plot, data, y_valuer, color, opacity ) {
+            var line = d3.svg.area()
+                        .interpolate('basis') 
+                        .x( function( v, idx ) { return x( x_valuer.call(this, v, idx) ); })
+                        .y0( 0.5 * height )
+                        .y1( function( v, idx ) { return y( y_valuer.call(this, v, idx) ); });
+
+            if( data !== undefined )
+                plot.append( 'path' )
+                    .attr( 'stroke', color)
+                    .attr( 'stroke-width', '1px' )
+                    .attr( 'fill', color)
+                    .attr( 'fill-opacity', opacity)
+                    .attr( 'd', line( data ) );
+        }
 
         function render_axis(cell) {
             
@@ -148,10 +148,24 @@ Plot = function( ) {
         return chart;
     }
 
+    chart.yPos = function(_) {
+        if( !arguments.length )
+            return y_pos_valuer;
+        y_pos_valuer = _;
+        return chart;
+    }
+
+    chart.yNeg = function(_) {
+        if( !arguments.length )
+            return y_neg_valuer;
+        y_neg_valuer = _;
+        return chart;
+    }
+
     chart.y = function(_) {
         if( !arguments.length )
-            return y_valuer;
-        y_valuer = _;
+            return y_sum_valuer;
+        y_sum_valuer = _;
         return chart;
     }
 
