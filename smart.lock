@@ -4,7 +4,8 @@
     "basePackages": {
       "bootstrap-3": {},
       "select2": {},
-      "just-i18n": {}
+      "just-i18n": {},
+      "bootstrap-select": {}
     },
     "packages": {
       "bootstrap-3": {
@@ -21,6 +22,11 @@
         "git": "https://github.com/subhog/meteor-just-i18n.git",
         "tag": "v0.3.0",
         "commit": "a60e7f4350fb9648d6f6b4a01acbbc114c4f4343"
+      },
+      "bootstrap-select": {
+        "git": "https://github.com/amrali/bootstrap-select-meteor.git",
+        "tag": "v1.5.4",
+        "commit": "de99107c031dad11327b7739e9f7b389a229c63f"
       }
     }
   }
