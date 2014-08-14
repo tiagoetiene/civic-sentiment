@@ -1,7 +1,9 @@
 TwitterCollection = new Meteor.Collection("tweets-summary")
+
 Politicians = People();
 
-if (Meteor.isClient) {
+if ( Meteor.isClient ) {
+	
 	configInternationalization();
 	document.title =i18n('title');
 	var past = -31 * 24 * 60 * 60 * 1000;
@@ -199,6 +201,7 @@ if (Meteor.isClient) {
 			retrievedDataId = setInterval(retrieveData, refreshingTime);
 		}
 	}, 500);
-}
+};
 
 if (Meteor.isServer) { Meteor.startup(function () { }); }
+
