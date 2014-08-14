@@ -38,8 +38,25 @@
 <template name="search">
 <div class="container">
 <div class="row">
+	<div class="row text-center">
+		<div class="col-md-6 col-md-offset-3 text-center">
+		    <select id="e1" class="selectpicker col-md-12" multiple >
+		    		<option value="" disabled selected>{{i18n "selectPolitician"}}</option>
+<!-- 		    		<optgroup label={{i18n "americanPoliticians"}}>
+			    		<option value="Jeanne Shaheen">Jeanne Shaheen</option>
+	        			<option value="Scott Brown">Scott Brown</option>
+					<option value="Barack Obama">Barack Obama</option>
+				</optgroup>
+				<optgroup label={{i18n "brazillianPoliticians"}}>
+        				<option value="Dilma Rousseff">Dilma Rousseff</option>
+        				<option value="Aécio Neves">Aécio Neves</option>
+        			</optgroup> -->
+    			</select>
+		</div>
+	</div>
+	<div style="height:3px;"></div>
 	<div class="row">
-		<div class="col-md-8 col-md-offset-2 text-center">
+		<div class="col-md-8 col-md-offset-2 text-center" style="visibility:{{searchVisibility}}">
 			<div class="btn-group btn-md"  data-toggle="buttons">
 				<label class="btn btn-primary active">
 					<input type="radio" name="options" id="pastMonth" checked> {{i18n "pastMonth"}}
@@ -63,23 +80,6 @@
 					<input type="radio" name="options" id="past5Min"> {{i18n "past5Min"}}
 				</label>
 			</div>
-		</div>
-	</div>
-	<div style="height:3px;"></div>
-	<div class="row text-center">
-		<div class="col-md-6 col-md-offset-3 text-center">
-		    <select id="e1" class="input-lg text-center" style="width:100%; ">
-		    		<option value="" disabled selected>{{i18n "selectPolitician"}}</option>
-		    		<optgroup label={{i18n "americanPoliticians"}}>
-			    		<option value="Jeanne Shaheen">Jeanne Shaheen</option>
-	        			<option value="Scott Brown">Scott Brown</option>
-					<option value="Barack Obama">Barack Obama</option>
-				</optgroup>
-				<optgroup label={{i18n "brazillianPoliticians"}}>
-        				<option value="Dilma Rousseff">Dilma Rousseff</option>
-        				<option value="Aécio Neves">Aécio Neves</option>
-        			</optgroup>
-    			</select>
 		</div>
 	</div>
 	<br>
@@ -129,7 +129,7 @@
 </template>
 
 <template name="close_button">
-	<h5 class="close"> <br/> {{i18n "close"}} </h5> 
+	<!-- <h5 class="close"> <br/> {{i18n "close"}} </h5>  -->
 </template>
 
 <template name="main">
