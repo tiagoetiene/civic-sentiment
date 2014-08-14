@@ -1,4 +1,4 @@
-Plot = function( ) {
+Plot = function() {
     var width = undefined;
     var height = 350;
     var padding = 45;
