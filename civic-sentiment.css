@@ -9,3 +9,7 @@
    padding: 0 !important;
    margin: 0 !important;
 }
+
+.hidden {
+	display: none
+}

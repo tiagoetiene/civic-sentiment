@@ -75,6 +75,9 @@ if (Meteor.isClient) {
 	Template.main.list_of_candidates = function() {
 		Session.get('ListOfCandidates')
 		return SelectedCandidates;
+
+	Template.main.isCandidateVisible = function( a, b ) {
+		return (Politicians.visible( this.name )) ? "" : "hidden";
 	}
 
 	Template.close_button.events =  {
