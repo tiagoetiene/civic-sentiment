@@ -48,9 +48,8 @@ Plot = function( ) {
         selection.each( function( data, idx ) {  
 
             width = parseInt(selection.style('width'));
-            var svg = selection.selectAll("svg").data([data]);
             if(pplot == undefined)
-                pplot = svg.enter().append( 'svg' );
+                pplot = selection.append( 'svg' );
             pplot.attr( 'width' ,  width-padding).attr( 'height' , height);
             pplot.select('#sentimentplot').remove();
             var plot = pplot.append("g").attr('id', 'sentimentplot');
@@ -113,8 +112,8 @@ Plot = function( ) {
             cell.append("text")
                 .attr("text-anchor", "start")
                 .attr("y", 6)
-                // .attr("dy", ".75em")
-                .attr("font-size", 35)
+                .attr("font-size", 30)
+                .attr("fill", colors[0])
                 .attr("transform", "translate(" + (padding+10) + "," + (20) + ")" + "rotate(0)")
                 .text(i18n("like"));
 
@@ -122,8 +121,8 @@ Plot = function( ) {
             cell.append("text")
                 .attr("text-anchor", "start")
                 .attr("y", 6)
-                // .attr("dy", ".75em")
-                .attr("font-size", 35)
+                .attr("font-size", 30)
+                .attr("fill", colors[1])
                 .attr("transform", "translate(" + (padding+10) + "," + (height-15) + ")" + "rotate(0)")
                 .text(i18n("dislike"));
 
