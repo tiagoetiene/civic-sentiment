@@ -16,11 +16,12 @@
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
 				<span class="sr-only">Toggle navigation</span>
-				<span class="icon-bar"></span>
+				<span class="icon-bar">Teste</span>
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
           		</button>
-          		<a class="navbar-brand" href="#"> {{i18n "civicsentiment"}}</a>
+          		<a class="navbar-brand" href="#"> {{i18n "civicsentiment"}} </a>
+          		<a class="navbar-brand" id="language" href="#"> {{i18n "language"}} </a>
         	</div>
       </div>
 </div>
@@ -42,6 +43,11 @@
 		<div class="col-md-6 col-md-offset-3 text-center">
 		    <select id="e1" class="selectpicker col-md-12" multiple >
 		    		<option value="" disabled selected>{{i18n "selectPolitician"}}</option>
+		    		{{#each group}}
+		    			<optgroup label={{label}}>
+		    				{{#each listOfPoliticians}} <option value=""> {{name}} </option> {{/each}}
+		    			</optgroup> 
+		    		{{/each}}
     			</select>
 		</div>
 	</div>

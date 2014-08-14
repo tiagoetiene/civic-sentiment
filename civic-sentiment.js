@@ -8,33 +8,17 @@ if ( Meteor.isClient ) {
 	document.title =i18n('title');
 	var past = -31 * 24 * 60 * 60 * 1000;
 	$(document).ready(function() { 
+		$("#e1").selectpicker('refresh').selectpicker('render');
 		$("#e1").select({placeholder: i18n("selectPolitician")})
 			.on("change", function(e) {
-				var selected = $(this).val();
-				for(var i = 0; i < Politicians.size(); ++i) {
-					Politicians( i ).selected = false;
-					for(var j = 0; j < selected.length; ++j) {
-						if( Politicians( i ).name.indexOf(selected[j]) != -1 ) {
-							Politicians( i ).selected = true;
-							break;
-						}
-					}
-				}
+				var selected = e.target
+				for(var i = 0; i < Politicians.size(); ++i)
+					Politicians( i ).selected = selected[i + 1].selected;
 				Session.set('ListOfCandidates', !(Session.get('ListOfCandidates') == true) );				
 				retrieveData();
 			});
-
-		var html = '';
-		_.each(Politicians.types(), function( type ) {
-			console.log( type, i18n( type ) );
-			html += '<optgroup label=' + i18n( type ) + '>';
-			_.each(Politicians(), function(politician) {
-				if(politician.type.indexOf(type) !== -1)
-					html += '<option>' + politician.name + '</option>';
-			});
-			html += '</optgroup>';
-		});
-		$("#e1").append( html ).selectpicker('refresh');
+		
+		
 		$("#pastMonth").change( function(e)	{ past = -31 * 24 * 60 * 60 * 1000; retrieveData(); refreshingTime = 28800000; });
 		$("#pastWeek").change( function(e)	{ past = - 7 * 24 * 60 * 60 * 1000; retrieveData(); refreshingTime = 3600000; });
 		$("#past3Day").change( function(e)		{ past = - 3 * 24 * 60 * 60 * 1000; retrieveData(); refreshingTime = 6000000; });
@@ -42,8 +26,33 @@ if ( Meteor.isClient ) {
 		$("#past8Hour").change( function(e)	{ past =     -  8 * 60 * 60 * 1000; retrieveData(); refreshingTime = 300000; });
 		$("#past1Hour").change( function(e)	{ past =     -  4 * 60 * 60 * 1000; retrieveData(); refreshingTime = 60000; });
 		$("#past5Min").change( function(e)		{ past =          -  5 * 60 * 1000; retrieveData(); refreshingTime = 2000; });
+
+		$('#language').click(function(){
+			if( i18n.getLanguage() === 'pt-br' )
+				i18n.setLanguage('en-us');
+			else
+				i18n.setLanguage('pt-br');
+			Session.set( 'updateSelect', Session.get('updateSelect') !== true );
+		})
   	});
-  
+
+	Template.search.group = function(){
+		Session.get('updateSelect');
+		$("#e1").selectpicker('render').selectpicker('refresh');
+		return Politicians.types();
+	}
+	Template.search.label = function() {
+		Session.get('updateSelect');
+		return i18n(String(this));
+	}
+	Template.search.listOfPoliticians = function() {
+		Session.get('updateSelect');
+		return Politicians.selectByType( String( this ) );
+	}
+	// Template.search.name = function() {
+	// 	return String(this);
+	// }
+
 	Template.plot.plot = function() {
 		if(this.plot === undefined)  this.plot = Plot();
 		return this.id;
