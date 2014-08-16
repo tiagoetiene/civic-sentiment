@@ -16,13 +16,24 @@
 		<div class="navbar-header">
 			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
 				<span class="sr-only">Toggle navigation</span>
-				<span class="icon-bar">Teste</span>
+				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
           		</button>
           		<a class="navbar-brand" href="#"> {{i18n "civicsentiment"}} </a>
-          		<a class="navbar-brand" id="language" href="#"> {{i18n "language"}} </a>
         	</div>
+		<div id="navbarCollapse" class="collapse navbar-collapse">
+			<ul class="nav navbar-nav">
+<!-- 				<li class="active"> <a href="#">Home</a> </li>
+				<li> <a href="#">Profile</a> </li>
+				<li> <a href="#">Messages</a> </li> -->
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li>
+					<a class="navbar-brand" id="language" href="#"> {{i18n "language"}} </a>
+				</li>
+			</ul>
+		</div>
       </div>
 </div>
 </template>
