@@ -90,23 +90,23 @@ Plot = function() {
         function render_axis(cell) {
             
             var axis = cell.append('g')
-                                    .attr('transform', 'translate(' + padding + ',' + 0 + ')')  
-                                    .append('line')
-                                    .attr('x1', 0.0)
-                                    .attr('y1', 0.0)
-                                    .attr('x2', 0.0)
-                                    .attr('y2', height)
-                                    .attr('stroke', 'lightgray')
-                                    .attr('stroke-width', '3px');
+                                    .attr('transform', 'translate(' + padding + ',' + 0 + ')');
+                                    // .append('line')
+                                    // .attr('x1', 0.0)
+                                    // .attr('y1', 0.0)
+                                    // .attr('x2', 0.0)
+                                    // .attr('y2', height)
+                                    // .attr('stroke', 'lightgray')
+                                    // .attr('stroke-width', '3px');
 
             // PLOT TEXT: SENTIMENT
-            cell.append("text")
-                .attr("text-anchor", "start")
-                .attr("y", 6)
-                // .attr("dy", ".75em")
-                .attr("font-size", 35)
-                .attr("transform", "translate(" + (padding-25) + "," + (height*0.75) + ")" + "rotate(-90)")
-                .text(i18n("sentiment"));
+            // cell.append("text")
+            //     .attr("text-anchor", "start")
+            //     .attr("y", 6)
+            //     // .attr("dy", ".75em")
+            //     .attr("font-size", 35)
+            //     .attr("transform", "translate(" + (padding-25) + "," + (height*0.75) + ")" + "rotate(-90)")
+            //     .text(i18n("sentiment"));
 
             // PLOT TEXT: LIKE
             cell.append("text")
@@ -114,7 +114,7 @@ Plot = function() {
                 .attr("y", 6)
                 .attr("font-size", 30)
                 .attr("fill", colors[0])
-                .attr("transform", "translate(" + (padding+10) + "," + (20) + ")" + "rotate(0)")
+                .attr("transform", "translate(" + (width * 0.4) + "," + (20) + ")" + "rotate(0)")
                 .text(i18n("like"));
 
             // PLOT TEXT: DISLIKE
@@ -123,7 +123,7 @@ Plot = function() {
                 .attr("y", 6)
                 .attr("font-size", 30)
                 .attr("fill", colors[1])
-                .attr("transform", "translate(" + (padding+10) + "," + (height-15) + ")" + "rotate(0)")
+                .attr("transform", "translate(" + (width * 0.4) + "," + (height-15) + ")" + "rotate(0)")
                 .text(i18n("dislike"));
 
             // x.range( [ padding , width ] );
@@ -133,10 +133,7 @@ Plot = function() {
                  .call(d3.svg.axis().scale(x).orient("bottom"))
                  .selectAll('text')
                  .attr('fill', 'black')
-                 .each(function() {
-                 		d3.select(this).text( forceLocalization( d3.select(this).text() ) );
-                 });
-
+                 .each(function() { d3.select(this).text( forceLocalization( d3.select(this).text() ) ); });
         }
     }
 
