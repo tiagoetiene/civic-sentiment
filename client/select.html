@@ -1,0 +1,47 @@
+<template name="select">
+	<div class="container">
+		<div class="row">
+			<div class="row text-center">
+				<div class="col-md-6 col-md-offset-3 text-center">
+				    <select id="e1" class="selectpicker col-md-12" multiple >
+				    		<option value="" disabled selected>{{i18n "selectPolitician"}}</option>
+				    		{{#each group}}
+				    			<optgroup label={{label}}>
+				    				{{#each listOfPoliticians}} <option value=""> {{name}} </option> {{/each}}
+				    			</optgroup> 
+				    		{{/each}}
+		    			</select>
+				</div>
+			</div>
+			<div style="height:3px;"></div>
+			<div class="row">
+				<div class="col-md-8 col-md-offset-2 text-center" style="visibility:{{searchVisibility}}">
+					<div class="btn-group btn-md"  data-toggle="buttons">
+						<label class="btn btn-primary active">
+							<input type="radio" name="options" id="pastMonth" checked> {{i18n "pastMonth"}}
+						</label>
+						<label class="btn btn-primary">
+							<input type="radio" name="options" id="pastWeek" checked> {{i18n "pastWeek"}}
+						</label>
+						<label class="btn btn-primary">
+							<input type="radio" name="options" id="past3Day"> {{i18n "past3Days"}}
+						</label>
+						<label class="btn btn-primary">
+							<input type="radio" name="options" id="pastDay"> {{i18n "pastDay"}}
+						</label>
+						<label class="btn btn-primary">
+							<input type="radio" name="options" id="past8Hour"> {{i18n "past8Hours"}}
+						</label>
+						<label class="btn btn-primary">
+							<input type="radio" name="options" id="past1Hour"> {{i18n "pastHour"}}
+						</label>
+						<label class="btn btn-primary">
+							<input type="radio" name="options" id="past5Min"> {{i18n "past5Min"}}
+						</label>
+					</div>
+				</div>
+			</div>
+			<br>
+		</div>
+	</div>
+</template>

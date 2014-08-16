@@ -17,8 +17,7 @@ if ( Meteor.isClient ) {
 				Session.set('ListOfCandidates', !(Session.get('ListOfCandidates') == true) );				
 				retrieveData();
 			});
-		
-		
+
 		$("#pastMonth").change( function(e)	{ past = -31 * 24 * 60 * 60 * 1000; retrieveData(); refreshingTime = 28800000; });
 		$("#pastWeek").change( function(e)	{ past = - 7 * 24 * 60 * 60 * 1000; retrieveData(); refreshingTime = 3600000; });
 		$("#past3Day").change( function(e)		{ past = - 3 * 24 * 60 * 60 * 1000; retrieveData(); refreshingTime = 6000000; });
@@ -36,23 +35,6 @@ if ( Meteor.isClient ) {
 		})
   	});
 
-	Template.search.group = function(){
-		Session.get('updateSelect');
-		$("#e1").selectpicker('render').selectpicker('refresh');
-		return Politicians.types();
-	}
-	Template.search.label = function() {
-		Session.get('updateSelect');
-		return i18n(String(this));
-	}
-	Template.search.listOfPoliticians = function() {
-		Session.get('updateSelect');
-		return Politicians.selectByType( String( this ) );
-	}
-	// Template.search.name = function() {
-	// 	return String(this);
-	// }
-
 	Template.plot.plot = function() {
 		if(this.plot === undefined)  this.plot = Plot();
 		return this.id;
@@ -68,11 +50,6 @@ if ( Meteor.isClient ) {
 
 	Template.twitter_feed.iframe_id = function() {
 		return this.iframe_id;
-	}
-
-	Template.search.searchVisibility = function() {
-		Session.get('ListOfCandidates');
-		return (Politicians.hasSelected()) ? "visible" : "hidden";
 	}
 
 	Template.candidate_name.name = function() {
