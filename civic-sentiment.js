@@ -144,7 +144,6 @@ if ( Meteor.isClient ) {
 					max = Math.max(max, d3.max( ret, function(d) { return Math.abs(d.negative_sentiment)} ));
 					if( max != 0 ) _.each( ret, function(d, idx) { ret[ idx ].positive_sentiment /= max } );
 					if( max != 0 ) _.each( ret, function(d, idx) { ret[ idx ].negative_sentiment /= max } );
-					if( max != 0 ) _.each( ret, function(d, idx) { ret[ idx ].sentiment /= max } );
 
 					Politicians( idx ).data = ret;
 				}
