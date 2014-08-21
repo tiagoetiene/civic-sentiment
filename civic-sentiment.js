@@ -23,7 +23,7 @@ if ( Meteor.isClient ) {
 		$("#past3Day").change( function(e)		{ past = - 3 * 24 * 60 * 60 * 1000; retrieveData(); refreshingTime = 6000000; });
 		$("#pastDay").change( function(e)		{ past =      - 24 * 60 * 60 * 1000; retrieveData(); refreshingTime = 1800000; });
 		$("#past8Hour").change( function(e)	{ past =     -  8 * 60 * 60 * 1000; retrieveData(); refreshingTime = 300000; });
-		$("#past1Hour").change( function(e)	{ past =     -  4 * 60 * 60 * 1000; retrieveData(); refreshingTime = 60000; });
+		$("#past1Hour").change( function(e)	{ past =     -  1 * 60 * 60 * 1000; retrieveData(); refreshingTime = 60000; });
 		$("#past5Min").change( function(e)		{ past =          -  5 * 60 * 1000; retrieveData(); refreshingTime = 2000; });
 
 		$('#language').click(function(){
