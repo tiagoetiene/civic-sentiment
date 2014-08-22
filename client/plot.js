@@ -1,6 +1,6 @@
 Plot = function() {
     var width = undefined;
-    var height = 350;
+    var height = 300;
     var padding = 45;
     var x_valuer = Number;
     var y_pos_valuer = Number;
