@@ -5,7 +5,11 @@
 	<div class="row">
 		<div class="col-md-3 text-center" style="height:100%">
 			<div class="row"><h5>Top links </h5></div>
-			<div class="row"> {{links}} </div>
+			<div class="row"> 
+			{{#each links}}
+				<a href="{{link}}">{{link}}</a><br/>
+			{{/each}}
+			</div>
 		</div>
 <!-- 		<div class="col-md-3 text-center" style="height:100%">
 			<div class="row"><h5>Top tweets </h5></div>
