@@ -163,6 +163,9 @@ if ( Meteor.isClient ) {
 				.y( function(d) { return d.sentiment; } )
 				.yPos( function(d) { return d.positive_sentiment; } )
 				.yNeg( function(d) { return d.negative_sentiment; } )
+				.onclick( function(d) { 
+					Session.set('plot_links', d.positive_sentiment);
+				} )
 				(plot_div);
 		});
 	}

@@ -6,6 +6,7 @@ Plot = function() {
     var y_pos_valuer = Number;
     var y_neg_valuer = Number;
     var y_sum_valuer = Number;
+    var onclick_callback = undefined;
     var colors = ['#2980B9', '#C0392B', 'green' ];
     var x, y;
     var domain = undefined;
@@ -54,26 +55,56 @@ Plot = function() {
             pplot.select('#sentimentplot').remove();
             var plot = pplot.append("g").attr('id', 'sentimentplot');
 
-            x = d3.time
-                    .scale()
-                    .range( [ padding , width ] )
-                    .domain( domain );
+		x = d3.time
+			.scale()
+			.range( [ 2*padding , width ] )
+			.domain( domain );
 
-    		y = d3.scale
-    			.linear()
-    			.range( [ height-10, 10 ] )
-    			.domain( [-1, 1] );
+		y = d3.scale
+			.linear()
+			.range( [ height-10, 10 ] )
+			.domain( [-1, 1] );
             
             plotCurves(plot, data, y_pos_valuer, colors[0], 0.5);
             plotCurves(plot, data, y_neg_valuer, colors[1], 0.5);    
             // plotCurves(plot, data, y_sum_valuer, colors[2], 0.9);
 
-    		render_axis(plot, data);
+            var bar_width = Math.floor( x( x_valuer.call( this, data[1], 1 ) ) - x( x_valuer.call( this, data[0], 0 ) ) );
+		var user_selection = plot.selectAll('g').data(data).enter().append('g');
+		user_selection
+			.append('circle')
+			.attr('id', function( v, idx ) { return idx } )
+			.attr('cx', function( v, idx ) { return x( x_valuer.call(this, v, idx)); } )
+			.attr('cy', function( v, idx ) { return y( y_pos_valuer.call(this, v, idx)); } )
+			.attr('r', bar_width*0.5 )
+			.attr('fill', colors[ 0 ] )
+			.attr('fill-opacity', 0.0 );
+		user_selection
+			.append('rect')
+			.attr('fill', 'white')
+			.attr('fill-opacity', 0.0)
+			.attr('x', function( v, idx ) { return x( x_valuer.call(this, v, idx) ); } )
+			.attr('y', 0 )
+			.attr('width', bar_width)
+			.attr('height', height)
+			.on('click', function(datum, idx) {
+				if(onclick_callback !== undefined)
+					onclick_callback.call(this, datum, idx);
+			})
+			.attr('cursor', 'pointer')
+			.on('mouseover', function(datum, idx) { 
+				d3.select(this.parentNode).select('circle') .attr('fill-opacity', 1.0);
+			})
+			.on('mouseout', function(datum, idx) { 
+				d3.select(this.parentNode).select('circle') .attr('fill-opacity', 0.0);
+			});
+
+		render_axis(plot, data);
         });
 
         function plotCurves( plot, data, y_valuer, color, opacity ) {
             var line = d3.svg.area()
-                        .interpolate('basis') 
+                        .interpolate('linear') 
                         .x( function( v, idx ) { return x( x_valuer.call(this, v, idx) ); })
                         .y0( 0.5 * height )
                         .y1( function( v, idx ) { return y( y_valuer.call(this, v, idx) ); });
@@ -88,7 +119,7 @@ Plot = function() {
         }
 
         function render_axis(cell) {
-            
+
             var axis = cell.append('g')
                                     .attr('transform', 'translate(' + padding + ',' + 0 + ')');
                                     // .append('line')
@@ -114,7 +145,7 @@ Plot = function() {
                 .attr("y", 6)
                 .attr("font-size", 30)
                 .attr("fill", colors[0])
-                .attr("transform", "translate(" + (width * 0.4) + "," + (20) + ")" + "rotate(0)")
+                .attr("transform", "translate(" + (0) + "," + (height * 0.45) + ")" + "rotate(0)")
                 .text(i18n("like"));
 
             // PLOT TEXT: DISLIKE
@@ -123,7 +154,7 @@ Plot = function() {
                 .attr("y", 6)
                 .attr("font-size", 30)
                 .attr("fill", colors[1])
-                .attr("transform", "translate(" + (width * 0.4) + "," + (height-15) + ")" + "rotate(0)")
+                .attr("transform", "translate(" + (0) + "," + (height*0.60) + ")" + "rotate(0)")
                 .text(i18n("dislike"));
 
             // x.range( [ padding , width ] );
@@ -170,6 +201,13 @@ Plot = function() {
             return domain;
         domain = _;
         return chart;
+    }
+
+    chart.onclick = function(_) {
+    	if( !arguments.length)
+    		return onclick_callback;
+    	onclick_callback = _;
+    	return chart;
     }
 
     return chart;
