@@ -163,8 +163,11 @@ if ( Meteor.isClient ) {
 				.y( function(d) { return d.sentiment; } )
 				.yPos( function(d) { return d.positive_sentiment; } )
 				.yNeg( function(d) { return d.negative_sentiment; } )
-				.onclick( function(d) {
-					Session.set('plot_links', d.positive_url);
+				.onclick( function(d, sentiment) { 
+					if(sentiment === 'pos')
+						Session.set('plot_links', d.positive_url); 
+					else
+						Session.set('plot_links', d.negative_url); 
 				})
 				(plot_div);
 		});
