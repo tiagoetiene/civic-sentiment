@@ -35,11 +35,6 @@ if ( Meteor.isClient ) {
 		})
   	});
 
-	Template.plot.plot = function() {
-		if(this.plot === undefined)  this.plot = Plot();
-		return this.id;
-	}
-
 	Template.jumbotron.background_image = function() {
 		return i18n('backgroundImage');
 	}
