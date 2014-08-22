@@ -55,51 +55,25 @@ Plot = function() {
             pplot.select('#sentimentplot').remove();
             var plot = pplot.append("g").attr('id', 'sentimentplot');
 
-		x = d3.time
-			.scale()
-			.range( [ 2*padding , width ] )
-			.domain( domain );
+    		x = d3.time
+    			.scale()
+    			.range( [ 2*padding , width ] )
+    			.domain( domain );
 
-		y = d3.scale
-			.linear()
-			.range( [ height-10, 10 ] )
-			.domain( [-1, 1] );
-            
-            plotCurves(plot, data, y_pos_valuer, colors[0], 0.5);
-            plotCurves(plot, data, y_neg_valuer, colors[1], 0.5);    
-            // plotCurves(plot, data, y_sum_valuer, colors[2], 0.9);
+    		y = d3.scale
+    			.linear()
+    			.range( [ height-10, 10 ] )
+    			.domain( [-1, 1] );
+                
+                plotCurves(plot, data, y_pos_valuer, colors[0], 0.5);
+                plotCurves(plot, data, y_neg_valuer, colors[1], 0.5);    
+                // plotCurves(plot, data, y_sum_valuer, colors[2], 0.9);
 
-            var bar_width = Math.floor( x( x_valuer.call( this, data[1], 1 ) ) - x( x_valuer.call( this, data[0], 0 ) ) );
-		var user_selection = plot.selectAll('g').data(data).enter().append('g');
-		user_selection
-			.append('circle')
-			.attr('id', function( v, idx ) { return idx } )
-			.attr('cx', function( v, idx ) { return x( x_valuer.call(this, v, idx)); } )
-			.attr('cy', function( v, idx ) { return y( y_pos_valuer.call(this, v, idx)); } )
-			.attr('r', bar_width*0.5 )
-			.attr('fill', colors[ 0 ] )
-			.attr('fill-opacity', 0.0 );
-		user_selection
-			.append('rect')
-			.attr('fill', 'white')
-			.attr('fill-opacity', 0.0)
-			.attr('x', function( v, idx ) { return x( x_valuer.call(this, v, idx) ); } )
-			.attr('y', 0 )
-			.attr('width', bar_width)
-			.attr('height', height)
-			.on('click', function(datum, idx) {
-				if(onclick_callback !== undefined)
-					onclick_callback.call(this, datum, idx);
-			})
-			.attr('cursor', 'pointer')
-			.on('mouseover', function(datum, idx) { 
-				d3.select(this.parentNode).select('circle') .attr('fill-opacity', 1.0);
-			})
-			.on('mouseout', function(datum, idx) { 
-				d3.select(this.parentNode).select('circle') .attr('fill-opacity', 0.0);
-			});
+            var user_selection = plot.selectAll('g').data(data).enter().append('g');
+            userSelection(user_selection, x_valuer, y_pos_valuer, colors[0], data, onclick_callback, 0, 0.5 * height, 'pos');
+            userSelection(user_selection, x_valuer, y_neg_valuer, colors[1], data, onclick_callback, 0.5 * height, height, 'neg');
 
-		render_axis(plot, data);
+    		render_axis(plot, data);
         });
 
         function plotCurves( plot, data, y_valuer, color, opacity ) {
@@ -116,6 +90,38 @@ Plot = function() {
                     .attr( 'fill', color)
                     .attr( 'fill-opacity', opacity)
                     .attr( 'd', line( data ) );
+        }
+
+        function userSelection(selection, x_valuer, y_valuer, color, data, callback, bar_start, bar_end, polarity) {
+            var bar_width = Math.ceil(x(x_valuer.call(this,data[1],1))-x(x_valuer.call(this,data[0],0)));
+            var sel = selection.append('g');
+            sel
+                .append('circle')
+                .attr('id', function( v, idx ) { return idx } )
+                .attr('cx', function( v, idx ) { return x( x_valuer.call(this, v, idx)); } )
+                .attr('cy', function( v, idx ) { return y( y_valuer.call(this, v, idx)); } )
+                .attr('r', bar_width*0.5 )
+                .attr('fill', color )
+                .attr('fill-opacity', 0.0 );
+            sel
+                .append('rect')
+                .attr('fill', 'white')
+                .attr('fill-opacity', 0.0)
+                .attr('x', function( v, idx ) { return x( x_valuer.call(this, v, idx) ); } )
+                .attr('y', bar_start )
+                .attr('width', bar_width)
+                .attr('height', bar_end)
+                .on('click', function(datum, idx) {
+                    if(callback !== undefined)
+                        callback.call(this, datum, polarity);
+                })
+                .attr('cursor', 'pointer')
+                .on('mouseover', function(datum, idx) { 
+                    d3.select(this.parentNode).select('circle').attr('fill-opacity', 1.0);
+                })
+                .on('mouseout', function(datum, idx) { 
+                    d3.select(this.parentNode).select('circle').attr('fill-opacity', 0.0);
+                });
         }
 
         function render_axis(cell) {
