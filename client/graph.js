@@ -5,3 +5,6 @@ Template.plot.plot = function() {
 Template.plot.links = function() {
 	return Session.get('plot_links');
 }
+Template.plot.link = function() {
+	return String(this);
+}
