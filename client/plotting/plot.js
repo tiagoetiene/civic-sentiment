@@ -170,6 +170,7 @@ Plot = function() {
 		if( !arguments.length )
 			return y_pos_valuer;
 		y_pos_valuer = _;
+		y_pos_valuer.grade = 'pos';
 		return chart;
 	}
 
@@ -177,6 +178,7 @@ Plot = function() {
 		if( !arguments.length )
 			return y_neg_valuer;
 		y_neg_valuer = _;
+		y_neg_valuer.grade = 'neg';
 		return chart;
 	}
 
