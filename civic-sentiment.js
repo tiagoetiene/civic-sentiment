@@ -155,18 +155,19 @@ if ( Meteor.isClient ) {
 		var _past = getPast( _now, past );
 		var domain = [ _past, _now ];
 
-		_.each(Politicians.selected(), function(d) {
-			var plot_div = d3.select( "#"+ d.id );
-			plot_div.data( [ d.data ] );
-			d.plot.domain( [  _past , _now ]  )
+		_.each( Politicians.selected(), function( d ) {
+			d.plot
 				.x( function(d) { return d.date; } )
 				.y( function(d) { return d.sentiment; } )
 				.yPos( function(d) { return d.positive_sentiment; } )
 				.yNeg( function(d) { return d.negative_sentiment; } )
-				.onclick( function(d) { 
-					Session.set('plot_links', d.positive_sentiment);
-				} )
-				(plot_div);
+				.onclick( function(d) { Session.set('plot_links', d.positive_sentiment); } )
+				(d3.select( "#"+ d.id ))
+		});
+		_.each(Politicians.selected(), function(d) {
+			d.plot.domain( [  _past , _now ]  )
+				.data( d.data )
+				.update();
 		});
 	}
 
