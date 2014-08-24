@@ -169,8 +169,8 @@ if ( Meteor.isClient ) {
 				})
 				(d3.select( "#"+ d.id ))
 		});
-		_.each(Politicians.selected(), function(d) {
-			d.plot.domain( [  _past , _now ]  ).data( d.data ).update();
+		_.each(Politicians.selected(), function(politician) {
+			politician.plot.domain( [  _past , _now ]  ).data( politician.data ).update();
 		});
 	}
 
