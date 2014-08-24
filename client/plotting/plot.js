@@ -80,37 +80,6 @@ Plot = function() {
 		selectionHandler(plot.select('#pos').select('#selection'), data, y_pos_valuer, colors[0]);
 		selectionHandler(plot.select('#neg').select('#selection'), data, y_neg_valuer, colors[1]);
 
-
-		// var bar_width = Math.floor( x( x_valuer.call( this, data[1], 1 ) ) - x( x_valuer.call( this, data[0], 0 ) ) );
-		// var user_selection = plot.selectAll('g').data(data).enter().append('g');
-		// user_selection
-		// .append('circle')
-		// .attr('id', function( v, idx ) { return idx } )
-		// .attr('cx', function( v, idx ) { return x( x_valuer.call(this, v, idx)); } )
-		// .attr('cy', function( v, idx ) { return y( y_pos_valuer.call(this, v, idx)); } )
-		// .attr('r', bar_width*0.5 )
-		// .attr('fill', colors[ 0 ] )
-		// .attr('fill-opacity', 0.0 );
-		// user_selection
-		// .append('rect')
-		// .attr('fill', 'white')
-		// .attr('fill-opacity', 0.0)
-		// .attr('x', function( v, idx ) { return x( x_valuer.call(this, v, idx) ); } )
-		// .attr('y', 0 )
-		// .attr('width', bar_width)
-		// .attr('height', height)
-		// .on('click', function(datum, idx) {
-		// if(onclick_callback !== undefined)
-		// onclick_callback.call(this, datum, idx);
-		// })
-		// .attr('cursor', 'pointer')
-		// .on('mouseover', function(datum, idx) { 
-		// d3.select(this.parentNode).select('circle') .attr('fill-opacity', 1.0);
-		// })
-		// .on('mouseout', function(datum, idx) { 
-		// d3.select(this.parentNode).select('circle') .attr('fill-opacity', 0.0);
-		// });
-
 		// render_axis(plot, data);
 	}
 
@@ -171,26 +140,6 @@ Plot = function() {
 		rects.exit().remove();
 		drawRects( rects.enter().append('rect'), data, y_valuer, color );
 		drawRects( rects, data, y_valuer, color );
-		
-		// user_selection
-		// .append('rect')
-		// .attr('fill', 'white')
-		// .attr('fill-opacity', 0.0)
-		// .attr('x', function( v, idx ) { return x( x_valuer.call(this, v, idx) ); } )
-		// .attr('y', 0 )
-		// .attr('width', bar_width)
-		// .attr('height', height)
-		// .on('click', function(datum, idx) {
-		// if(onclick_callback !== undefined)
-		// onclick_callback.call(this, datum, idx);
-		// })
-		// .attr('cursor', 'pointer')
-		// .on('mouseover', function(datum, idx) { 
-		// d3.select(this.parentNode).select('circle') .attr('fill-opacity', 1.0);
-		// })
-		// .on('mouseout', function(datum, idx) { 
-		// d3.select(this.parentNode).select('circle') .attr('fill-opacity', 0.0);
-		// });
 	}
 
         function render_axis(cell) {
