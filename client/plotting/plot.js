@@ -47,8 +47,6 @@ Plot = function() {
 		
 		selectionHandler(plot.select('#pos').select('#selection'), data, y_pos_valuer, colors[0]);
 		selectionHandler(plot.select('#neg').select('#selection'), data, y_neg_valuer, colors[1]);
-
-		// render_axis(plot, data);
 	}
 
 	function plotCurves( plot, data, y_valuer, color, opacity ) {
@@ -60,14 +58,14 @@ Plot = function() {
 				.y1( function(d) { return y( y_valuer.call(this, d) ); } );
 			plot
 				.attr('fill', color)
-				.attr('fill-opacity', 1.0)
+				.attr('fill-opacity', 0.8)
 				.attr('d', area(data));
 		}
 	}
 
 	function drawCircles( selection, data, y_valuer, color ) {
 		var bar_width = Math.floor( x( x_valuer.call( this, data[1], 1 ) ) - x( x_valuer.call( this, data[0], 0 ) ) );
-		selection.attr('id', function( v, idx ) { return idx } )
+		selection.attr('id', function( v, idx ) { return 'circle-id-' + idx } )
 			.attr('cx', function( v, idx ) { return x( x_valuer.call(this, v, idx)); } )
 			.attr('cy', function( v, idx ) { return y( y_valuer.call(this, v, idx)); } )
 			.attr('r', bar_width*0.5 )
@@ -80,28 +78,25 @@ Plot = function() {
 			.attr('fill', 'white')
 			.attr('fill-opacity', 0.0)
 			.attr('x', function( v, idx ) { return x( x_valuer.call(this, v, idx) ); } )
-			.attr('y', 0 )
+			.attr('y', ( ( (y_valuer.grade === 'pos') ? 0 : 0.5 * height ) ) )
 			.attr('width', bar_width)
-			.attr('height', height)
-			.on('click', function(datum, idx) {
-				if(onclick_callback !== undefined)
-					onclick_callback.call(this, datum, idx);
-			})
+			.attr('height', 0.5 * height)
 			.attr('cursor', 'pointer')
+			.on('click', function(datum, idx) {
+				if(onclick_callback !== undefined) onclick_callback.call(this, datum, idx);
+			})
 			.on('mouseover', function(datum, idx) { 
-				d3.select(this.parentNode).select('circle') .attr('fill-opacity', 1.0);
+				d3.select(this.parentNode).select('#circle-id-' + idx).attr('fill-opacity', 1.0);
 			})
 			.on('mouseout', function(datum, idx) { 
-				d3.select(this.parentNode).select('circle') .attr('fill-opacity', 0.0);
+				d3.select(this.parentNode).select('#circle-id-' + idx).attr('fill-opacity', 0.0);
 			});
 	}
 
 	function selectionHandler( selection, data, y_valuer, color ) {
-		
 		var circles = selection.selectAll('circle').data(data);
-		
 		circles.exit().remove();
-		drawCircles( circles.enter().append('circle'), data, y_valuer, color );
+		drawCircles( circles.enter().append('circle').attr('fill-opacity', 0.0 ), data, y_valuer, color );
 		drawCircles( circles, data, y_valuer, color );
 
 		var rects = selection.selectAll( 'rect' ).data( data );
