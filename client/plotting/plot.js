@@ -64,11 +64,10 @@ Plot = function() {
 	}
 
 	function drawCircles( selection, data, y_valuer, color ) {
-		var bar_width = Math.floor( x( x_valuer.call( this, data[1], 1 ) ) - x( x_valuer.call( this, data[0], 0 ) ) );
 		selection.attr('id', function( v, idx ) { return 'circle-id-' + idx } )
 			.attr('cx', function( v, idx ) { return x( x_valuer.call(this, v, idx)); } )
 			.attr('cy', function( v, idx ) { return y( y_valuer.call(this, v, idx)); } )
-			.attr('r', bar_width*0.5 )
+			.attr('r', 7)
 			.attr('fill', color );
 	}
 
