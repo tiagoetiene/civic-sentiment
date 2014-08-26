@@ -1,6 +1,6 @@
 Plot = function() {
 	var width = undefined;
-	var height = 300;
+	var height = 165;
 	var padding = 45;
 	var x_valuer = Number;
 	var y_pos_valuer = Number;
@@ -10,15 +10,17 @@ Plot = function() {
 	var colors = ['#2980B9', '#C0392B', 'green' ];
 	var x, y;
 	var domain = undefined;
+	var svg = undefined;
 	var plot = undefined; 
 	var data = undefined;
 
 	function chart( selection ) {
-            if(plot == undefined) {
+            if(svg === undefined) {
             	width = parseInt(selection.style('width'));
-            	plot = selection.append( 'svg' );
-            	plot.attr( 'width' ,  width-padding).attr( 'height' , height);
-            	plot = plot.append("g").attr('id', 'sentimentplot');
+            	svg = selection.append( 'svg' );
+            	svg.attr( 'width' ,  width).attr( 'height' , height);
+
+            	plot = svg.append("g").attr('id', 'sentimentplot');
 
             	var pos = plot.append('g').attr('id', 'pos');
             	var neg = plot.append('g').attr('id', 'neg');
@@ -28,18 +30,25 @@ Plot = function() {
 
             	neg.append('path');
             	neg.append('g').attr('id', 'selection');
+
+            	svg.append('g').attr('id', 'axis');
+
+            	// drawBox( svg );
             }
 	}
 
 	function update( ) {
+		if(data === undefined || data.length === 0)
+			return;
+
 		x = d3.time
 			.scale()
-			.range( [ 2*padding , width ] )
+			.range( [ 35 , width-padding ] )
 			.domain( domain );
 
 		y = d3.scale
 			.linear()
-			.range( [ height, 0 ] )
+			.range( [ height - 10, 10 ] )
 			.domain( [-1, 1] );
 
 		plotCurves(plot.select('#pos').select('path'), data, y_pos_valuer, colors[0], 0.5);
@@ -47,6 +56,20 @@ Plot = function() {
 		
 		selectionHandler(plot.select('#pos').select('#selection'), data, y_pos_valuer, colors[0]);
 		selectionHandler(plot.select('#neg').select('#selection'), data, y_neg_valuer, colors[1]);
+
+		render_axis(svg.select('#axis'));
+	}
+
+	function drawBox( selection ) {
+		selection
+			.append('rect')
+			.attr('fill', 'none')
+			.attr('stroke', 'black')
+			.attr('stroke-width', 0.5)
+			.attr('x', 0 )
+			.attr('y', 0 )
+			.attr('width', width)
+			.attr('height', height);
 	}
 
 	function plotCurves( plot, data, y_valuer, color, opacity ) {
@@ -106,51 +129,38 @@ Plot = function() {
 
         function render_axis(cell) {
 
+        	cell.select('#axis_text').remove();
             var axis = cell.append('g')
-                                    .attr('transform', 'translate(' + padding + ',' + 0 + ')');
-                                    // .append('line')
-                                    // .attr('x1', 0.0)
-                                    // .attr('y1', 0.0)
-                                    // .attr('x2', 0.0)
-                                    // .attr('y2', height)
-                                    // .attr('stroke', 'lightgray')
-                                    // .attr('stroke-width', '3px');
-
-            // PLOT TEXT: SENTIMENT
-            // cell.append("text")
-            //     .attr("text-anchor", "start")
-            //     .attr("y", 6)
-            //     // .attr("dy", ".75em")
-            //     .attr("font-size", 35)
-            //     .attr("transform", "translate(" + (padding-25) + "," + (height*0.75) + ")" + "rotate(-90)")
-            //     .text(i18n("sentiment"));
+			.attr('id', 'axis_text')
+			.attr('transform', 'translate(' + 0 + ',' + 0 + ')');
 
             // PLOT TEXT: LIKE
-            cell.append("text")
+            axis.append("text")
                 .attr("text-anchor", "start")
                 .attr("y", 6)
-                .attr("font-size", 30)
+                .attr("font-size", 20)
                 .attr("fill", colors[0])
-                .attr("transform", "translate(" + (0) + "," + (height * 0.45) + ")" + "rotate(0)")
+                .attr("transform", "translate(" + (10) + "," + (height * 0.48) + ")" + "rotate(-90)")
                 .text(i18n("like"));
 
             // PLOT TEXT: DISLIKE
-            cell.append("text")
+            axis.append("text")
                 .attr("text-anchor", "start")
                 .attr("y", 6)
-                .attr("font-size", 30)
+                .attr("font-size", 20)
                 .attr("fill", colors[1])
-                .attr("transform", "translate(" + (0) + "," + (height*0.60) + ")" + "rotate(0)")
+                .attr("transform", "translate(" + (10) + "," + (height*0.52) + ")" + "rotate(90)")
                 .text(i18n("dislike"));
 
             // x.range( [ padding , width ] );
-            cell.append('g')
+            axis.append('g')
                  .attr('transform', 'translate(' + 0 + ',' + height / 2 + ')')
                  .attr('fill', 'lightgray')
                  .call(d3.svg.axis().scale(x).orient("bottom"))
                  .selectAll('text')
                  .attr('fill', 'black')
                  .each(function() { d3.select(this).text( forceLocalization( d3.select(this).text() ) ); });
+
 	}
 
 	chart.x = function(_) {
