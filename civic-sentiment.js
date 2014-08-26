@@ -3,7 +3,7 @@ TwitterCollection = new Meteor.Collection("tweets-summary")
 Politicians = People();
 
 if ( Meteor.isClient ) {
-	Meteor.loginVisitor()
+	// Meteor.loginVisitor()
 	
 	configInternationalization();
 	document.title =i18n('title');

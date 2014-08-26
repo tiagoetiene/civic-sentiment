@@ -5,8 +5,7 @@
       "bootstrap-3": {},
       "select2": {},
       "just-i18n": {},
-      "bootstrap-select": {},
-      "accounts-guest": {}
+      "bootstrap-select": {}
     },
     "packages": {
       "bootstrap-3": {
@@ -28,11 +27,6 @@
         "git": "https://github.com/amrali/bootstrap-select-meteor.git",
         "tag": "v1.5.4",
         "commit": "de99107c031dad11327b7739e9f7b389a229c63f"
-      },
-      "accounts-guest": {
-        "git": "https://github.com/artwells/meteor-accounts-guest.git",
-        "tag": "v0.0.6",
-        "commit": "f40bcf1f9e5999c70ab81a4f1e7a39f3ce78aa57"
       }
     }
   }
