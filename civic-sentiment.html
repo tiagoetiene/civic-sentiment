@@ -83,8 +83,7 @@
 
 <template name="candidate_name">
 	<h3 class="text-center" style="{{color}};"> 
-		{{name}} <br/>
-		{{tweets_count}} {{i18n "tweets"}}
+		{{tweets_count}} {{i18n "tweets"}} {{i18n "about"}} {{name}}
 	</h3>
 </template>
 
@@ -97,18 +96,12 @@
 	<div class="row">
 		{{#each list_of_candidates}}
 			<div class="row {{isCandidateVisible}}">
-				<div class="col-md-3">
-					<div class="row">
-						<div class="col-md-12">
-							<div class="col-md-1 nopadding"></div>
-							<div class="col-md-10 nopadding">
-								{{> candidate_name}}
-							</div>
-							<div class="col-md-1 nopadding">
-								{{> close_button}}
-							</div>
-						</div>
+				<div class="row">
+					<div class="col-md-12">
+						{{> candidate_name}}
 					</div>
+				</div>
+				<div class="col-md-4">
 					<div class="row">
 						<div class="col-md-12">
 							<div>{{> twitter_feed}}</div>
@@ -117,10 +110,11 @@
 					</div>
 
 				</div>
-				<div class="col-md-9">
+				<div class="col-md-8">
 					{{> plot}}
 				</div>
 			</div>
+			<hr class="{{isCandidateVisible}}">
 		{{/each}}
 	</div>
 </div>
