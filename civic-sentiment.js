@@ -58,7 +58,7 @@ if ( Meteor.isClient ) {
 	Template.candidate_name.tweets_count = function() {
 		Session.get(this.name);
 		Session.set(this.name+':color', 'color:red');
-		return this.tweets_count;
+		return this.tweets_count + ' ';
 	}
 
 	Template.main.list_of_candidates = function() {
