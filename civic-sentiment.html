@@ -48,7 +48,7 @@
 </template>
 
 <template name="twitter_feed">
-	<iframe src="{{iframe_source}}" height="225px" width="100%" frameborder="0" id="{{iframe_id}}" scrolling="no">
+	<iframe src="{{iframe_source}}" height="165px" width="100%" frameborder="0" id="{{iframe_id}}" scrolling="no">
 	</iframe>
 	<script>
 		if (!window.WAYIN) {
@@ -101,6 +101,9 @@
 						{{> candidate_name}}
 					</div>
 				</div>
+				<div class="col-md-8">
+					{{> plot}}
+				</div>
 				<div class="col-md-4">
 					<div class="row">
 						<div class="col-md-12">
@@ -108,10 +111,6 @@
 							<!-- <div class="col-md-6 nopadding">{{> candidate_image}}</div> -->
 						</div>
 					</div>
-
-				</div>
-				<div class="col-md-8">
-					{{> plot}}
 				</div>
 			</div>
 			<hr class="{{isCandidateVisible}}">
