@@ -3,6 +3,7 @@
     "bootstrap-3": {},
     "select2": {},
     "just-i18n": {},
-    "bootstrap-select": {}
+    "bootstrap-select": {},
+    "accounts-guest": {}
   }
 }
