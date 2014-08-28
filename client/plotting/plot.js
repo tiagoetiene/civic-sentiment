@@ -105,10 +105,10 @@ Plot = function() {
 			.attr('height', 0.5 * height)
 			.attr('cursor', 'pointer')
 			.on('click', function(datum, idx) {
-				if(onclick_callback !== undefined) onclick_callback.call(this, datum, idx);
 			})
 			.on('mouseover', function(datum, idx) { 
 				d3.select(this.parentNode).select('#circle-id-' + idx).attr('fill-opacity', 1.0);
+				if(onclick_callback !== undefined) onclick_callback.call(this, datum, idx);
 			})
 			.on('mouseout', function(datum, idx) { 
 				d3.select(this.parentNode).select('#circle-id-' + idx).attr('fill-opacity', 0.0);
