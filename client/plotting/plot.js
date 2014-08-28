@@ -24,12 +24,16 @@ Plot = function() {
 
             	var pos = plot.append('g').attr('id', 'pos');
             	var neg = plot.append('g').attr('id', 'neg');
+            	var neu = plot.append('g').attr('id', 'neu');
 
             	pos.append('path');
             	pos.append('g').attr('id', 'selection');
 
             	neg.append('path');
             	neg.append('g').attr('id', 'selection');
+
+            	neu.append('path');
+            	neu.append('g').attr('id', 'selection');
 
             	svg.append('g').attr('id', 'axis');
 
@@ -53,6 +57,7 @@ Plot = function() {
 
 		plotCurves(plot.select('#pos').select('path'), data, y_pos_valuer, colors[0], 0.5);
 		plotCurves(plot.select('#neg').select('path'), data, y_neg_valuer, colors[1], 0.5);    
+		// plotCurves(plot.select('#neu').select('path'), data, y_sum_valuer, 'darkgreen', 0.5);    
 		
 		selectionHandler(plot.select('#pos').select('#selection'), data, y_pos_valuer, colors[0]);
 		selectionHandler(plot.select('#neg').select('#selection'), data, y_neg_valuer, colors[1]);
