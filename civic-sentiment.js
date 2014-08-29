@@ -10,16 +10,7 @@ if ( Meteor.isClient ) {
 	var past = -31 * 24 * 60 * 60 * 1000;
 
 	$(document).ready(function() {
-		function animateLinkTag( selection ) {
-			selection.click(function(){  
-				$('html, body').animate({ scrollTop: $( $.attr(this, 'href') ).offset().top }, 500); return false; 
-			});
-		}
-
-		animateLinkTag( $('#linkTo0') );
-		animateLinkTag( $('#linkTo1') );
-		animateLinkTag( $('#aboutLink') );
-
+		$('#homeLink').click(function() {  Session.set('IsCoverPage', true);  });
 		$('#language').click(function(){
 			if( i18n.getLanguage() === 'pt-br' )
 				i18n.setLanguage('en-us');
@@ -28,6 +19,30 @@ if ( Meteor.isClient ) {
 			Session.set( 'updateSelect', Session.get('updateSelect') !== true );
 		})
   	});
+
+  	Template.twitter_feed.rendered = function() {
+		if (!window.WAYIN) {
+			window.WAYIN = {hubs: []};}
+			window.WAYIN.hubs.push(
+				{
+					hub_iframe: document.getElementById(this.data.iframe_id),
+					not_use_outer_iframe:false,
+					vexpand:false,
+					allows_dialogs:true,
+					updates_url:false
+				});
+			(function() {
+				if (document.getElementById('wayin-hub-embedd-script')) {
+					return;
+				} else {
+					var script = document.createElement('script');
+					script.id = 'wayin-hub-embedd-script';
+					script.type = 'text/javascript';
+					script.src = '//rjihacks.wayinhub.com/scripts/iframe-onload.js';
+					document.body.appendChild( script );
+				}
+			})();
+  	}
 
 	Template.getStartedButton.rendered = function() {
 		d3.selectAll('#xxxx')
@@ -57,13 +72,27 @@ if ( Meteor.isClient ) {
 	}
 
 	Template.bodyTemplate.coverImage =function() {
-		if(Session.get('IsCoverPage') === true)
-			return 'background : url(' + i18n('coverImage') + ');';
+		if(Session.get('IsCoverPage') === true) 
+			return 'background : url(' + i18n('coverImage') + ') no-repeat; background-size:cover;';
 		return ' ';
 	}
 
 	Template.bodyTemplate.coverPage = function() {
 		return Session.get('IsCoverPage');
+	}
+
+	Template.coverPageTemplate.rendered = function() {
+		function animateLinkTag( selection ) {
+			selection.click(function(){  
+				$('html, body').animate({ 
+					scrollTop: $( $.attr(this, 'href') ).offset().top 
+				}, 500); return false; 
+			});
+		}
+
+		animateLinkTag( $('#linkTo0') );
+		animateLinkTag( $('#linkTo1') );
+		animateLinkTag( $('#aboutLink') );
 	}
 
 	Template.jumbotron.background_image = function() {
@@ -99,8 +128,12 @@ if ( Meteor.isClient ) {
 		return Politicians();
 	}
 
-	Template.main.isCandidateVisible = function( a, b ) {
+	Template.main.isCandidateVisible = function() {
 		return (Politicians.visible( this.name )) ? "" : "hidden";
+	}
+
+	Template.main.isVisible = function() {
+		return Politicians.visible( this.name );
 	}
 
 	Template.close_button.events =  {
