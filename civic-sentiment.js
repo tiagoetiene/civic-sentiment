@@ -3,7 +3,6 @@ Politicians = People();
 
 if ( Meteor.isClient ) {
 	Session.set('IsCoverPage', true);
-	Meteor.loginVisitor()
 	
 	configInternationalization();
 	document.title =i18n('title');
