@@ -5,8 +5,8 @@ if ( Meteor.isClient ) {
 	Session.set('IsCoverPage', true);
 	
 	configInternationalization();
-	document.title =i18n('title');
 	var past = -31 * 24 * 60 * 60 * 1000;
+	document.title =i18n('title');
 
 	$(document).ready(function() {
 		$('#homeLink').click(function() {  Session.set('IsCoverPage', true);  });
@@ -15,6 +15,7 @@ if ( Meteor.isClient ) {
 				i18n.setLanguage('en-us');
 			else
 				i18n.setLanguage('pt-br');
+			document.title =i18n('title');
 			Session.set( 'updateSelect', Session.get('updateSelect') !== true );
 		})
   	});
