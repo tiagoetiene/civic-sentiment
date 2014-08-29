@@ -136,21 +136,6 @@ if ( Meteor.isClient ) {
 		return Politicians.visible( this.name );
 	}
 
-	Template.close_button.events =  {
-		'click h5': function (event) {
-			var _this = this;
-			SelectedCandidates = _.filter(SelectedCandidates, function(data) {
-				return data.iframe_id.localeCompare(_this.iframe_id) != 0;
-      		});
-
-			// Updating WAYIN data
-			window.WAYIN.hubs = _.filter(window.WAYIN.hubs, function(hub) {
-				return hub.hub_iframe.id.localeCompare(_this.iframe_id) != 0;
-      		});
-			Session.set('ListOfCandidates', !(Session.get('ListOfCandidates') == true) );
-		}
-	}
-
 	Template.candidate_image.candidate_image = function() {
 		return this.image;
 	}
