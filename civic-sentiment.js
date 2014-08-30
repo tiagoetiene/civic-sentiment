@@ -9,6 +9,22 @@ if ( Meteor.isClient ) {
 	document.title =i18n('title');
 
 	$(document).ready(function() {
+		$(function() {
+			$('a[href*=#]:not([href=#])').click(function() {
+				if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
+					var target = $(this.hash);
+					target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+					if (target.length) {
+						$('html,body').animate({
+							scrollTop: target.offset().top
+						}, 500);
+						return false;
+					}
+				}
+			});
+		});
+
+
 		$('#homeLink').click(function() {  Session.set('IsCoverPage', true);  });
 		$('#language').click(function(){
 			if( i18n.getLanguage() === 'pt-br' )
@@ -81,18 +97,32 @@ if ( Meteor.isClient ) {
 		return Session.get('IsCoverPage');
 	}
 
-	Template.coverPageTemplate.rendered = function() {
-		function animateLinkTag( selection ) {
-			selection.click(function(){  
-				$('html, body').animate({ 
-					scrollTop: $( $.attr(this, 'href') ).offset().top 
-				}, 500); return false; 
-			});
-		}
+	Template.bodyTemplate.rendered = function() {
+		// function animateLinkTag( selection ) {
+		// 	selection.click(function(){  
+		// 		$('html, body').animate({ 
+		// 			scrollTop: $( $.attr(this, 'href') ).offset().top 
+		// 		}, 500); return false; 
+		// 	});
+		// }
 
-		animateLinkTag( $('#linkTo0') );
-		animateLinkTag( $('#linkTo1') );
-		animateLinkTag( $('#aboutLink') );
+		// animateLinkTag( $('#linkTo0') );
+		// animateLinkTag( $('#linkTo1') );
+		// animateLinkTag( $('#aboutLink') );
+	}
+
+	Template.coverPageTemplate.rendered = function() {
+		// function animateLinkTag( selection ) {
+		// 	selection.click(function(){  
+		// 		$('html, body').animate({ 
+		// 			scrollTop: $( $.attr(this, 'href') ).offset().top 
+		// 		}, 500); return false; 
+		// 	});
+		// }
+
+		// animateLinkTag( $('#linkTo0') );
+		// animateLinkTag( $('#linkTo1') );
+		// animateLinkTag( $('#aboutLink') );
 	}
 
 	Template.jumbotron.background_image = function() {
