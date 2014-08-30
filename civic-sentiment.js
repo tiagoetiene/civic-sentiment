@@ -24,12 +24,6 @@ if ( Meteor.isClient ) {
 			});
 		});
 
-		 $('head').append('<meta xmlns:fb="http://ogp.me/ns/fb#" xmlns="http://www.w3.org/1999/xhtml"/>');
-		 $('head').append('<meta property="og:image" content="http://civicsentiment.herokuapp.com/resource/us_congress.jpg"/>');
-		 $('head').append('<meta property="og:url" content="http://www.civicsentiment.com" />');
-		 $('head').append('<meta property="og:title" content="' +  i18n('title') + '" />');
-		 
-
 		$('#homeLink').click(function() {  Session.set('IsCoverPage', true);  });
 		$('#language').click(function(){
 			if( i18n.getLanguage() === 'pt-br' )
@@ -103,17 +97,10 @@ if ( Meteor.isClient ) {
 	}
 
 	Template.bodyTemplate.rendered = function() {
-		// function animateLinkTag( selection ) {
-		// 	selection.click(function(){  
-		// 		$('html, body').animate({ 
-		// 			scrollTop: $( $.attr(this, 'href') ).offset().top 
-		// 		}, 500); return false; 
-		// 	});
-		// }
-
-		// animateLinkTag( $('#linkTo0') );
-		// animateLinkTag( $('#linkTo1') );
-		// animateLinkTag( $('#aboutLink') );
+		$('head').append('<meta xmlns:fb="http://ogp.me/ns/fb#" xmlns="http://www.w3.org/1999/xhtml" />');
+		 $('head').append('<meta property="og:image" content="http://civicsentiment.herokuapp.com/resource/us_congress.jpg"/>');
+		 $('head').append('<meta property="og:url" content="http://www.civicsentiment.com"/>');
+		 $('head').append('<meta property="og:title" content="' +  i18n('title') + '" />');
 	}
 
 	Template.coverPageTemplate.rendered = function() {
