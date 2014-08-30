@@ -24,6 +24,8 @@ if ( Meteor.isClient ) {
 			});
 		});
 
+		 $('head').append('<meta xmlns:fb="http://ogp.me/ns/fb#" xmlns="http://www.w3.org/1999/xhtml"/>');
+		 $('head').append('<meta property="og:image" content="http://civicsentiment.herokuapp.com/' + i18n('coverImage') + '"/>');
 
 		$('#homeLink').click(function() {  Session.set('IsCoverPage', true);  });
 		$('#language').click(function(){
