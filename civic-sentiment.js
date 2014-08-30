@@ -25,7 +25,9 @@ if ( Meteor.isClient ) {
 		});
 
 		 $('head').append('<meta xmlns:fb="http://ogp.me/ns/fb#" xmlns="http://www.w3.org/1999/xhtml"/>');
-		 $('head').append('<meta property="og:image" content="http://civicsentiment.herokuapp.com/' + i18n('coverImage') + '"/>');
+		 $('head').append('<meta property="og:image" content="http://civicsentiment.herokuapp.com/resource/us_congress.jpg"/>');
+		 $('head').append('<meta property="og:url" content="http://www.civicsentiment.com" />');
+		 $('head').append('<meta property="og:title" content="' +  i18n('title') + '" />');
 		 
 
 		$('#homeLink').click(function() {  Session.set('IsCoverPage', true);  });
