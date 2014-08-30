@@ -24,6 +24,9 @@ if ( Meteor.isClient ) {
 			});
 		});
 
+		 $('html').attr("xmlns:fb","http://ogp.me/ns/fb#").attr('xmlns', 'http://www.w3.org/1999/xhtml');
+    		$("head").attr("property", "og:image").attr('content', i18n('coverImage')); 
+
 
 		$('#homeLink').click(function() {  Session.set('IsCoverPage', true);  });
 		$('#language').click(function(){
