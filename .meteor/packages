@@ -6,9 +6,9 @@
 standard-app-packages
 autopublish
 insecure
-bootstrap-3
 d3
-select2
-just-i18n
-bootstrap-select
-spiderable
+natestrauser:select2@3.4.5
+mrt:just-i18n@0.3.0
+mizzao:bootstrap-3
+mrt:bootstrap-select
+
