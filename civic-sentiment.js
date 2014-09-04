@@ -121,18 +121,6 @@ if ( Meteor.isClient ) {
 		return i18n('backgroundImage');
 	}
 
-	Template.twitter_feed.iframe_source = function() {
-		return this.iframe_src;
-	}
-
-	Template.twitter_feed.iframe_id = function() {
-		return this.iframe_id;
-	}
-
-	Template.candidate_name.name = function() {
-		return this.name;
-	}
-
 	Template.candidate_name.color = function() {
 		return Session.get(this.name+':color');
 	}
@@ -156,10 +144,6 @@ if ( Meteor.isClient ) {
 
 	Template.main.isVisible = function() {
 		return Politicians.visible( this.name );
-	}
-
-	Template.candidate_image.candidate_image = function() {
-		return this.image;
 	}
 
 	Template.candidate_image.image_height = function() {
