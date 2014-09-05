@@ -4,30 +4,12 @@ Politicians = People();
 if ( Meteor.isClient ) {
 
 	Meteor.subscribe("summaries");
-
-	Session.set('IsCoverPage', true);
 	
 	configInternationalization();
 	var past = -31 * 24 * 60 * 60 * 1000;
 	document.title =i18n('title');
 
 	$(document).ready(function() {
-		$(function() {
-			$('a[href*=#]:not([href=#])').click(function() {
-				if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
-					var target = $(this.hash);
-					target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
-					if (target.length) {
-						$('html,body').animate({
-							scrollTop: target.offset().top
-						}, 500);
-						return false;
-					}
-				}
-			});
-		});
-
-		$('#homeLink').click(function() {  Session.set('IsCoverPage', true);  });
 		$('#language').click(function(){
 			if( i18n.getLanguage() === 'pt-br' )
 				i18n.setLanguage('en-us');
@@ -62,14 +44,6 @@ if ( Meteor.isClient ) {
 			})();
   	}
 
-	Template.getStartedButton.rendered = function() {
-		d3.selectAll('#xxxx')
-			.each(function() {
-				$(this).click( function() { Session.set('IsCoverPage', Session.get('IsCoverPage') !== true); });
-			});
-		
-	}
-
 	Template.mainPage.rendered = function() {
 		$("#e1").selectpicker('refresh').selectpicker('render');
 		$("#e1").select({placeholder: i18n("selectPolitician")})
@@ -89,21 +63,8 @@ if ( Meteor.isClient ) {
 		$("#past5Min").change( function(e)		{ past =          -  5 * 60 * 1000; retrieveData(); refreshingTime = 2000; });
 	}
 
-	Template.bodyTemplate.coverImage =function() {
-		if(Session.get('IsCoverPage') === true) 
-			return 'background : url(' + i18n('coverImage') + ') no-repeat; background-size:cover;';
-		return ' ';
-	}
-
-	Template.bodyTemplate.coverPage = function() {
-		return Session.get('IsCoverPage');
-	}
-
-	Template.bodyTemplate.rendered = function() {
-		$('head').append('<meta xmlns:fb="http://ogp.me/ns/fb#" xmlns="http://www.w3.org/1999/xhtml" />');
-		 $('head').append('<meta property="og:image" content="http://civicsentiment.herokuapp.com/resource/us_congress.jpg"/>');
-		 $('head').append('<meta property="og:url" content="http://www.civicsentiment.com"/>');
-		 $('head').append('<meta property="og:title" content="' +  i18n('title') + '" />');
+	Template.home.coverImage =function() {
+		return 'background : url(' + i18n('coverImage') + ') no-repeat; background-size:cover;';
 	}
 
 	Template.coverPageTemplate.rendered = function() {
@@ -249,6 +210,14 @@ if ( Meteor.isClient ) {
 		}
 	}, 500);
 };
+
+
+Router.map( function () {
+	this.route( 'about' );
+	this.route('home', { path : '/' });
+	this.route('appHome', { path : 'realtime'} )
+});
+
 
 if (Meteor.isServer) { 
 	Meteor.startup(function () { 
