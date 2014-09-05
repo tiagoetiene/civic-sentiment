@@ -37,6 +37,7 @@ routepolicy@1.0.0
 session@1.0.0
 spacebars-compiler@1.0.1
 spacebars@1.0.0
+spiderable@1.0.2
 standard-app-packages@1.0.0
 templating@1.0.4
 ui@1.0.0
