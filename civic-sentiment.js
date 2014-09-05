@@ -2,6 +2,9 @@ TwitterCollection = new Meteor.Collection("tweets-summary")
 Politicians = People();
 
 if ( Meteor.isClient ) {
+
+	Meteor.subscribe("summaries");
+
 	Session.set('IsCoverPage', true);
 	
 	configInternationalization();
@@ -247,5 +250,12 @@ if ( Meteor.isClient ) {
 	}, 500);
 };
 
-if (Meteor.isServer) { Meteor.startup(function () { }); }
+if (Meteor.isServer) { 
+	Meteor.startup(function () { 
+	}); 
+
+	Meteor.publish("summaries", function () {
+  		return TwitterCollection.find( {} );
+	});
+}
 
