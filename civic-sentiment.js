@@ -1,6 +1,21 @@
 TwitterCollection = new Meteor.Collection("tweets-summary")
 Politicians = People();
 
+var urlParamSelected = [];
+function updateSelector() {
+	$("#e1").selectpicker('refresh').selectpicker('render');
+	$("#e1").select({placeholder: i18n("selectPolitician")})
+		.on("change", function(e) {
+			var selected = e.target
+			for(var i = 0; i < Politicians.size(); ++i)
+				Politicians( i ).selected = selected[i + 1].selected;
+			Session.set('ListOfCandidates', !(Session.get('ListOfCandidates') == true) );
+			retrieveData();
+		});
+	if(urlParamSelected !== undefined && urlParamSelected.length !== 0)
+		$("#e1").selectpicker('val', urlParamSelected);
+}
+
 if ( Meteor.isClient ) {
 
 	Meteor.subscribe("summaries");
@@ -10,14 +25,7 @@ if ( Meteor.isClient ) {
 	document.title =i18n('title');
 
 	$(document).ready(function() {
-		$('#language').click(function(){
-			if( i18n.getLanguage() === 'pt-br' )
-				i18n.setLanguage('en-us');
-			else
-				i18n.setLanguage('pt-br');
-			document.title =i18n('title');
-			Session.set( 'updateSelect', Session.get('updateSelect') !== true );
-		})
+
   	});
 
   	Template.twitter_feed.rendered = function() {
@@ -44,30 +52,24 @@ if ( Meteor.isClient ) {
 			})();
   	}
 
-	Template.mainPage.rendered = function() {
-		$("#e1").selectpicker('refresh').selectpicker('render');
-		$("#e1").select({placeholder: i18n("selectPolitician")})
-			.on("change", function(e) {
-				var selected = e.target
-				for(var i = 0; i < Politicians.size(); ++i)
-					Politicians( i ).selected = selected[i + 1].selected;
-				Session.set('ListOfCandidates', !(Session.get('ListOfCandidates') == true) );
-				retrieveData();
-			});
+	Template.appHome.rendered = function() {
+		updateSelector();
+
 		$("#pastMonth").change( function(e)	{ past = -31 * 24 * 60 * 60 * 1000; retrieveData(); refreshingTime = 28800000; });
 		$("#pastWeek").change( function(e)	{ past = - 7 * 24 * 60 * 60 * 1000; retrieveData(); refreshingTime = 3600000; });
-		$("#past3Day").change( function(e)		{ past = - 3 * 24 * 60 * 60 * 1000; retrieveData(); refreshingTime = 6000000; });
-		$("#pastDay").change( function(e)		{ past =      - 24 * 60 * 60 * 1000; retrieveData(); refreshingTime = 1800000; });
+		$("#past3Day").change( function(e)	{ past = - 3 * 24 * 60 * 60 * 1000; retrieveData(); refreshingTime = 6000000; });
+		$("#pastDay").change( function(e)	{ past =      - 24 * 60 * 60 * 1000; retrieveData(); refreshingTime = 1800000; });
 		$("#past8Hour").change( function(e)	{ past =     -  8 * 60 * 60 * 1000; retrieveData(); refreshingTime = 300000; });
 		$("#past1Hour").change( function(e)	{ past =     -  1 * 60 * 60 * 1000; retrieveData(); refreshingTime = 60000; });
-		$("#past5Min").change( function(e)		{ past =          -  5 * 60 * 1000; retrieveData(); refreshingTime = 2000; });
+		$("#past5Min").change( function(e)	{ past =          -  5 * 60 * 1000; retrieveData(); refreshingTime = 2000; });
 	}
 
 	Template.home.coverImage =function() {
 		return 'background : url(' + i18n('coverImage') + ') no-repeat; background-size:cover;';
 	}
 
-	Template.coverPageTemplate.rendered = function() {
+	Template.home.rendered = function() {
+		console.log('finished rendering home');
 		// function animateLinkTag( selection ) {
 		// 	selection.click(function(){  
 		// 		$('html, body').animate({ 
@@ -215,14 +217,20 @@ if ( Meteor.isClient ) {
 Router.map( function () {
 	this.route( 'about' );
 	this.route('home', { path : '/' });
-	this.route('appHome', { path : 'realtime'} )
+	this.route('appHome', { 
+		path : 'realtime',
+		onAfterAction : function() {
+			if(this.params.politicians !== undefined)
+				urlParamSelected = this.params.politicians.split(',');
+		}
+	} );
+	this.route('howToGetStarted', { path : 'getstarted'} );
+	this.route('howToSelect', {path : 'select'});
 });
 
 
 if (Meteor.isServer) { 
-	Meteor.startup(function () { 
-	}); 
-
+	Meteor.startup(function () { }); 
 	Meteor.publish("summaries", function () {
   		return TwitterCollection.find( {} );
 	});

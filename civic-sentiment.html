@@ -8,18 +8,21 @@
 </head>
 
 <body>
+	{{> navigationBar}}
 </body>
 
 <template name="home">
-	<div class="backgroud-image" style={{coverImage}}>
-		{{> navigationBar}}
-		{{> coverPageTemplate}}
+	<div id="content" class="backgroud-image animated" style={{coverImage}}>
+		{{> cover_0}}
 	</div>
 </template>
 
 <template name="appHome">
-	{{> navigationBar}}
-	{{> mainPage}}
+	<div id="content" class="animated">
+		{{> jumbotron}}
+		{{> select}}
+		{{> main}}
+	</div>
 </template>
 
 <template name="getStartedButton">
