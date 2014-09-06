@@ -69,7 +69,6 @@ if ( Meteor.isClient ) {
 	}
 
 	Template.home.rendered = function() {
-		console.log('finished rendering home');
 		// function animateLinkTag( selection ) {
 		// 	selection.click(function(){  
 		// 		$('html, body').animate({ 
@@ -207,7 +206,6 @@ if ( Meteor.isClient ) {
 		if(lastRefreshingTime != refreshingTime) {
 			clearInterval(retrievedDataId);
 			lastRefreshingTime = refreshingTime;
-			console.log('current refreshing time: ', refreshingTime / 1000, 'seconds...');
 			retrievedDataId = setInterval(retrieveData, refreshingTime);
 		}
 	}, 500);
@@ -219,7 +217,8 @@ Router.map( function () {
 	this.route('home', { path : '/' });
 	this.route('appHome', { 
 		path : 'realtime',
-		onAfterAction : function() {
+		data : function() {
+			console.log(this.params);
 			if(this.params.politicians !== undefined)
 				urlParamSelected = this.params.politicians.split(',');
 		}
