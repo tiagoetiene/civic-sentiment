@@ -1,3 +1,3 @@
-Template.cover_1.curveExplanation = function() {
+Template.howToGetStarted.curveExplanation = function() {
 	return i18n('images.curveExplanation');
 }
