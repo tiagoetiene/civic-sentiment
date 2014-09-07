@@ -65,7 +65,7 @@ if ( Meteor.isClient ) {
 	}
 
 	Template.home.coverImage =function() {
-		return 'background : url(' + i18n('coverImage') + ') no-repeat; background-size:cover;';
+		return 'background : url(' + i18n('images.coverImage') + ') no-repeat; background-size:cover;';
 	}
 
 	Template.home.rendered = function() {
@@ -83,7 +83,7 @@ if ( Meteor.isClient ) {
 	}
 
 	Template.jumbotron.background_image = function() {
-		return i18n('backgroundImage');
+		return i18n('images.backgroundImage');
 	}
 
 	Template.candidate_name.color = function() {
