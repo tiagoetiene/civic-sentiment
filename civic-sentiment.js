@@ -218,7 +218,6 @@ Router.map( function () {
 	this.route('appHome', { 
 		path : 'realtime',
 		data : function() {
-			console.log(this.params);
 			if(this.params.politicians !== undefined)
 				urlParamSelected = this.params.politicians.split(',');
 		}
