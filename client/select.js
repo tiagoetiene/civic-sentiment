@@ -6,7 +6,7 @@ Template.select.group = function(){
 
 Template.select.label = function() {
 	Session.get('updateSelect');
-	return i18n(String(this));
+	return i18n('options.'+String(this));
 }
 
 Template.select.listOfPoliticians = function() {
