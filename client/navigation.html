@@ -17,19 +17,25 @@
 			<div id="navbarCollapse" class="collapse navbar-collapse">
 				<ul class="nav navbar-nav">
 					<li> 
-						<a id="linkTo0" href="{{ pathFor 'howToGetStarted' }}"> {{i18n "cover1Headline"}}</a>
-					 </li>
-					 <li> 
-						<a id="linkTo1" href="{{ pathFor 'howToSelect' }}">  {{i18n "cover2Headline"}}  </a>
+						<a href="{{ pathFor 'howToSentimentPlot' }}"> {{i18n "howToSentimentPlot.headline_short"}} </a>
 					 </li>
 					<li> 
-						<a href="{{ pathFor 'about' }}"> {{i18n "aboutHeadline"}} </a>
+						<a href="{{ pathFor 'howToSelectPolitician' }}"> {{i18n "howToSelectPolitician.headline_short"}} </a>
+					 </li>
+					 <li> 
+						<a href="{{ pathFor 'howToSelect' }}">  Select Time  </a>
+					 </li>
+					<li> 
+						<a href="{{ pathFor 'about' }}"> About </a>
 					 </li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li>
 						{{> language}}
-					</li>				
+					</li>
+					<li>
+						<a class="navbar-brand" >{{> loginButtons align="right"}}</a>
+					</li>		
 				</ul>
 			</div>
 	      </div>
