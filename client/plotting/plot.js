@@ -163,6 +163,16 @@ Plot = function() {
                  .attr('fill', 'lightgray')
                  .call(d3.svg.axis().scale(x).orient("bottom"))
                  .selectAll('text')
+                 .attr('stroke', 'white')
+                 .attr('stroke-width', 3)
+                 .attr('stroke-opacity', 0.5)
+                 .attr('fill', 'white')
+                 .each(function() { d3.select(this).text( forceLocalization( d3.select(this).text() ) ); });
+            axis.append('g')
+                 .attr('transform', 'translate(' + 0 + ',' + height / 2 + ')')
+                 .attr('fill', 'lightgray')
+                 .call(d3.svg.axis().scale(x).orient("bottom"))
+                 .selectAll('text')
                  .attr('fill', 'black')
                  .each(function() { d3.select(this).text( forceLocalization( d3.select(this).text() ) ); });
 
