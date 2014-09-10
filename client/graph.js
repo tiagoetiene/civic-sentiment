@@ -1,6 +1,8 @@
 Template.plot.plot = function() {
-	if(this.plot === undefined)  this.plot = Plot();
 	return this.id;
+}
+Template.plot.created = function() {
+	this.data.plot = Plot();
 }
 Template.plot.links = function() {
 	return Session.get('plot_links');
