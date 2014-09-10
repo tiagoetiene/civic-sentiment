@@ -9,6 +9,13 @@ function updateSelector() {
 			var selected = e.target
 			for(var i = 0; i < Politicians.size(); ++i)
 				Politicians( i ).selected = selected[i + 1].selected;
+
+			var goToURL = "/realtime?politicians=";
+			for(var i = 0; i < Politicians.size(); ++i)
+				if( Politicians( i ).selected )
+					goToURL +=Politicians( i ).name + ",";
+			Router.go( goToURL );
+
 			Session.set('ListOfCandidates', !(Session.get('ListOfCandidates') == true) );
 			retrieveData();
 		});
