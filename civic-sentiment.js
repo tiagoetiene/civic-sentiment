@@ -19,8 +19,10 @@ function updateSelector() {
 			Session.set('ListOfCandidates', !(Session.get('ListOfCandidates') == true) );
 			retrieveData();
 		});
-	if(urlParamSelected !== undefined && urlParamSelected.length !== 0)
+	if(urlParamSelected !== undefined && urlParamSelected.length !== 0) {
 		$("#e1").selectpicker('val', urlParamSelected);
+		$("#e1").selectpicker('refresh').selectpicker('render');
+	}
 }
 
 if ( Meteor.isClient ) {
