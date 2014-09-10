@@ -213,8 +213,11 @@ if ( Meteor.isClient ) {
 
 
 Router.map( function () {
-	this.route( 'about' );
 	this.route('home', { path : '/' });
+	this.route('howToSentimentPlot', { path : 'sentimentplot'} );
+	this.route('howToSelect', {path : 'select'});
+	this.route('howToSelectPolitician', {path : 'selectpolitician'});
+	this.route( 'about' );
 	this.route('appHome', { 
 		path : 'realtime',
 		data : function() {
@@ -222,8 +225,6 @@ Router.map( function () {
 				urlParamSelected = this.params.politicians.split(',');
 		}
 	} );
-	this.route('howToGetStarted', { path : 'getstarted'} );
-	this.route('howToSelect', {path : 'select'});
 });
 
 
