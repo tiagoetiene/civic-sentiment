@@ -27,6 +27,8 @@ function updateSelector() {
 
 if ( Meteor.isClient ) {
 
+	ruler = Ruler();
+
 	Meteor.subscribe("summaries");
 	
 	configInternationalization();
@@ -37,6 +39,9 @@ if ( Meteor.isClient ) {
 
   	});
 
+	Template.Ruler.rendered = function() {
+		ruler(d3.select('#ruler'));
+	}
   	Template.twitter_feed.rendered = function() {
 		if (!window.WAYIN) {
 			window.WAYIN = {hubs: []};}
@@ -197,6 +202,12 @@ if ( Meteor.isClient ) {
 						Session.set('plot_links', d.positive_url); 
 					else
 						Session.set('plot_links', d.negative_url); 
+				})
+				.onmouseover( function(x) {
+					ruler.x( x );
+				})
+				.onmouseout( function(x) {
+					ruler.x( 0.0 );
 				})
 				(d3.select( "#"+ d.id ))
 		});

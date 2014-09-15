@@ -7,6 +7,8 @@ Plot = function() {
 	var y_neg_valuer = Number;
 	var y_sum_valuer = Number;
 	var onclick_callback = undefined;
+	var onmouseover_callback = undefined;
+	var onmouseout_callback = undefined;
 	var colors = ['#2980B9', '#C0392B', 'green' ];
 	var x, y;
 	var domain = undefined;
@@ -114,9 +116,12 @@ Plot = function() {
 			.on('mouseover', function(datum, idx) { 
 				d3.select(this.parentNode).select('#circle-id-' + idx).attr('fill-opacity', 1.0);
 				if(onclick_callback !== undefined) onclick_callback.call(this, datum, idx);
+				var position = $(this).offset().left;
+				if(onmouseover_callback !== undefined) onmouseover_callback.call(this, position );
 			})
 			.on('mouseout', function(datum, idx) { 
 				d3.select(this.parentNode).select('#circle-id-' + idx).attr('fill-opacity', 0.0);
+				if(onmouseout_callback !== undefined) onmouseout_callback.call(this, x( x_valuer.call(this, datum, idx) ) );
 			});
 	}
 
@@ -137,6 +142,7 @@ Plot = function() {
         	cell.select('#axis_text').remove();
             var axis = cell.append('g')
 			.attr('id', 'axis_text')
+			.attr('pointer-events', 'none')
 			.attr('transform', 'translate(' + 0 + ',' + 0 + ')');
 
             // PLOT TEXT: LIKE
@@ -167,6 +173,7 @@ Plot = function() {
                  .attr('stroke-width', 3)
                  .attr('stroke-opacity', 0.5)
                  .attr('fill', 'white')
+                 .attr('pointer-events', 'none')
                  .each(function() { d3.select(this).text( forceLocalization( d3.select(this).text() ) ); });
             axis.append('g')
                  .attr('transform', 'translate(' + 0 + ',' + height / 2 + ')')
@@ -174,6 +181,7 @@ Plot = function() {
                  .call(d3.svg.axis().scale(x).orient("bottom"))
                  .selectAll('text')
                  .attr('fill', 'black')
+                 .attr('pointer-events', 'none')
                  .each(function() { d3.select(this).text( forceLocalization( d3.select(this).text() ) ); });
 
 	}
@@ -219,6 +227,20 @@ Plot = function() {
 		if( !arguments.length)
 			return onclick_callback;
 		onclick_callback = _;
+		return chart;
+	}
+
+	chart.onmouseover = function(_) {
+		if(!arguments.length)
+			return onmouseover_callback;
+		onmouseover_callback = _;
+		return chart;
+	}
+
+	chart.onmouseout = function(_) {
+		if(!arguments.length)
+			return onmouseout_callback;
+		onmouseout_callback = _;
 		return chart;
 	}
 
