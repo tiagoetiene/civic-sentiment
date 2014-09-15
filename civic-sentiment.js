@@ -42,6 +42,11 @@ if ( Meteor.isClient ) {
 	Template.Ruler.rendered = function() {
 		ruler(d3.select('#ruler'));
 	}
+
+	Template.candidateInfo.background_image = function() {
+		return "background-image:url(" + this.image + ")";
+	}
+
   	Template.twitter_feed.rendered = function() {
 		if (!window.WAYIN) {
 			window.WAYIN = {hubs: []};}

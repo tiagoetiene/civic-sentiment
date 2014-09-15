@@ -75,20 +75,29 @@
 	</h4>
 </template>
 
+
+<template name="candidateInfo">
+	<div class="col-md-2">
+		<div class="row">
+			<div class="col-md-6 nopadding">
+				<img src={{image}}  class=""  style="height:165px; " />
+			</div>
+			<div class="col-md-6 gradient" style="height:165px;">
+				{{> candidate_name}}
+			</div>
+		</div>
+	</div>
+</template>
+
+
 <template name="main">
 <div class="container">
 	<div class="row">
 		{{#each list_of_candidates}}
 			{{#if isVisible}}
 				<div class="row {{isCandidateVisible}}" style="border-top: 1px solid #999; heigth:100%; vertical-align: middle;">
-					<div class="col-md-1" style="heigth:100%; vertical-align: middle;">
-	 					<div class="row" style="heigth:100%; vertical-align: middle;">
-							<div class="col-md-12" style="heigth:100%; vertical-align: middle;">
-								{{> candidate_name}}
-							</div>
-						</div>
-					</div>
-					<div class="col-md-11 nopadding">
+					{{> candidateInfo}}
+					<div class="col-md-10 nopadding">
 						<div class="col-md-8">
 							{{> plot}}
 						</div>
