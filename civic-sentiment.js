@@ -125,14 +125,6 @@ if ( Meteor.isClient ) {
 		return Politicians.visible( this.name );
 	}
 
-	Template.candidate_image.image_height = function() {
-		Session.get('UpdateImageHeight');
-		var height = $('#'+this.iframe_id).height();
-		if(height == null)
-	  		return '268px';
-		return height + 'px';
-	}
-
 	var data = { };
   	  	
 	function getIndex( interval ) {
