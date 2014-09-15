@@ -26,7 +26,12 @@
 
 <body>
 	{{> navigationBar}}
+	{{> Ruler}}
 </body>
+
+<template name="Ruler">
+	<div id = "ruler" style="position:fixed; width:100%; height:100%;"></div> 
+</template>
 
 <template name="home">
 	<div class="backgroud-image" style={{coverImage}}>
