@@ -123,9 +123,9 @@ if ( Meteor.isClient ) {
   	  	
 	function getIndex( interval ) {
 		var idx;
-		var depth = 18;
+		var depth = 15;
 		var milliseconds = 1000;
-		for(idx = 0; idx < 18; ++idx) {
+		for(idx = 0; idx < 15; ++idx) {
 			if(milliseconds >= interval)
 				break;
 			milliseconds *= 2;
