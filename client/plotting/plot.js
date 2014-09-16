@@ -64,7 +64,7 @@ Plot = function() {
 		selectionHandler(plot.select('#pos').select('#selection'), data, y_pos_valuer, colors[0]);
 		selectionHandler(plot.select('#neg').select('#selection'), data, y_neg_valuer, colors[1]);
 
-		render_axis(svg.select('#axis'));
+		renderAxis(svg.select('#axis'));
 	}
 
 	function drawBox( selection ) {
@@ -137,7 +137,7 @@ Plot = function() {
 		drawRects( rects, data, y_valuer, color );
 	}
 
-        function render_axis(cell) {
+        function renderAxis(cell) {
 
         	cell.select('#axis_text').remove();
             var axis = cell.append('g')
