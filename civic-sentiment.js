@@ -88,17 +88,6 @@ if ( Meteor.isClient ) {
 	}
 
 	Template.home.rendered = function() {
-		// function animateLinkTag( selection ) {
-		// 	selection.click(function(){  
-		// 		$('html, body').animate({ 
-		// 			scrollTop: $( $.attr(this, 'href') ).offset().top 
-		// 		}, 500); return false; 
-		// 	});
-		// }
-
-		// animateLinkTag( $('#linkTo0') );
-		// animateLinkTag( $('#linkTo1') );
-		// animateLinkTag( $('#aboutLink') );
 	}
 
 	Template.jumbotron.background_image = function() {
