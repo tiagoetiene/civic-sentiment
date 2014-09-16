@@ -123,14 +123,14 @@ if ( Meteor.isClient ) {
   	  	
 	function getIndex( interval ) {
 		var idx;
-		var depth = 15;
 		var milliseconds = 1000;
-		for(idx = 0; idx < 15; ++idx) {
+		for(idx = 0; idx < 14; ++idx) {
 			if(milliseconds >= interval)
 				break;
 			milliseconds *= 2;
 		}
-		return { depth : Math.min( depth - 1, idx ), interval : milliseconds };
+		console.log(idx, milliseconds);
+		return { depth : idx , interval : milliseconds };
 	}
 
 	function retrieveData() {
@@ -150,6 +150,8 @@ if ( Meteor.isClient ) {
 				var r = TwitterCollection.findOne( query );
 				if(r !== undefined) {
 					var ret = _.filter(r.data, function(d) {  return +d.date >= +_past; });
+					for(var i = 1; i < ret.length; ++i)
+						console.assert(ret[i].date > ret[i-1].date);
 								
 					Politicians( idx ).tweets_count = 0;
 					_.each(ret, function(d) { Politicians( idx ).tweets_count += d.counter; });
@@ -162,7 +164,31 @@ if ( Meteor.isClient ) {
 					if( max != 0 ) _.each( ret, function(d, idx) { ret[ idx ].positive_sentiment /= max } );
 					if( max != 0 ) _.each( ret, function(d, idx) { ret[ idx ].negative_sentiment /= max } );
 
-					Politicians( idx ).data = ret;
+					var minDate = Math.floor( +_past / pair.interval ) * pair.interval;
+					var out = [];
+					var i = 0;
+					var j = 0;
+					while(+minDate < +_now) {
+						if(j < ret.length && +ret[j].date == +minDate) {
+							out[i] = ret[j];
+							++j;
+						}
+						else {
+							out[i] = { 
+								counter : 0,
+								date : +minDate,
+								negative_counter : 0,
+								negative_sentiment : 0,
+								positive_counter : 0,
+								positive_sentiment : 0,
+								sentiment : 0,
+							}	
+						}
+						minDate += pair.interval;
+						i++;
+					}
+
+					Politicians( idx ).data = out;
 				}
 			}
 		});
