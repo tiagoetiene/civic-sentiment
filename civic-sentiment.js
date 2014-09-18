@@ -1,43 +1,17 @@
 TwitterCollection = new Meteor.Collection("tweets-summary")
 Politicians = People();
 
-var urlParamSelected = [];
-function updateSelector() {
-	$("#e1").selectpicker('refresh').selectpicker('render');
-	$("#e1").select({placeholder: i18n("selectPolitician")})
-		.on("change", function(e) {
-			var selected = e.target
-			for(var i = 0; i < Politicians.size(); ++i)
-				Politicians( i ).selected = selected[i + 1].selected;
-
-			var goToURL = "/realtime?politicians=";
-			for(var i = 0; i < Politicians.size(); ++i)
-				if( Politicians( i ).selected )
-					goToURL +=Politicians( i ).name + ",";
-			Router.go( goToURL );
-
-			Session.set('ListOfCandidates', !(Session.get('ListOfCandidates') == true) );
-			retrieveData();
-		});
-	if(urlParamSelected !== undefined && urlParamSelected.length !== 0) {
-		$("#e1").selectpicker('val', urlParamSelected);
-		$("#e1").selectpicker('refresh').selectpicker('render');
-	}
-}
+urlParamSelected = new ReactiveVar([], _.isEqual);
+urlParamTimeframe = new ReactiveVar("past month", _.isEqual);
 
 if ( Meteor.isClient ) {
 
 	ruler = Ruler();
-
 	Meteor.subscribe("summaries");
-	
 	configInternationalization();
-	var past = -31 * 24 * 60 * 60 * 1000;
 	document.title =i18n('title');
 
-	$(document).ready(function() {
-
-  	});
+	$(document).ready(function() {});
 
 	Template.Ruler.rendered = function() {
 		ruler(d3.select('#ruler'));
@@ -72,15 +46,7 @@ if ( Meteor.isClient ) {
   	}
 
 	Template.appHome.rendered = function() {
-		updateSelector();
-
-		$("#pastMonth").change( function(e)	{ past = -31 * 24 * 60 * 60 * 1000; retrieveData(); refreshingTime = 28800000; });
-		$("#pastWeek").change( function(e)	{ past = - 7 * 24 * 60 * 60 * 1000; retrieveData(); refreshingTime = 3600000; });
-		$("#past3Day").change( function(e)	{ past = - 3 * 24 * 60 * 60 * 1000; retrieveData(); refreshingTime = 6000000; });
-		$("#pastDay").change( function(e)	{ past =      - 24 * 60 * 60 * 1000; retrieveData(); refreshingTime = 1800000; });
-		$("#past8Hour").change( function(e)	{ past =     -  8 * 60 * 60 * 1000; retrieveData(); refreshingTime = 300000; });
-		$("#past1Hour").change( function(e)	{ past =     -  1 * 60 * 60 * 1000; retrieveData(); refreshingTime = 60000; });
-		$("#past5Min").change( function(e)	{ past =          -  5 * 60 * 1000; retrieveData(); refreshingTime = 2000; });
+		comboboxObserver();		
 	}
 
 	Template.home.coverImage =function() {
@@ -107,8 +73,8 @@ if ( Meteor.isClient ) {
 	}
 
 	Template.main.list_of_candidates = function() {
-		Session.get('ListOfCandidates')
-		return Politicians();
+		urlParamSelected.get();
+		return Politicians.selected();
 	}
 
 	Template.main.isCandidateVisible = function() {
@@ -129,11 +95,11 @@ if ( Meteor.isClient ) {
 				break;
 			milliseconds *= 2;
 		}
-		console.log(idx, milliseconds);
 		return { depth : idx , interval : milliseconds };
 	}
 
 	function retrieveData() {
+		var past = getTimeFrame();
 		var _now = new Date();
 		var _past = getPast( _now, past );
 		var bins = 100;
@@ -150,8 +116,6 @@ if ( Meteor.isClient ) {
 				var r = TwitterCollection.findOne( query );
 				if(r !== undefined) {
 					var ret = _.filter(r.data, function(d) {  return +d.date >= +_past; });
-					for(var i = 1; i < ret.length; ++i)
-						console.assert(ret[i].date > ret[i-1].date);
 								
 					Politicians( idx ).tweets_count = 0;
 					_.each(ret, function(d) { Politicians( idx ).tweets_count += d.counter; });
@@ -187,7 +151,6 @@ if ( Meteor.isClient ) {
 						minDate += pair.interval;
 						i++;
 					}
-
 					Politicians( idx ).data = out;
 				}
 			}
@@ -198,39 +161,44 @@ if ( Meteor.isClient ) {
 		if(_.isEmpty(data))
 			return;
 
+		var past = getTimeFrame();
 		var plot_data = [];
 		var _now = new Date();
 		var _past = getPast( _now, past );
 		var domain = [ _past, _now ];
 
 		_.each( Politicians.selected(), function( d ) {
-			d.plot
-				.x( function(d) { return d.date; } )
-				.y( function(d) { return d.sentiment; } )
-				.yPos( function(d) { return d.positive_sentiment; } )
-				.yNeg( function(d) { return d.negative_sentiment; } )
-				.onclick( function(d, sentiment) { 
-					if(sentiment === 'pos')
-						Session.set('plot_links', d.positive_url); 
-					else
-						Session.set('plot_links', d.negative_url); 
-				})
-				.onmouseover( function(x) {
-					ruler.x( x );
-				})
-				.onmouseout( function(x) {
-					ruler.x( 0.0 );
-				})
-				(d3.select( "#"+ d.id ))
+			if(d.plot !== undefined) {
+				d.plot
+					.x( function(d) { return d.date; } )
+					.y( function(d) { return d.sentiment; } )
+					.yPos( function(d) { return d.positive_sentiment; } )
+					.yNeg( function(d) { return d.negative_sentiment; } )
+					.onclick( function(d, sentiment) { 
+						if(sentiment === 'pos')
+							Session.set('plot_links', d.positive_url); 
+						else
+							Session.set('plot_links', d.negative_url); 
+					})
+					.onmouseover( function(x) {
+						ruler.x( x );
+					})
+					.onmouseout( function(x) {
+						ruler.x( 0.0 );
+					})
+					(d3.select( "#"+ d.id ))
+			}
 		});
 		_.each(Politicians.selected(), function(politician) {
-			politician.plot.domain( [  _past , _now ]  ).data( politician.data ).update();
+			if(politician.plot !== undefined) {
+				politician.plot.domain( [  _past , _now ]  ).data( politician.data ).update();
+			}
 		});
 	}
 
 	lastRefreshingTime = -1;
 	retrievedDataId = undefined;
-	refreshingTime  = 10000;
+	refreshingTime  = 1000;
 	retrieveData();
 	setInterval(pplot, 1000);
 
@@ -241,10 +209,8 @@ if ( Meteor.isClient ) {
 			retrievedDataId = setInterval(retrieveData, refreshingTime);
 		}
 	}, 500);
-};
 
-
-Router.map( function () {
+	Router.map( function () {
 	this.route('home', { path : '/' });
 	this.route('howToSentimentPlot', { path : 'sentimentplot'} );
 	this.route('howToSelect', {path : 'select'});
@@ -253,12 +219,14 @@ Router.map( function () {
 	this.route('appHome', { 
 		path : 'realtime',
 		data : function() {
-			if(this.params.politicians !== undefined)
-				urlParamSelected = this.params.politicians.split(',');
+			var selected = ( this.params.politicians )  ? this.params.politicians.split(',')  : [];
+			var timeframe = ( this.params.timeframe ) ? this.params.timeframe : "past month"; 
+			urlParamSelected.set( selected ); 
+			urlParamTimeframe.set( timeframe );
 		}
-	} );
+	});
 });
-
+};
 
 if (Meteor.isServer) { 
 	Meteor.startup(function () { }); 
