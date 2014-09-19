@@ -90,25 +90,25 @@
 
 
 <template name="main">
-<div class="container">
-	<div class="row">
-		{{#each list_of_candidates}}
-			{{#if isVisible}}
-				<div class="row {{isCandidateVisible}}" style="border-top: 1px solid #999; heigth:100%; vertical-align: middle;">
-					{{> candidateInfo}}
-					<div class="col-md-10 nopadding">
-						<div class="col-md-8">
-							{{> plot}}
-						</div>
-						<div class="col-md-4">
-							<div class="row" style="margin-top:5px">{{> twitter_feed}}</div>
+	<div class="container">
+		<div class="row">
+			{{#each list_of_candidates}}
+				{{#if isVisible}}
+					<div class="row {{isCandidateVisible}}" style="border-top: 1px solid #999; heigth:100%; vertical-align: middle;">
+						{{> candidateInfo}}
+						<div class="col-md-10 nopadding">
+							<div class="col-md-8">
+								{{> plot}}
+							</div>
+							<div class="col-md-4">
+								<div class="row" style="margin-top:5px">{{> twitter_feed}}</div>
+							</div>
 						</div>
 					</div>
-				</div>
-			{{/if}}
-		{{/each}}
+				{{/if}}
+			{{/each}}
+		</div>
 	</div>
-</div>
-<br>
+	<br>
 </template>
 

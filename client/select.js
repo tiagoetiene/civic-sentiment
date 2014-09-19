@@ -13,8 +13,3 @@ Template.select.listOfPoliticians = function() {
 	Session.get('updateSelect');
 	return Politicians.selectByType( String( this ) );
 }
-
-Template.select.searchVisibility = function() {
-	Session.get('ListOfCandidates');
-	return (Politicians.hasSelected()) ? "visible" : "hidden";
-}
