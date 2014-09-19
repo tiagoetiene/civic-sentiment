@@ -39,7 +39,6 @@ function updateSelector() {
 
 
 comboboxObserver = function() {
-
 	updateSelector();
 	updateTimeframeData();
 
@@ -48,15 +47,6 @@ comboboxObserver = function() {
 				.selectpicker('refresh')
 				.selectpicker('render');
 	});
-
-	updateURL = Deps.autorun( function () {	
-		var goToURL = "/realtime?politicians=";
-		_.each(urlParamSelected.get(), function(name) { goToURL += name + "," });
-		goToURL += "&timeframe=" + urlParamTimeframe.get();
-		Router.go(goToURL);
-	});
-
-
 	updateTimeSelector = Deps.autorun( function () {
 		var time = urlParamTimeframe.get();
 		(time.indexOf('past month') !== -1) ? $('#past_month').addClass('active') : $('#past_month').removeClass('active');
@@ -66,6 +56,12 @@ comboboxObserver = function() {
 		(time.indexOf('past 8 hours') !== -1) ? $('#past_8_hours').addClass('active') : $('#past_8_hours').removeClass('active');
 		(time.indexOf('past hour') !== -1) ? $('#past_hour').addClass('active') : $('#past_hour').removeClass('active');
 		(time.indexOf('past 5 min') !== -1) ? $('#past_5_min').addClass('active') : $('#past_5_min').removeClass('active');
+	});
+	updateURL = Deps.autorun( function () {	
+		var goToURL = "/realtime?politicians=";
+		_.each(urlParamSelected.get(), function(name) { goToURL += name + "," });
+		goToURL += "&timeframe=" + urlParamTimeframe.get();
+		Router.go(goToURL);
 	});
 }
 
