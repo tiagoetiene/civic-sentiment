@@ -46,7 +46,7 @@ mobile-status-bar@1.0.0
 mongo@1.0.5
 mrt:bootstrap-select@1.5.4
 mrt:just-i18n@0.3.0
-natestrauser:select2@3.4.7
+natestrauser:select2@3.4.9
 oauth1@1.1.0
 oauth2@1.1.0
 oauth@1.1.0
