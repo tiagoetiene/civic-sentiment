@@ -1,3 +1,5 @@
+urlParamSelected = new ReactiveVar([], _.isEqual);
+urlParamTimeframe = new ReactiveVar("past month", _.isEqual);
 
 getTimeFrame = function() {
 	var time = urlParamTimeframe.get();
@@ -41,7 +43,6 @@ function updateSelector() {
 comboboxObserver = function() {
 	updateSelector();
 	updateTimeframeData();
-
 	updateComboBox = Deps.autorun( function () {
 		$("#e1").selectpicker('val', urlParamSelected.get())
 				.selectpicker('refresh')
@@ -63,5 +64,6 @@ comboboxObserver = function() {
 		goToURL += "&timeframe=" + urlParamTimeframe.get();
 		Router.go(goToURL);
 	});
+	updateData();
 }
 
