@@ -125,10 +125,10 @@ if ( Meteor.isClient ) {
 	this.route('appHome', { 
 		path : 'realtime',
 		data : function() {
-			if(this.params.politicians)
-				urlParamSelected.set(this.params.politicians.split(','));
-			if(this.params.timeframe)
-				urlParamTimeframe.set(this.params.timeframe);
+			if(this.params.query.politicians)
+				urlParamSelected.set(this.params.query.politicians.split(','));
+			if(this.params.query.timeframe)
+				urlParamTimeframe.set(this.params.query.timeframe);
 		}
 	});
 });
