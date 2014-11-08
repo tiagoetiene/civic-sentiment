@@ -1,0 +1,23 @@
+<!--
+OptionT is separated because we need to call .selectpicker()
+everytime an option is rendered. If we do not do that, then 
+we will have to figure out a way to wait for the option to load
+and only then call .selectpicker()
+-->
+<template name="OptionT">
+	<option value={{name}}> 
+		{{name}} 
+	</option> 
+</template>
+
+<template name="OptionsT">
+	<select id="e1" class="col-md-12" multiple >
+		{{#each group}}
+			<optgroup label={{label}}>
+				{{#each listOfPoliticians}} 
+					{{> OptionT}}
+				{{/each}}
+			</optgroup> 
+		{{/each}}
+	</select>
+</template>

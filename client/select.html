@@ -2,20 +2,13 @@
 	<div class="container">
 		<div class="row">
 			<div class="row text-center">
-				<div class="col-md-6 col-md-offset-3 text-center">
-				    <select id="e1" class="selectpicker col-md-12" multiple >
-				    		<option value="" disabled selected>{{i18n "selectPolitician"}}</option>
-				    		{{#each group}}
-				    			<optgroup label={{label}}>
-				    				{{#each listOfPoliticians}} <option value={{name}}> {{name}} </option> {{/each}}
-				    			</optgroup> 
-				    		{{/each}}
-		    			</select>
+				<div class="col-sm-6 col-sm-offset-3 text-center">
+				    {{> OptionsT}}
 				</div>
 			</div>
 			<div style="height:3px;"></div>
 			<div class="row">
-				<div class="col-md-8 col-md-offset-2 text-center">
+				<div class="col-sm-8 col-sm-offset-2 text-center">
 					<div id="button-group" class="btn-group btn-md"  data-toggle="buttons">
 						<label id="past_month" class="btn btn-primary active">
 							<input type="radio" name="options" id="pastMonth"> {{i18n "pastMonth"}}
