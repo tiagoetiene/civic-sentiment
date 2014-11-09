@@ -20,7 +20,9 @@ if ( Meteor.isClient ) {
 
 	Template.home.helpers({
 		coverImage : function() {
-			return 'background : url(' + i18n('images.coverImage') + ') no-repeat; background-size:cover;';
+			return 'background : url(' + 
+					i18n('images.coverImage') + 
+					') no-repeat; background-size:cover;';
 		}
 	});
 
@@ -30,13 +32,29 @@ if ( Meteor.isClient ) {
 		}
 	});
   	  	
-	function wwww( ) {
+	function updatePlotScale( ) {
 
-		console.log( "verifyig if there is data available .... ")
+		console.log( "* Updating plot axis .... ")
 
+		if( reactiveNow.get() === true ) {
+			var startEnd = reactiveStartEndDates.get();
+			var end = new Date();
+			var diff = +startEnd.end - (+startEnd.start);
+			var start = new Date( +end - diff );
+			var tmp = {
+				start : start,
+				end : end,
+				depth : startEnd.depth,
+				interval : startEnd.interval
+			};
+			reactiveStartEndDates.set( tmp );
+			console.log( "\t* Updating interval to now! .... ", reactiveStartEndDates.get() );
+		}
 
-		// var past = getTimeFrame();
-		// var plot_data = [];
+		// var startEnd = reactiveStartEndDates.get();
+		// var end = startEnd.end;
+		// var start = startEnd.start;
+
 		// var _now = new Date();
 		// var _past = getPast( _now, past );
 		// var domain = [ _past, _now ];
@@ -67,11 +85,8 @@ if ( Meteor.isClient ) {
 		// });
 	}
 
-	// Meteor.setInterval( function() { wwww(); }, 1000 );
+	Meteor.setInterval( function() { updatePlotScale(); }, 2000 );
 	
-	
-
-
 	Router.map( function () {
 		this.route('home', { path : '/' });
 		this.route('howToSentimentPlot', { path : 'sentimentplot'} );
@@ -90,13 +105,15 @@ if ( Meteor.isClient ) {
 				var endDate;
 
 				if(this.params.query.politicians) {
-					names = _.filter( this.params.query.politicians.split(','), function(name) { return _.isEmpty(name) == false; });
+					names = _.filter( this.params.query.politicians.split(','), 
+						function(name) { return _.isEmpty(name) == false; });
 					reactiveSelectedNames.set( names );
 				}
 				if(this.params.query.timeframe) {
 					var timeframe = getTimeFrame( this.params.query.timeframe );
 					endDate = new Date();
-					startDate = new Date( +endDate + timeframe )				
+					startDate = new Date( +endDate + timeframe );
+					reactiveNow.set( true );
 				}
 
 				var exactInterval = (+endDate - (+startDate)) / HistogramBins;
@@ -116,6 +133,11 @@ if ( Meteor.isClient ) {
 				return Meteor.subscribe( "summaries", names, depth );
 			},
 			onAfterAction : function() {
+
+				// _.each( reactiveSelectedNames.get(), function( name ) {
+				// 	data[ name ].plot = Plot();
+				// });
+
 				console.log("\t* All right, the data was successfully loaded.")
 			}
 		});

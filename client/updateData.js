@@ -2,7 +2,6 @@ data = { };
 
 HistogramBins = 100;
 
-
 updateData = function() {
 
 	console.log( "* Input parameters have changed. Time to update our data...." );
@@ -12,10 +11,6 @@ updateData = function() {
 	var end = startEnd.end;
 	var depth = startEnd.depth;
 	var interval = startEnd.interval;
-	
-	_.each( reactiveSelectedNames.get(), function( name ) {
-		data[ name ] = undefined;
-	});
 	
 	_.each( reactiveSelectedNames.get(), function( name ) { 
 
@@ -27,7 +22,7 @@ updateData = function() {
 			date 	: {  $gte: +start, $lt : +end }
 		} ;
 		var ret = TwitterCollection.find( query ).fetch();
-		  console.log("\t*", ret.length, "documents were loaded for", name, ":", ret);
+		console.log("\t*", ret.length, "documents were loaded for", name, ":", ret);
 
 		var tweets_count = 0;
 		_.each(ret, function( d ) { tweets_count += d.counter; });

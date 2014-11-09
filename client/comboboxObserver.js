@@ -3,8 +3,10 @@ reactiveUserSelectedTimeframe = new ReactiveVar("past month", _.isEqual);
 
 reactiveRoutePath = new ReactiveVar("/realtime", _.isEqual);
 
-reactiveSelectedNames = new ReactiveVar([], _.isEqual);
+reactivePlots = new ReactiveVar( {}, _.isEqual );
+reactiveSelectedNames = new ReactiveVar( [], _.isEqual );
 reactiveStartEndDates = new ReactiveVar( {}, _.isEqual );
+reactiveNow = new ReactiveVar( false, _.isEqual );
 
 // function updateTimeframeData() {
 // 	$("#pastMonth").change( function(e) { reactiveTimeframe.set("past month"); });
