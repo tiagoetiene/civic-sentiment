@@ -32,3 +32,14 @@ Template.OptionsT.rendered = function() {
 Template.OptionT.rendered = function() {
 	$("#e1").selectpicker('render').selectpicker('refresh');
 }
+
+updateCandidateOptionsCombobox = function ( ) {
+	var names = reactiveSelectedNames.get();
+	console.log(names);
+	if(names.length) {
+		$("#e1")
+			.selectpicker( "val",  names)
+			.selectpicker( "render" )
+			.selectpicker( "refresh" );
+	}
+}

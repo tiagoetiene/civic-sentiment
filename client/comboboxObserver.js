@@ -11,18 +11,6 @@ reactiveData = new ReactiveVar( {}, _.isEqual );
 reactivePlots = new ReactiveVar( {}, _.isEqual );
 reactiveTweetCount = new ReactiveVar( {}, _.isEqual );
 
-function updateCombobox( ) {
-	var names = reactiveSelectedNames.get();
-	console.log(names);
-	if(names.length) {
-		$("#e1")
-			.selectpicker( "val",  names)
-			.selectpicker( "render" )
-			.selectpicker( "refresh" );
-	}
-}
-
-
 var firstTime = true;
 var previousPath = "";
 function updateRoute() {
@@ -49,7 +37,7 @@ comboboxObserver = function() {
 
 	// Update route
 	Tracker.autorun( function() { updateRoute();  } );
-	Tracker.autorun( function() { updateCombobox(); } );
+	Tracker.autorun( function() { updateCandidateOptionsCombobox(); } );
 
 	// Tracker.autorun( function() {
 	// 	updateSelector();
