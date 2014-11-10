@@ -9,23 +9,26 @@ Template.PastTimeT.rendered = function() {
 }
 
 
-function updatePastTimeToggleButtons() {
+updatePastTimeToggleButtons = function() {
 	var now = reactiveNow.get();
-
-	if(now == false) {
-		return;
-	}
 	var startEnd = reactiveStartEndDates.get();
-	var interval = startEnd.interval;
+	var delta = +startEnd.end - (+startEnd.start);
+	var tmp = Infinity;
+	var selected = null;
+	_.each( TotalNumberOfMilliseconds, function( value, key ) {
+		if( Math.abs( value - delta ) < tmp ) {
+			tmp = Math.abs( value - delta );
+			selected = value;
+		}
+	});
 
-
-	(interval == TotalNumberOfMilliseconds.month) ? $('#past_month').addClass('active') : $('#past_month').removeClass('active');
-	(interval == TotalNumberOfMilliseconds.week) ? $('#past_week').addClass('active') : $('#past_week').removeClass('active');
-	(interval == TotalNumberOfMilliseconds.three_days) ? $('#past_3_days').addClass('active') : $('#past_3_days').removeClass('active');
-	(interval == TotalNumberOfMilliseconds.day) ? $('#past_day').addClass('active') : $('#past_day').removeClass('active');
-	(interval == TotalNumberOfMilliseconds.eight_hours) ? $('#past_8_hours').addClass('active') : $('#past_8_hours').removeClass('active');
-	(interval == TotalNumberOfMilliseconds.hour) ? $('#past_hour').addClass('active') : $('#past_hour').removeClass('active');
-	(interval == TotalNumberOfMilliseconds.five_min) ? $('#past_5_min').addClass('active') : $('#past_5_min').removeClass('active');
+	(now && selected == TotalNumberOfMilliseconds.month) ? $('#past_month').addClass('active') : $('#past_month').removeClass('active');
+	(now && selected == TotalNumberOfMilliseconds.week) ? $('#past_week').addClass('active') : $('#past_week').removeClass('active');
+	(now && selected == TotalNumberOfMilliseconds.three_days) ? $('#past_3_days').addClass('active') : $('#past_3_days').removeClass('active');
+	(now && selected == TotalNumberOfMilliseconds.day) ? $('#past_day').addClass('active') : $('#past_day').removeClass('active');
+	(now && selected == TotalNumberOfMilliseconds.eight_hours) ? $('#past_8_hours').addClass('active') : $('#past_8_hours').removeClass('active');
+	(now && selected == TotalNumberOfMilliseconds.hour) ? $('#past_hour').addClass('active') : $('#past_hour').removeClass('active');
+	(now && selected == TotalNumberOfMilliseconds.five_min) ? $('#past_5_min').addClass('active') : $('#past_5_min').removeClass('active');
 }
 
 	
