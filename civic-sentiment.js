@@ -3,11 +3,16 @@ AccountsCollection = new Meteor.Collection("accounts");
 
 if ( Meteor.isClient ) {
 
+	Meteor.startup(function () { 
+		updateAddressBar();
+	});
+
 	ruler = Ruler();
 	
 	Meteor.subscribe("accounts");
 
 	configInternationalization();
+
 	document.title =i18n('title');
 
 	Template.Ruler.rendered = function() {

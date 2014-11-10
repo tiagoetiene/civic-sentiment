@@ -33,7 +33,7 @@ function updateRoute() {
 }
 
 
-comboboxObserver = function() {
+updateAddressBar = function() {
 	Tracker.autorun( function() { updateRoute();  } );
 	Tracker.autorun( function() { updateCandidateOptionsCombobox(); } );	
 	Tracker.autorun( function () { updateData(); } );

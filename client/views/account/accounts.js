@@ -3,7 +3,3 @@ Template.AccountsT.helpers({
 		return AccountsCollection.find( { name : { $in : reactiveSelectedNames.get() } } ).fetch();
 	},
 });
-
-Template.AccountsT.rendered = function() {
-	comboboxObserver();	
-}
