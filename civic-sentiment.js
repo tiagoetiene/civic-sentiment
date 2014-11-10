@@ -14,10 +14,6 @@ if ( Meteor.isClient ) {
 		ruler(d3.select('#ruler'));
 	}
 
-	Template.appHome.rendered = function() {
-		comboboxObserver();		
-	}
-
 	Template.home.helpers({
 		coverImage : function() {
 			return 'background : url(' + 
@@ -89,11 +85,10 @@ if ( Meteor.isClient ) {
 		this.route('howToSelect', {path : 'select'});
 		this.route('howToSelectPolitician', {path : 'selectpolitician'});
 		this.route( 'about' );
-		this.route('appHome', { 
+		this.route('AccountsT', { 
 			loadingTemplate : "LoadingT",
 			layoutTemplate : "CandidateSelectionT",
 			path : 'realtime',
-			name : 'appHome',
 			waitOn : function() {
 				console.log("* Wating on data...");
 
