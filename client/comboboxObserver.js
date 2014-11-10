@@ -11,16 +11,6 @@ reactiveData = new ReactiveVar( {}, _.isEqual );
 reactivePlots = new ReactiveVar( {}, _.isEqual );
 reactiveTweetCount = new ReactiveVar( {}, _.isEqual );
 
-// function updateSelector() {
-// 	var selected = reactiveSelected.get().map(function(d) {  return d.name } );
-// 	$("#e1")
-// 		.selectpicker()
-// 		.selectpicker("val", selected)
-// 		.selectpicker('render')
-// 		.selectpicker('refresh');
-// }
-
-
 function updateCombobox( ) {
 	var names = reactiveSelectedNames.get();
 	console.log(names);
