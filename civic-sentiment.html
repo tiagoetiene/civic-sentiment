@@ -43,10 +43,26 @@
 	</div>
 </template>
 
+<template name="CandidateSelectionT">
+	<div class="container">
+		<div class="row"> 
+			<div class="col-md-12">
+				{{> jumbotron}}
+				{{> select}}
+				{{> yield}}
+			</div>
+		</div>
+	</div>
+</template>
+
+<template name="LoadingT">
+	<div class="row text-center">
+		<h1> We are working hard to retreive all tweets.... </h1>	
+	</div>
+</template>
+
 <template name="appHome">
 	<div>
-		{{> jumbotron}}
-		{{> select}}
 		{{> AccountsT}}
 	</div>
 </template>

@@ -3,7 +3,7 @@ Template.PlotT.created =  function() {
 
 Template.PlotT.helpers({
 	plot : function() {
-		return this.id;
+		return "plot-" + this.name.replace( / /, "_" );
 	},
 	links : function() {
 		return Session.get('plot_links');

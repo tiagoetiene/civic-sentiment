@@ -3,20 +3,13 @@ reactiveUserSelectedTimeframe = new ReactiveVar("past month", _.isEqual);
 
 reactiveRoutePath = new ReactiveVar("/realtime", _.isEqual);
 
-reactivePlots = new ReactiveVar( {}, _.isEqual );
 reactiveSelectedNames = new ReactiveVar( [], _.isEqual );
 reactiveStartEndDates = new ReactiveVar( {}, _.isEqual );
 reactiveNow = new ReactiveVar( false, _.isEqual );
 
-// function updateTimeframeData() {
-// 	$("#pastMonth").change( function(e) { reactiveTimeframe.set("past month"); });
-// 	$("#pastWeek").change( function(e) { reactiveTimeframe.set("past week"); });
-// 	$("#past3Day").change( function(e) { reactiveTimeframe.set("past 3 days"); });
-// 	$("#pastDay").change( function(e) { reactiveTimeframe.set("past day"); });
-// 	$("#past8Hour").change( function(e) { reactiveTimeframe.set("past 8 hours"); });
-// 	$("#past1Hour").change( function(e) { reactiveTimeframe.set("past hour"); });
-// 	$("#past5Min").change( function(e) { reactiveTimeframe.set("past 5 min") });
-// }
+reactiveData = new ReactiveVar( {}, _.isEqual );
+reactivePlots = new ReactiveVar( {}, _.isEqual );
+reactiveTweetCount = new ReactiveVar( {}, _.isEqual );
 
 // function updateSelector() {
 // 	var selected = reactiveSelected.get().map(function(d) {  return d.name } );
@@ -26,6 +19,19 @@ reactiveNow = new ReactiveVar( false, _.isEqual );
 // 		.selectpicker('render')
 // 		.selectpicker('refresh');
 // }
+
+
+function updateCombobox( ) {
+	var names = reactiveSelectedNames.get();
+	console.log(names);
+	if(names.length) {
+		$("#e1")
+			.selectpicker( "val",  names)
+			.selectpicker( "render" )
+			.selectpicker( "refresh" );
+	}
+}
+
 
 var firstTime = true;
 var previousPath = "";
@@ -53,6 +59,7 @@ comboboxObserver = function() {
 
 	// Update route
 	Tracker.autorun( function() { updateRoute();  } );
+	Tracker.autorun( function() { updateCombobox(); } );
 
 	// Tracker.autorun( function() {
 	// 	updateSelector();

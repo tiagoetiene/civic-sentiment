@@ -11,6 +11,8 @@ updateData = function() {
 	var end = startEnd.end;
 	var depth = startEnd.depth;
 	var interval = startEnd.interval;
+	var data = {};
+	var tweetCount = {};
 	
 	_.each( reactiveSelectedNames.get(), function( name ) { 
 
@@ -55,13 +57,16 @@ updateData = function() {
 			minDate += interval;
 			i++;
 		}
-		// candidate.data = out;
-
-
+		
+		data[ name ] = out;
+		tweetCount[ name ] = tweets_count;
 		// Signaling to the user that the new data has just came in
 		// Session.set( candidate.name, candidate.tweets_count );
 		// setTimeout( function() { Session.set(candidate.name+':color', 'color:black'); }, 3000);
 	});
+	
+	reactiveData.set( data );
+	reactiveTweetCount.set( tweetCount );
 
 	console.log( "\t* Done!" );
 }
