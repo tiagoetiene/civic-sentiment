@@ -24,9 +24,9 @@ Template.OptionsT.rendered = function() {
 				if( t.selected === true ) {
 					names.push( t.value );
 				}
-			})
+			});
 			reactiveUserSelectedNames.set( names );
-		})
+		});
 }
 
 Template.OptionT.rendered = function() {
@@ -35,8 +35,7 @@ Template.OptionT.rendered = function() {
 
 updateCandidateOptionsCombobox = function ( ) {
 	var names = reactiveSelectedNames.get();
-	console.log(names);
-	if(names.length) {
+	if( names.length ) {
 		$("#e1")
 			.selectpicker( "val",  names)
 			.selectpicker( "render" )
