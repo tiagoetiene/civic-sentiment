@@ -129,7 +129,6 @@ if ( Meteor.isClient ) {
 						interval : interval
 					});
 
-
 				// If no candidades are selected, we do a housekeeping and 
 				// return ....
 				if( names == undefined  ) {
@@ -144,13 +143,11 @@ if ( Meteor.isClient ) {
 				return Meteor.subscribe( "summaries", names, depth );
 			},
 			onAfterAction : function() {
-
 				var plots = {};
 				_.each( reactiveSelectedNames.get(), function( name ) {
 					plots[ name ] = Plot();
 				});
 				reactivePlots.set( plots );
-
 				console.log("\t* All right, the data was successfully loaded.")
 			}
 		});
