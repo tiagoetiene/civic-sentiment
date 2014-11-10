@@ -3,10 +3,6 @@ AccountsCollection = new Meteor.Collection("accounts");
 
 if ( Meteor.isClient ) {
 
-	Meteor.startup(function () { 
-		updateAddressBar();
-	});
-
 	ruler = Ruler();
 	
 	Meteor.subscribe("accounts");
