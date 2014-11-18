@@ -9,7 +9,9 @@ if ( Meteor.isClient ) {
 
 	configInternationalization();
 
-	document.title =i18n('title');
+	document.title = i18n('title');
+
+	timeUpdater("past month");
 
 	Template.Ruler.rendered = function() {
 		ruler(d3.select('#ruler'));
@@ -17,9 +19,7 @@ if ( Meteor.isClient ) {
 
 	Template.home.helpers({
 		coverImage : function() {
-			return 'background : url(' + 
-					i18n('images.coverImage') + 
-					') no-repeat; background-size:cover;';
+			return 'background : url(' + i18n('images.coverImage') + ') no-repeat; background-size:cover;';
 		}
 	});
 
@@ -42,12 +42,12 @@ if ( Meteor.isClient ) {
 				interval : startEnd.interval
 			};
 			reactiveStartEndDates.set( tmp );
-			console.log( "\t* Updating interval to now! .... " );
+			// console.log( "\t* Updating interval to now! .... " );
 		}
 	}
 
 	function updatePlotScale( ) {
-		console.log( "* Updating plot axis .... ")
+		// console.log( "* Updating plot axis .... ")
 
 		var startEnd = reactiveStartEndDates.get();
 		var end = startEnd.end;
@@ -55,6 +55,11 @@ if ( Meteor.isClient ) {
 		var domain = [ start, end ];
 		var plots = reactivePlots.get();
 		var data = reactiveData.get( );
+
+		if(_.isEmpty(startEnd))
+			return;
+
+		// console.log("\t* Plot parameters", startEnd);
 
 		_.each( reactiveSelectedNames.get() , function( name ) {
 			var plot = plots[ name ];
@@ -70,15 +75,21 @@ if ( Meteor.isClient ) {
 							Session.set('plot_links', d.negative_url); 
 					})
 					.onmouseover( function(x) { ruler.x( x ); })
-					.onmouseout( function(x) { ruler.x( 0.0 ); })
-					( d3.select( "#plot-"+ name.replace( / /, "_" ) ) )
-				plot.domain( [  start , end ]  ).data( data[ name ] ).update();
+					.onmouseout( function(x) { ruler.x( 0.0 ); });
+				var div = d3.select( "#plot-"+ name.replace( / /, "_" ) );
+
+				// We only create a plot iff the div has been created
+				if( div[ 0 ][ 0 ] != null ) {
+					plot( div );
+					plot.domain( [  start , end ]  ).data( data[ name ] ).update();
+				}
+				
 			}
 		});
 	}
 
-	intervalPlotHandler = Meteor.setInterval( function() { updatePlotScale(); }, 2000 );
-	intervalTimeHandler = Meteor.setInterval( function() { updateTimeInterval(); }, 2000);
+	intervalPlotHandler = Meteor.setInterval( function() { updatePlotScale(); }, 5000 );
+	intervalTimeHandler = Meteor.setInterval( function() { updateTimeInterval(); }, 5000);
 	
 	Router.map( function () {
 		this.route('home', { path : '/' });
@@ -92,12 +103,7 @@ if ( Meteor.isClient ) {
 			path : 'realtime',
 			waitOn : function() {
 				console.log("* Wating on data...");
-
 				var names;
-				var depth;
-				var interval;
-				var startDate;
-				var endDate;
 
 				// I. Processing URL parameters. We expect two parameters: selected candidates and timeframe
 				// The parsed parameters  will be stored into the reactive vars
@@ -106,28 +112,6 @@ if ( Meteor.isClient ) {
 						function(name) { return _.isEmpty(name) == false; });
 					reactiveSelectedNames.set( names );
 				}
-				if(this.params.query.timeframe) {
-					var timeframe = getTimeFrame( this.params.query.timeframe );
-					endDate = new Date();
-					startDate = new Date( +endDate + timeframe );
-					reactiveNow.set( true );
-				}
-
-				// II. Now that we have the time information, let us process it to figure out
-				// which time interval is the most interesting for us
-				var exactInterval = (+endDate - (+startDate)) / HistogramBins;
-				var depthIntervalPair = findDepthAndInterval( exactInterval );
-				depth = depthIntervalPair.depth;
-				interval = depthIntervalPair.interval;
-
-				// We store time information into a reactive var
-				reactiveStartEndDates.set( 
-					{ 
-						start : startDate, 
-						end : endDate, 
-						depth : depth,
-						interval : interval
-					});
 
 				// If no candidades are selected, we do a housekeeping and 
 				// return ....
@@ -136,11 +120,15 @@ if ( Meteor.isClient ) {
 					return;
 				}
 
+				if( this.params.query.timeframe ) {
+					timeUpdater( this.params.query.timeframe );
+				}
+
 				// ... otherwise, it is time to shine. We will retrieve the data
 				// and will wait until everything is loaded before continue
 				// Here we heaviy rely on Meteor folks to do some caching
-				console.log("\t* Retrieving data for", names, "at depth", depth);
-				return Meteor.subscribe( "summaries", names, depth );
+				console.log("\t* Retrieving data for", names);
+				return Meteor.subscribe( "summaries", names );
 			},
 			onAfterAction : function() {
 				var plots = {};
@@ -156,8 +144,8 @@ if ( Meteor.isClient ) {
 
 if (Meteor.isServer) { 
 	Meteor.startup(function () { }); 
-	Meteor.publish("summaries", function ( names, depth ) {
-		query = { name : { $in : names }, depth : depth };
+	Meteor.publish("summaries", function ( names ) {
+		query = { name : { $in : names } };
   		return TwitterCollection.find( query );
 	});
 	Meteor.publish("accounts", function() {

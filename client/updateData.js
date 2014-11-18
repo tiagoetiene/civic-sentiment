@@ -4,7 +4,7 @@ HistogramBins = 100;
 
 updateData = function() {
 
-	console.log( "* Input parameters have changed. Time to update our data...." );
+	// console.log( "* Input parameters have changed. Time to update our data....");
 
 	var startEnd = reactiveStartEndDates.get();
 	var start = startEnd.start;
@@ -13,6 +13,16 @@ updateData = function() {
 	var interval = startEnd.interval;
 	var data = {};
 	var tweetCount = {};
+
+	if(start == undefined || end == undefined) {
+		console.log( "\t* No date interval was defined yet. Wating for the user.... ");
+		return;
+	}
+
+	// console.log( "\t* Start: ", start);
+	// console.log( "\t* End: ", end);
+	// console.log( "\t* Interval: ", interval);
+	// console.log( "\t* Depth: ", depth);
 	
 	_.each( reactiveSelectedNames.get(), function( name ) { 
 
@@ -24,7 +34,7 @@ updateData = function() {
 			date 	: {  $gte: +start, $lt : +end }
 		} ;
 		var ret = TwitterCollection.find( query ).fetch();
-		console.log("\t*", ret.length, "documents were loaded for", name, ":", ret);
+		// console.log("\t*", ret.length, "documents were loaded for", name, ":", ret);
 
 		var tweets_count = 0;
 		_.each(ret, function( d ) { tweets_count += d.counter; });
@@ -68,5 +78,5 @@ updateData = function() {
 	reactiveData.set( data );
 	reactiveTweetCount.set( tweetCount );
 
-	console.log( "\t* Done!" );
+	// console.log( "\t* Done!" );
 }
