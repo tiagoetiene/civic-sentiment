@@ -1,4 +1,5 @@
 reactiveUserSelectedNames = new ReactiveVar([], _.isEqual);
+reactiveUserSelectedTimeframe = new ReactiveVar("", _.isEqual);
 
 // These reactive variables are supposed to used only after
 // the routing to the selected names finishes

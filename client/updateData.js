@@ -34,6 +34,7 @@ updateData = function() {
 			date 	: {  $gte: +start, $lt : +end }
 		} ;
 		var ret = TwitterCollection.find( query ).fetch();
+		console.log("\t* query:", query, TwitterCollection.find( query ).count() );
 		// console.log("\t*", ret.length, "documents were loaded for", name, ":", ret);
 
 		var tweets_count = 0;

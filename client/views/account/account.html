@@ -3,7 +3,11 @@
 		{{> AccountPhotoT}}
 		<div class="col-md-10 nopadding">
 			<div class="col-md-8">
-				{{> PlotT}}
+				{{#if subscriptionIsReady}}
+					{{> PlotT}}
+				{{else}}
+					{{> LoadingT}}
+				{{/if}}
 			</div>
 			<div class="col-md-4">
 				<div class="row" style="margin-top:5px">{{> TwitterFeedT}}</div>

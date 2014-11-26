@@ -1,6 +1,8 @@
 TwitterCollection = new Meteor.Collection("tweets-summary-test")
 AccountsCollection = new Meteor.Collection("accounts");
 
+reactiveSubscriptionHandle = new ReactiveVar(undefined, _.isEqual);
+
 if ( Meteor.isClient ) {
 
 	ruler = Ruler();
@@ -42,7 +44,7 @@ if ( Meteor.isClient ) {
 				interval : startEnd.interval
 			};
 			reactiveStartEndDates.set( tmp );
-			// console.log( "\t* Updating interval to now! .... " );
+			// console.log( "\t* Updating interval to now! .... ", tmp );
 		}
 	}
 
@@ -82,14 +84,28 @@ if ( Meteor.isClient ) {
 				if( div[ 0 ][ 0 ] != null ) {
 					plot( div );
 					plot.domain( [  start , end ]  ).data( data[ name ] ).update();
-				}
-				
+				}	
 			}
 		});
 	}
 
-	intervalPlotHandler = Meteor.setInterval( function() { updatePlotScale(); }, 5000 );
-	intervalTimeHandler = Meteor.setInterval( function() { updateTimeInterval(); }, 5000);
+	var intervalPlotHandler, intervalTimeHandler, interval;
+	Tracker.autorun( function() {
+		var startEnd = reactiveStartEndDates.get();
+
+		if(interval == startEnd.interval) 
+			return;
+
+		interval = startEnd.interval;
+
+		clearInterval( intervalTimeHandler );
+		clearInterval( intervalPlotHandler );
+
+		intervalPlotHandler = Meteor.setInterval( function() { updatePlotScale(); }, 5000 );
+		intervalTimeHandler = Meteor.setInterval( function() { updateTimeInterval(); }, 5000 );
+	});
+
+
 	
 	Router.map( function () {
 		this.route('home', { path : '/' });
@@ -101,15 +117,15 @@ if ( Meteor.isClient ) {
 			loadingTemplate : "LoadingT",
 			layoutTemplate : "CandidateSelectionT",
 			path : 'realtime',
-			waitOn : function() {
+			data : function() {
 				console.log("* Wating on data...");
 				var names;
+				var startEnd;
 
 				// I. Processing URL parameters. We expect two parameters: selected candidates and timeframe
 				// The parsed parameters  will be stored into the reactive vars
-				if(this.params.query.politicians) {
-					names = _.filter( this.params.query.politicians.split(','), 
-						function(name) { return _.isEmpty(name) == false; });
+				if(this.params.query.p) {
+					names = _.filter( this.params.query.p.split(','), function(name) { return _.isEmpty(name) == false; });
 					reactiveSelectedNames.set( names );
 				}
 
@@ -120,21 +136,22 @@ if ( Meteor.isClient ) {
 					return;
 				}
 
-				if( this.params.query.timeframe ) {
-					timeUpdater( this.params.query.timeframe );
+				
+				if( this.params.query.t ) {
+					startEnd = timeUpdater( this.params.query.t );
+				}
+				else {
+					reactiveUserSelectedTimeframe.set("past month");
+					return;
 				}
 
-				// ... otherwise, it is time to shine. We will retrieve the data
-				// and will wait until everything is loaded before continue
-				// Here we heaviy rely on Meteor folks to do some caching
 				console.log("\t* Retrieving data for", names);
-				return Meteor.subscribe( "summaries", names );
+				var handle = Meteor.subscribe( "summaries", names, startEnd.depth );
+				reactiveSubscriptionHandle.set( handle );
 			},
 			onAfterAction : function() {
 				var plots = {};
-				_.each( reactiveSelectedNames.get(), function( name ) {
-					plots[ name ] = Plot();
-				});
+				_.each( reactiveSelectedNames.get(), function( name ) { plots[ name ] = Plot(); });
 				reactivePlots.set( plots );
 				console.log("\t* All right, the data was successfully loaded.")
 			}
@@ -144,9 +161,16 @@ if ( Meteor.isClient ) {
 
 if (Meteor.isServer) { 
 	Meteor.startup(function () { }); 
-	Meteor.publish("summaries", function ( names ) {
-		query = { name : { $in : names } };
-  		return TwitterCollection.find( query );
+	Meteor.publish("summaries", function ( names, depth ) {
+		query = { name : { $in : names }, depth : depth };
+
+		console.log( "* Query: ", query );
+
+		var cursor = TwitterCollection.find( query );
+
+		console.log( "* Number of docs in this quey: ", cursor.count( ), "/", TwitterCollection.find({}).count() );
+
+  		return cursor;
 	});
 	Meteor.publish("accounts", function() {
 		return AccountsCollection.find( { } );

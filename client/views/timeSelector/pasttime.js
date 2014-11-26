@@ -1,11 +1,11 @@
 Template.PastTimeT.rendered = function() {
-	$("#pastMonth").change( function(e) { timeUpdater("past month"); });
-	$("#pastWeek").change( function(e) { timeUpdater("past week"); });
-	$("#past3Day").change( function(e) { timeUpdater("past 3 days"); });
-	$("#pastDay").change( function(e) { timeUpdater("past day"); });
-	$("#past8Hour").change( function(e) { timeUpdater("past 8 hours"); });
-	$("#past1Hour").change( function(e) { timeUpdater("past hour"); });
-	$("#past5Min").change( function(e) { timeUpdater("past 5 min") });
+	$("#pastMonth").change( function(e) { reactiveUserSelectedTimeframe.set("past month"); });
+	$("#pastWeek").change( function(e) { reactiveUserSelectedTimeframe.set("past week"); });
+	$("#past3Day").change( function(e) { reactiveUserSelectedTimeframe.set("past 3 days"); });
+	$("#pastDay").change( function(e) { reactiveUserSelectedTimeframe.set("past day"); });
+	$("#past8Hour").change( function(e) { reactiveUserSelectedTimeframe.set("past 8 hours"); });
+	$("#past1Hour").change( function(e) { reactiveUserSelectedTimeframe.set("past hour"); });
+	$("#past5Min").change( function(e) { reactiveUserSelectedTimeframe.set("past 5 min") });
 }
 
 updatePastTimeToggleButtons = function() {

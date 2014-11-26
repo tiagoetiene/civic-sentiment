@@ -1,8 +1,9 @@
 var previousPath = "";
 pathUpdater = function() {
 	console.log("* Updating path");
-	var path = "/realtime?politicians=";
+	var path = "/realtime?p=";
 	_.each(reactiveUserSelectedNames.get(), function(name) {  path += name + ","  });
+	path += "&t=" + reactiveUserSelectedTimeframe.get();
 
 	// We do no want to re-rendere everything if the path is the same
 	// More than that, we do not want to end up with cyclic 
