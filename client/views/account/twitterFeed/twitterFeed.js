@@ -1,6 +1,6 @@
 Template.TwitterFeedT.rendered = function() {
 	if (!window.WAYIN) {
-		window.WAYIN = {hubs: []};}
+		window.WAYIN = { hubs: [] }; }
 		window.WAYIN.hubs.push(
 			{
 				hub_iframe: document.getElementById(this.data.iframe_id),
@@ -20,4 +20,10 @@ Template.TwitterFeedT.rendered = function() {
 				document.body.appendChild( script );
 			}
 		})();
+}
+
+Template.TwitterFeedT.destroyed = function() {
+	window.WAYIN.hubs = _.filter( window.WAYIN.hubs, function( v ) {  
+		return _.isEqual( this.data.iframe_id ) == false 
+	});
 }
