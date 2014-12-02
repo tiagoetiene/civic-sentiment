@@ -13,7 +13,7 @@ if ( Meteor.isClient ) {
 
 	document.title = i18n('title');
 
-	timeUpdater("past month");
+	// timeUpdater("past month");
 
 	Template.Ruler.rendered = function() {
 		ruler(d3.select('#ruler'));
@@ -114,11 +114,15 @@ if ( Meteor.isClient ) {
 		this.route('howToSelectPolitician', {path : 'selectpolitician'});
 		this.route( 'about' );
 		this.route('AccountsT', { 
-			loadingTemplate : "LoadingT",
 			layoutTemplate : "CandidateSelectionT",
 			path : 'realtime',
 			data : function() {
-				console.log("* Wating on data...");
+			},
+			action : function() {
+				this.render();
+			},
+			after : function() {
+				console.log("* Wating on data...", this.params);
 				var names;
 				var startEnd;
 
@@ -148,8 +152,8 @@ if ( Meteor.isClient ) {
 				console.log("\t* Retrieving data for", names);
 				var handle = Meteor.subscribe( "summaries", names, startEnd.depth );
 				reactiveSubscriptionHandle.set( handle );
-			},
-			onAfterAction : function() {
+
+
 				var plots = {};
 				_.each( reactiveSelectedNames.get(), function( name ) { plots[ name ] = Plot(); });
 				reactivePlots.set( plots );
