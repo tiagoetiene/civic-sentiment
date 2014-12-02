@@ -96,7 +96,9 @@ Plot = function() {
 				.y0( 0.5 * height )
 				.y1( function(d) { return y( y_valuer.call(this, d) ); } );
 			plot
-				.attr('fill', color)
+				.attr('fill', "none")
+				.attr('stroke', color)
+				.attr('stroke-width', "2px")
 				.attr('fill-opacity', 0.8)
 				.attr('d', area(data));
 		}
