@@ -19,7 +19,16 @@ Plot = function() {
 	function chart( selection ) {
             if(svg === undefined) {
             	width = parseInt(selection.style('width'));
-            	svg = selection.append( 'svg' );
+
+            	// We retrieve the current svg attached to the
+            	// input "selection" if one exists. Otherwise,
+            	// one is created
+            	svg = selection
+            			.selectAll("svg")
+            			.data([ 0 ])
+            			.enter()
+            			.append( 'svg' );
+
             	svg.attr( 'width' ,  width).attr( 'height' , height);
 
             	plot = svg.append("g").attr('id', 'sentimentplot');
