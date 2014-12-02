@@ -1,5 +1,5 @@
-var previousPath = "";
 var first = true;
+var previousPath = "";
 pathUpdater = function() {
 	console.log("* Updating path");
 	var path = "/realtime?p=";
@@ -10,10 +10,15 @@ pathUpdater = function() {
 	// More than that, we do not want to end up with cyclic 
 	// rendering see http://www....
 	console.log("\t* previous path: ", previousPath );
-	console.log("\t* current path: ", path )
+	console.log("\t* current path: ", path );
+
+	if( first == true ) {
+		first = false;
+		return;
+	}
 	if(_.isEqual(path, previousPath) == false) {
 		previousPath = path;
 		console.log("\t* The route has changed. We are now going to", path);
-		( first ) ? first = false : Router.go(path);
+		Router.go(path);
 	}
 }
