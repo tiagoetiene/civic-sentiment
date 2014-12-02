@@ -1,4 +1,5 @@
 var previousPath = "";
+var first = true;
 pathUpdater = function() {
 	console.log("* Updating path");
 	var path = "/realtime?p=";
@@ -13,6 +14,6 @@ pathUpdater = function() {
 	if(_.isEqual(path, previousPath) == false) {
 		previousPath = path;
 		console.log("\t* The route has changed. We are now going to", path);
-		Router.go(path);
+		( first ) ? first = false : Router.go(path);
 	}
 }
