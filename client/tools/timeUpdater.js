@@ -1,7 +1,3 @@
-getExactInterval = function() {
-
-}
-
 timeUpdater = function( timeframe ) {
 	var startDate;
 	var endDate;

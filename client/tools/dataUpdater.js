@@ -3,9 +3,6 @@ data = { };
 HistogramBins = 100;
 
 updateData = function() {
-
-	// console.log( "* Input parameters have changed. Time to update our data....");
-
 	var startEnd = reactiveStartEndDates.get();
 	var start = startEnd.start;
 	var end = startEnd.end;
@@ -18,11 +15,6 @@ updateData = function() {
 		console.log( "\t* No date interval was defined yet. Wating for the user.... ");
 		return;
 	}
-
-	// console.log( "\t* Start: ", start);
-	// console.log( "\t* End: ", end);
-	// console.log( "\t* Interval: ", interval);
-	// console.log( "\t* Depth: ", depth);
 	
 	_.each( reactiveSelectedNames.get(), function( name ) { 
 
@@ -75,6 +67,4 @@ updateData = function() {
 	
 	reactiveData.set( data );
 	reactiveTweetCount.set( tweetCount );
-
-	// console.log( "\t* Done!" );
 }

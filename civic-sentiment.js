@@ -44,13 +44,10 @@ if ( Meteor.isClient ) {
 				interval : startEnd.interval
 			};
 			reactiveStartEndDates.set( tmp );
-			// console.log( "\t* Updating interval to now! .... ", tmp );
 		}
 	}
 
 	function updatePlotScale( ) {
-		// console.log( "* Updating plot axis .... ")
-
 		var startEnd = reactiveStartEndDates.get();
 		var end = startEnd.end;
 		var start = startEnd.start;
@@ -60,8 +57,6 @@ if ( Meteor.isClient ) {
 
 		if(_.isEmpty(startEnd))
 			return;
-
-		// console.log("\t* Plot parameters", startEnd);
 
 		_.each( reactiveSelectedNames.get() , function( name ) {
 			var plot = plots[ name ];
@@ -122,7 +117,6 @@ if ( Meteor.isClient ) {
 				this.render();
 			},
 			after : function() {
-				console.log("* Wating on data...", this.params);
 				var names;
 				var startEnd;
 
