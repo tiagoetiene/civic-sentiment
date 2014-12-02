@@ -38,14 +38,11 @@ Template.OptionT.rendered = function() {
 updateCandidateOptionsCombobox = function( ) {
 	Meteor.setTimeout( function() {
 		var names = reactiveSelectedNames.get();
-		console.log("start");
-		console.log(names);
 		if( names.length ) {
 			$("#e1")
 				.selectpicker( "val",  names)
 				.selectpicker( "render" )
 				.selectpicker( "refresh" );
 		}
-		console.log("end");
 	}, 5000);
 }

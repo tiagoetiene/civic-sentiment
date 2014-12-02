@@ -100,8 +100,6 @@ if ( Meteor.isClient ) {
 		intervalTimeHandler = Meteor.setInterval( function() { updateTimeInterval(); }, 1000 );
 	});
 
-
-	
 	Router.map( function () {
 		this.route('home', { path : '/' });
 		this.route('howToSentimentPlot', { path : 'sentimentplot'} );
@@ -112,11 +110,6 @@ if ( Meteor.isClient ) {
 			layoutTemplate : "CandidateSelectionT",
 			path : 'realtime',
 			data : function() {
-			},
-			action : function() {
-				this.render();
-			},
-			after : function() {
 				var names;
 				var startEnd;
 
@@ -131,27 +124,26 @@ if ( Meteor.isClient ) {
 				// return ....
 				if( names == undefined  ) {
 					reactiveSelectedNames.set( [] );
-					return;
 				}
-
 				
 				if( this.params.query.t ) {
 					startEnd = timeUpdater( this.params.query.t );
+					reactiveUserSelectedTimeframe.set( this.params.query.t );
 				}
 				else {
 					reactiveUserSelectedTimeframe.set("past month");
 					return;
 				}
 
-				console.log("\t* Retrieving data for", names);
+				if( names == undefined )
+					return;
+
 				var handle = Meteor.subscribe( "summaries", names, startEnd.depth );
 				reactiveSubscriptionHandle.set( handle );
-
 
 				var plots = {};
 				_.each( reactiveSelectedNames.get(), function( name ) { plots[ name ] = Plot(); });
 				reactivePlots.set( plots );
-				console.log("\t* All right, the data was successfully loaded.")
 			}
 		});
 	});
@@ -161,14 +153,7 @@ if (Meteor.isServer) {
 	Meteor.startup(function () { }); 
 	Meteor.publish("summaries", function ( names, depth ) {
 		query = { name : { $in : names }, depth : depth };
-
-		console.log( "* Query: ", query );
-
-		var cursor = TwitterCollection.find( query );
-
-		console.log( "* Number of docs in this quey: ", cursor.count( ), "/", TwitterCollection.find({}).count() );
-
-  		return cursor;
+  		return TwitterCollection.find( query );
 	});
 	Meteor.publish("accounts", function() {
 		return AccountsCollection.find( { } );
