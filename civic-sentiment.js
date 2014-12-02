@@ -96,8 +96,8 @@ if ( Meteor.isClient ) {
 		clearInterval( intervalTimeHandler );
 		clearInterval( intervalPlotHandler );
 
-		intervalPlotHandler = Meteor.setInterval( function() { updatePlotScale(); }, 5000 );
-		intervalTimeHandler = Meteor.setInterval( function() { updateTimeInterval(); }, 5000 );
+		intervalPlotHandler = Meteor.setInterval( function() { updatePlotScale(); }, 1000 );
+		intervalTimeHandler = Meteor.setInterval( function() { updateTimeInterval(); }, 1000 );
 	});
 
 
