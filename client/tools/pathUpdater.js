@@ -1,5 +1,5 @@
 var first = true;
-var previousPath = "";
+var previousPath = "/realtime?p=&t=";
 pathUpdater = function() {
 	console.log("* Updating path");
 	var path = "/realtime?p=";

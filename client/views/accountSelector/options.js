@@ -17,6 +17,7 @@ Template.OptionsT.helpers({
 });
 
 Template.OptionsT.rendered = function() {
+	$("#e1").selectpicker('render').selectpicker('refresh');
 	$("#e1")
 		.on("change", function( e ) {
 			var names = []
@@ -29,16 +30,22 @@ Template.OptionsT.rendered = function() {
 		});
 }
 
+
 Template.OptionT.rendered = function() {
 	$("#e1").selectpicker('render').selectpicker('refresh');
 }
 
-updateCandidateOptionsCombobox = function ( ) {
-	var names = reactiveSelectedNames.get();
-	if( names.length ) {
-		$("#e1")
-			.selectpicker( "val",  names)
-			.selectpicker( "render" )
-			.selectpicker( "refresh" );
-	}
+updateCandidateOptionsCombobox = function( ) {
+	Meteor.setTimeout( function() {
+		var names = reactiveSelectedNames.get();
+		console.log("start");
+		console.log(names);
+		if( names.length ) {
+			$("#e1")
+				.selectpicker( "val",  names)
+				.selectpicker( "render" )
+				.selectpicker( "refresh" );
+		}
+		console.log("end");
+	}, 5000);
 }
