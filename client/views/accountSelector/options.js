@@ -1,18 +1,18 @@
 Template.OptionsT.helpers({
 	group : function() {
-		var options = { sort : {type : 1}, fields : { type : true } };
-		var types = _.uniq(AccountsCollection
+		var options = { sort : {type : 1}, fields : { country : true } };
+		var countries = _.uniq(AccountsCollection
 			.find({}, options)
 			.fetch()
-			.map(function(d) { return d.type; }), true);
-		return types;
+			.map(function(d) { return d.country; }), true);
+		return countries;
 	},
 	label : function() {
 		return i18n('options.'+String(this));
 	},
 	listOfPoliticians : function() {
 		var options = { sort : {name : 1}, fields : { name : true } };
-		return AccountsCollection.find({ type : String( this ) }, options).fetch();
+		return AccountsCollection.find({ country : String( this ) }, options).fetch();
 	}
 });
 

@@ -1,5 +1,5 @@
 Template.AccountPhotoT.helpers({
-	background_image : function() {
-		return "background-image:url(" + this.image + ")";
+	image : function() {
+		return this.profile_image_url.replace("_normal", "");
 	}
 });
