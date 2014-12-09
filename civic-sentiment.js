@@ -6,8 +6,6 @@ reactiveSubscriptionHandle = new ReactiveVar(undefined, _.isEqual);
 if ( Meteor.isClient ) {
 
 	ruler = Ruler();
-	
-	Meteor.subscribe("accounts");
 
 	configInternationalization();
 
