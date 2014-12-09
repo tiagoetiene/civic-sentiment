@@ -73,7 +73,7 @@ if ( Meteor.isClient ) {
 					})
 					.onmouseover( function(x) { ruler.x( x ); })
 					.onmouseout( function(x) { ruler.x( 0.0 ); });
-				var div = d3.select( "#plot-"+ name.replace( / /, "_" ) );
+				var div = d3.select( "#plot-"+ name.replace( / /g, "_" ).replace( /\./g, "_" ) );
 
 				// We only create a plot iff the div has been created
 				if( div[ 0 ][ 0 ] != null ) {
