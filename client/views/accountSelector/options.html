@@ -11,7 +11,7 @@ and only then call .selectpicker()
 </template>
 
 <template name="OptionsT">
-	<select id="e1" class="col-md-12" multiple >
+	<select id="e1" class="col-md-12" multiple data-size="10" data-live-search="true">
 		{{#each group}}
 			<optgroup label={{label}}>
 				{{#each listOfPoliticians}} 
