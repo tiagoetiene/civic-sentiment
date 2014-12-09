@@ -156,7 +156,12 @@ if (Meteor.isServer) {
   		return TwitterCollection.find( query );
 	});
 	Meteor.publish("accounts", function() {
-		return AccountsCollection.find( { } );
+			var options = { limit : 600, fields : { 
+				"person/name" : true, 
+				"state" : true, 
+			}
+		};
+		return AccountsCollection.find( { }, options );
 	});
 }
 
