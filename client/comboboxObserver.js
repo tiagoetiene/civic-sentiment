@@ -3,7 +3,8 @@ reactiveUserSelectedTimeframe = new ReactiveVar("", _.isEqual);
 
 // These reactive variables are supposed to used only after
 // the routing to the selected names finishes
-reactiveSelectedNames = new ReactiveVar( [], _.isEqual );
+reactiveSelectedNames = new ReactiveVar( [] );
+reactiveSelectedTwitterHandles = new ReactiveVar( [] );
 reactiveStartEndDates = new ReactiveVar( {}, _.isEqual );
 reactiveTimeframe = new ReactiveVar( "", _.isEqual );
 reactiveNow = new ReactiveVar( false, _.isEqual );
@@ -13,6 +14,8 @@ reactiveNow = new ReactiveVar( false, _.isEqual );
 reactiveData = new ReactiveVar( {}, _.isEqual );
 reactivePlots = new ReactiveVar( {}, _.isEqual );
 reactiveTweetCount = new ReactiveVar( {}, _.isEqual );
+
+NameToTwitterID = {};
 
 updateAddressBar = function() {
 	//

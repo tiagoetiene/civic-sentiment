@@ -27,7 +27,7 @@ findDepthAndInterval = function( interval ) {
 	var idx = 0;
 
 	while(milliseconds < interval)  {
-		milliseconds *= 2;
+		milliseconds *= 4;
 		idx += 1;
 	}
 	return { depth : idx , interval : milliseconds };

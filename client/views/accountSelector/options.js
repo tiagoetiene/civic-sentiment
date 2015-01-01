@@ -17,7 +17,7 @@ Template.OptionsT.helpers({
 		return i18n( "options." + String( this ) );
 	},
 	listOfPoliticians : function() {
-		var options = { sort : {"person/name" : 1}, fields : { "person/name" : true } };
+		var options = { sort : {"person/name" : 1}, fields : { "person/name" : true, "person/twitterid" : true } };
 		return AccountsCollection.find( { "state" : String( this ) }, options).fetch();
 	}
 });
@@ -46,7 +46,9 @@ Template.OptionT.helpers({
 
 Template.OptionT.helpers( {
 	name : function() {
-		return this["person/name"].replace(/ *\[.*\]/, "");
+		// return this["person/name"].replace(/ *\[.*\]/, "");
+		NameToTwitterID[ this["person/name"] ]  = "@"+ this["person/twitterid"].toLowerCase();
+		return this["person/name"];
 	}
 });
 

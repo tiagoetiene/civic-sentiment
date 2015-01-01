@@ -21,18 +21,22 @@ updateData = function() {
 		// Preparing query. At this point we assume that all data is available
 		// on minimongo
 		var query = { 
-			name 	: name, 
-			depth 	: depth, 
-			date 	: {  $gte: +start, $lt : +end }
+			twitter_handle  : NameToTwitterID[ name ],
+			depth : depth,
+			date : {  $gte: +start, $lt : +end }
 		} ;
+		console.log( query );
 		var ret = TwitterCollection.find( query ).fetch();
 		var tweets_count = 0;
 		_.each(ret, function( d ) { tweets_count += d.counter; });
 
-		var max = d3.max( ret, function(d) { return d.positive_sentiment } );
-		max = Math.max(max, d3.max( ret, function(d) { return Math.abs(d.negative_sentiment)} ));
-		if( max != 0 ) _.each( ret, function(d, idx) { ret[ idx ].positive_sentiment /= max } );
-		if( max != 0 ) _.each( ret, function(d, idx) { ret[ idx ].negative_sentiment /= max } );
+		console.log("* data loaded: ", ret);
+		// console.log("* query: ", query);
+
+		var max = d3.max( ret, function(d) { return Math.abs( d.sentiment ) } );
+		// max = Math.max(max, d3.max( ret, function(d) { return Math.abs(d.negative_sentiment)} ));
+		if( max != 0 ) _.each( ret, function(d, idx) { ret[ idx ].sentiment /= max } );
+		// if( max != 0 ) _.each( ret, function(d, idx) { ret[ idx ].sentiment /= max } );
 
 		var minDate = Math.floor( +start / interval ) * interval;
 		var out = [];
@@ -47,10 +51,10 @@ updateData = function() {
 				out[i] = { 
 					counter : 0,
 					date : +minDate,
-					negative_counter : 0,
-					negative_sentiment : 0,
-					positive_counter : 0,
-					positive_sentiment : 0,
+					// negative_counter : 0,
+					// negative_sentiment : 0,
+					// positive_counter : 0,
+					// positive_sentiment : 0,
 					sentiment : 0,
 				}	
 			}

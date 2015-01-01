@@ -1,4 +1,7 @@
 Template.CandidateNameT.helpers({
+	name : function() {
+		return this["person/name"] ;
+	},
 	color : function() {
 		return "black";
 	},

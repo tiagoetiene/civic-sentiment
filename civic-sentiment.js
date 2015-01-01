@@ -61,17 +61,21 @@ if ( Meteor.isClient ) {
 			if(plot !== undefined) {
 				plot.x( function(d) { return d.date; } )
 					.y( function(d) { return d.sentiment; } )
-					.yPos( function(d) { return d.positive_sentiment; } )
-					.yNeg( function(d) { return d.negative_sentiment; } )
+					.yPos( function(d) { return d.sentiment; } )
+					.yNeg( function(d) { return d.sentiment; } )
 					.onclick( function(d, sentiment) { 
-						if(sentiment === 'pos')
-							Session.set('plot_links', d.positive_url); 
-						else
-							Session.set('plot_links', d.negative_url); 
+						// if(sentiment === 'pos')
+						// 	Session.set('plot_links', d.positive_url); 
+						// else
+						// 	Session.set('plot_links', d.negative_url); 
 					})
 					.onmouseover( function(x) { ruler.x( x ); })
 					.onmouseout( function(x) { ruler.x( 0.0 ); });
-				var div = d3.select( "#plot-"+ name.replace( / /g, "_" ).replace( /\./g, "_" ) );
+				var div = d3.select( "#plot-"+ name
+					.replace( / /g, "_" )
+					.replace( /\./g, "_" )
+					.replace( /\[/g, "_" )
+					.replace( /\]/g, "_" ) );
 
 				// We only create a plot iff the div has been created
 				if( div[ 0 ][ 0 ] != null ) {
@@ -99,7 +103,12 @@ if ( Meteor.isClient ) {
 	});
 
 	Router.map( function () {
-		this.route('home', { path : '/' });
+		this.route('home', { 
+			path : '/',
+			waitOn : function() {
+				return Meteor.subscribe( "accounts" );
+			},
+		});
 		this.route('howToSentimentPlot', { path : 'sentimentplot'} );
 		this.route('howToSelect', {path : 'select'});
 		this.route('howToSelectPolitician', {path : 'selectpolitician'});
@@ -107,14 +116,21 @@ if ( Meteor.isClient ) {
 		this.route('AccountsT', { 
 			layoutTemplate : "CandidateSelectionT",
 			path : 'realtime',
+			waitOn : function() {
+				return Meteor.subscribe( "accounts" );
+			},
 			data : function() {
 				var names;
 				var startEnd;
 
+				console.log( "Parameters: ", this.params.query.p );
+
 				// I. Processing URL parameters. We expect two parameters: selected candidates and timeframe
 				// The parsed parameters  will be stored into the reactive vars
 				if(this.params.query.p) {
-					names = _.filter( this.params.query.p.split(','), function(name) { return _.isEmpty(name) == false; });
+					names = _.filter( this.params.query.p.split(','), function(name) { 
+						return _.isEmpty(name) == false; 
+					} );
 					reactiveSelectedNames.set( names );
 				}
 
@@ -123,7 +139,7 @@ if ( Meteor.isClient ) {
 				if( names == undefined  ) {
 					reactiveSelectedNames.set( [] );
 				}
-				
+
 				if( this.params.query.t ) {
 					startEnd = timeUpdater( this.params.query.t );
 					reactiveUserSelectedTimeframe.set( this.params.query.t );
@@ -136,11 +152,21 @@ if ( Meteor.isClient ) {
 				if( names == undefined )
 					return;
 
-				var handle = Meteor.subscribe( "summaries", names, startEnd.depth );
+				console.log( ":::", reactiveSelectedNames.get() );
+
+				var twitterHandlers = [];
+				_.each( names, function( name ) {
+					twitterHandlers.push( NameToTwitterID[ name ] );
+				} );
+
+				var handle = Meteor.subscribe( "summaries", twitterHandlers, startEnd.depth );
 				reactiveSubscriptionHandle.set( handle );
 
 				var plots = {};
-				_.each( reactiveSelectedNames.get(), function( name ) { plots[ name ] = Plot(); });
+				_.each( reactiveSelectedNames.get(), function( name ) { 
+					plots[ name ] = Plot(); 
+				});
+
 				reactivePlots.set( plots );
 			}
 		});
@@ -149,13 +175,15 @@ if ( Meteor.isClient ) {
 
 if (Meteor.isServer) { 
 	Meteor.startup(function () { }); 
-	Meteor.publish("summaries", function ( names, depth ) {
-		query = { name : { $in : names }, depth : depth };
+	Meteor.publish("summaries", function ( handles, depth ) {
+		var query = { twitter_handle : { $in : handles }, depth : depth };
   		return TwitterCollection.find( query );
 	});
 	Meteor.publish("accounts", function() {
-			var options = { limit : 600, fields : { 
+		var options = { 
+				limit : 600, fields : { 
 				"person/name" : true, 
+				"person/twitterid" : true, 
 				"state" : true, 
 			}
 		};

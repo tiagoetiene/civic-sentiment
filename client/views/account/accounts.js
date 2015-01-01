@@ -1,6 +1,8 @@
 Template.AccountsT.helpers({
 	accounts : function() {
-		return AccountsCollection.find( { name : { $in : reactiveSelectedNames.get() } } ).fetch();
+		var array = AccountsCollection.find( { "person/name" : { $in : reactiveSelectedNames.get() } } ).fetch();
+		console.log( array, reactiveSelectedNames.get() );
+		return array;
 	},
 });
 
