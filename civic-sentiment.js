@@ -1,4 +1,4 @@
-TwitterCollection = new Meteor.Collection("tweets-summary-test")
+TwitterCollection = new Meteor.Collection("summary")
 AccountsCollection = new Meteor.Collection("politicians");
 
 reactiveSubscriptionHandle = new ReactiveVar(undefined, _.isEqual);
