@@ -176,8 +176,19 @@ if ( Meteor.isClient ) {
 if (Meteor.isServer) { 
 	Meteor.startup(function () { }); 
 	Meteor.publish("summaries", function ( handles, depth ) {
-		var query = { twitter_handle : { $in : handles }, depth : depth };
-  		return TwitterCollection.find( query );
+			var query = { depth : depth , twitter_handle : { $in : handles } };
+			var options = {
+				fields : {
+					// "_id" : 0,
+					// "date" : true,
+					// "depth" : true,
+					// "twitter_handle" : true,
+					// "counter" : 0,
+					// "sentiment" : 0,
+					"expire" : 0,
+				}
+			}
+  		return TwitterCollection.find( query, options );
 	});
 	Meteor.publish("accounts", function() {
 		var options = { 
