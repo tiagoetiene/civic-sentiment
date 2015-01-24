@@ -17,39 +17,42 @@ Plot = function() {
 	var data = undefined;
 
 	function chart( selection ) {
-            if(svg === undefined) {
-            	width = parseInt(selection.style('width'));
+		if(svg === undefined) {
 
-            	// We retrieve the current svg attached to the
-            	// input "selection" if one exists. Otherwise,
-            	// one is created
-            	svg = selection
-            			.selectAll("svg")
-            			.data([ 0 ])
-            			.enter()
-            			.append( 'svg' );
+			console.log( "####" )
 
-            	svg.attr( 'width' ,  width).attr( 'height' , height);
+			width = parseInt(selection.style('width'));
 
-            	plot = svg.append("g").attr('id', 'sentimentplot');
+			// We retrieve the current svg attached to the
+			// input "selection" if one exists. Otherwise,
+			// one is created
+			svg = selection
+					.selectAll("svg")
+					.data([ 0 ])
+					.enter()
+					.append( 'svg' );
 
-            	var pos = plot.append('g').attr('id', 'pos');
-            	var neg = plot.append('g').attr('id', 'neg');
-            	var neu = plot.append('g').attr('id', 'neu');
+			svg.attr( 'width' ,  width).attr( 'height' , height);
 
-            	pos.append('path');
-            	pos.append('g').attr('id', 'selection');
+			plot = svg.append("g").attr('id', 'sentimentplot');
 
-            	neg.append('path');
-            	neg.append('g').attr('id', 'selection');
+			var pos = plot.append('g').attr('id', 'pos');
+			var neg = plot.append('g').attr('id', 'neg');
+			var neu = plot.append('g').attr('id', 'neu');
 
-            	neu.append('path');
-            	neu.append('g').attr('id', 'selection');
+			pos.append('path');
+			pos.append('g').attr('id', 'selection');
 
-            	svg.append('g').attr('id', 'axis');
+			neg.append('path');
+			neg.append('g').attr('id', 'selection');
 
-            	// drawBox( svg );
-            }
+			neu.append('path');
+			neu.append('g').attr('id', 'selection');
+
+			svg.append('g').attr('id', 'axis');
+
+			// drawBox( svg );
+		}
 	}
 
 	function update( ) {
@@ -66,8 +69,8 @@ Plot = function() {
 			.range( [ height - 10, 10 ] )
 			.domain( [-1, 1] );
 
-		plotCurves(plot.select('#pos').select('path'), data, y_pos_valuer, colors[0], 0.5);
-		plotCurves(plot.select('#neg').select('path'), data, y_neg_valuer, colors[1], 0.5);    
+		plotCurves(plot.select('#pos'), data, y_pos_valuer, colors[0], 0.5);
+		// plotCurves(plot.select('#neg').select('path'), data, y_neg_valuer, colors[1], 0.5);    
 		// plotCurves(plot.select('#neu').select('path'), data, y_sum_valuer, 'darkgreen', 0.5);    
 		
 		selectionHandler(plot.select('#pos').select('#selection'), data, y_pos_valuer, colors[0]);
