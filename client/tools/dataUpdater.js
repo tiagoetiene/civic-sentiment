@@ -29,7 +29,17 @@ updateData = function() {
 		} ;
 		console.log( query );
 		var ret = TwitterCollection.find( query ).fetch();
+		var options = {
+			fields : {
+				depth : false,
+				twitter_handle : false,
+			}
+		};
+
+		
+		var ret = TwitterCollection.find( query, options ).fetch();
 		var tweets_count = 0;
+
 		_.each(ret, function( d ) { tweets_count += d.counter; });
 
 		console.log("* data loaded: ", ret);
