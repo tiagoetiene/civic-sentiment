@@ -11,8 +11,6 @@ if ( Meteor.isClient ) {
 
 	document.title = i18n('title');
 
-	// timeUpdater("past month");
-
 	Template.Ruler.rendered = function() {
 		ruler(d3.select('#ruler'));
 	}
@@ -45,13 +43,13 @@ if ( Meteor.isClient ) {
 		}
 	}
 
-	function updatePlotScale( ) {
+	function updatePlotScale() {
 		var startEnd = reactiveStartEndDates.get();
 		var end = startEnd.end;
 		var start = startEnd.start;
 		var domain = [ start, end ];
 		var plots = reactivePlots.get();
-		var data = reactiveData.get( );
+		var data = reactiveData.get();
 
 		if(_.isEmpty(startEnd))
 			return;
@@ -59,19 +57,21 @@ if ( Meteor.isClient ) {
 		_.each( reactiveSelectedNames.get() , function( name ) {
 			var plot = plots[ name ];
 			if(plot !== undefined) {
-				plot.x( function(d) { return d.date; } )
+				plot
+					.x( function(d) { return d.date; } )
 					.y( function(d) { return d.sentiment; } )
 					.yPos( function(d) { return d.sentiment; } )
 					.yNeg( function(d) { return d.sentiment; } )
-					.onclick( function(d, sentiment) { 
+					.onclick( function( d, sentiment ) { 
 						// if(sentiment === 'pos')
 						// 	Session.set('plot_links', d.positive_url); 
 						// else
 						// 	Session.set('plot_links', d.negative_url); 
 					})
-					.onmouseover( function(x) { ruler.x( x ); })
-					.onmouseout( function(x) { ruler.x( 0.0 ); });
-				var div = d3.select( "#plot-"+ name
+					.onmouseover( function( x ) { ruler.x( x ); } )
+					.onmouseout( function( x ) { ruler.x( 0.0 ); } );
+				var div = d3
+					.select( "#plot-"+ name
 					.replace( / /g, "_" )
 					.replace( /\./g, "_" )
 					.replace( /\[/g, "_" )
@@ -123,8 +123,6 @@ if ( Meteor.isClient ) {
 				var names;
 				var startEnd;
 
-				console.log( "Parameters: ", this.params.query.p );
-
 				// I. Processing URL parameters. We expect two parameters: selected candidates and timeframe
 				// The parsed parameters  will be stored into the reactive vars
 				if(this.params.query.p) {
@@ -151,8 +149,6 @@ if ( Meteor.isClient ) {
 
 				if( names == undefined )
 					return;
-
-				console.log( ":::", reactiveSelectedNames.get() );
 
 				var twitterHandlers = [];
 				_.each( names, function( name ) {
