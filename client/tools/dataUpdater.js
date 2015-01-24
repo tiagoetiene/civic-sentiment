@@ -15,6 +15,8 @@ updateData = function() {
 		console.log( "\t* No date interval was defined yet. Wating for the user.... ");
 		return;
 	}
+
+	console.assert( start <= end );
 	
 	_.each( reactiveSelectedNames.get(), function( name ) { 
 
