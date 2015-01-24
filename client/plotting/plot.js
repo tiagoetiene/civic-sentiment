@@ -90,17 +90,32 @@ Plot = function() {
 
 	function plotCurves( plot, data, y_valuer, color, opacity ) {
 		if( data !== undefined ) {
-			var area = d3.svg.area()
-				.interpolate("linear")
-				.x( function(d) { return x( x_valuer.call(this, d) ); } )
-				.y0( 0.5 * height )
-				.y1( function(d) { return y( y_valuer.call(this, d) ); } );
-			plot
+			var curves = plot.selectAll("line").data( data );
+			curves.exit().remove();
+			curves.enter().append("line");
+			var x_0 = 0;
+			var y_0 = 0;
+			curves
 				.attr('fill', "none")
-				.attr('stroke', color)
 				.attr('stroke-width', "2px")
 				.attr('fill-opacity', 0.8)
-				.attr('d', area(data));
+				.attr("x1", function( d ) { var a = Number( x_0 ); x_0 = x( x_valuer.call( this, d ) ); return a; })
+				.attr("y1", function( d ) { var a = Number( y_0 ); y_0 = y( y_valuer.call( this, d ) ); return a; })
+				.attr("x2", function( d ) { return x( x_valuer.call( this, d ) )})
+				.attr("y2", function( d ) { return y( y_valuer.call( this, d ) )})
+				.attr('stroke', function( d, idx ) {  return ( idx == 0 ) ? "none" : color; } );
+
+			// var area = d3.svg.area()
+			// 	.interpolate("linear")
+			// 	.x( function(d) { return x( x_valuer.call(this, d) ); } )
+			// 	.y0( 0.5 * height )
+			// 	.y1( function(d) { return y( y_valuer.call(this, d) ); } );
+			// plot
+			// 	.attr('fill', "none")
+			// 	.attr('stroke', color)
+			// 	.attr('stroke-width', "2px")
+			// 	.attr('fill-opacity', 0.8)
+			// 	.attr('d', area(data));
 		}
 	}
 
