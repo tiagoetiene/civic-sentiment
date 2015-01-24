@@ -2,7 +2,7 @@ timeUpdater = function( timeframe ) {
 	var startDate;
 	var endDate;
 
-	if(timeframe) {
+	if( timeframe ) {
 		var period = getTimeFrame( timeframe );
 		endDate = new Date();
 		startDate = new Date( +endDate + period );
@@ -22,5 +22,6 @@ timeUpdater = function( timeframe ) {
 			interval : interval
 		};
 	reactiveStartEndDates.set( data );
+
 	return data;
 }

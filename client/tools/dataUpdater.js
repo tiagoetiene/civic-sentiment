@@ -23,12 +23,10 @@ updateData = function() {
 		// Preparing query. At this point we assume that all data is available
 		// on minimongo
 		var query = { 
-			twitter_handle  : NameToTwitterID[ name ],
 			depth : depth,
+			twitter_handle  : NameToTwitterID[ name ],
 			date : {  $gte: +start, $lt : +end }
-		} ;
-		console.log( query );
-		var ret = TwitterCollection.find( query ).fetch();
+		};
 		var options = {
 			fields : {
 				depth : false,
@@ -36,14 +34,16 @@ updateData = function() {
 			}
 		};
 
+		// console.log( JSON.stringify( query ) );
 		
 		var ret = TwitterCollection.find( query, options ).fetch();
 		var tweets_count = 0;
 
 		_.each(ret, function( d ) { tweets_count += d.counter; });
 
-		console.log("* data loaded: ", ret);
-		// console.log("* query: ", query);
+		// console.log( ret )
+		// console.log( name, tweets_count )
+
 
 		var max = d3.max( ret, function(d) { return Math.abs( d.sentiment ) } );
 		// max = Math.max(max, d3.max( ret, function(d) { return Math.abs(d.negative_sentiment)} ));
