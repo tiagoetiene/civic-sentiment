@@ -7,6 +7,6 @@ Template.CandidateNameT.helpers({
 	},
 	tweets_count : function() {
 		var tweetCount = reactiveTweetCount.get();
-		return tweetCount[ this.name ] + ' ';
+		return tweetCount[ this["person/name"] ] + ' ';
 	}
 });
