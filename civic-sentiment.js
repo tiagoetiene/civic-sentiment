@@ -102,6 +102,7 @@ if ( Meteor.isClient ) {
 		intervalTimeHandler = Meteor.setInterval( function() { updateTimeInterval(); }, 1000 );
 	});
 
+	var lastDepth = -1;
 	Router.map( function () {
 		this.route('home', { 
 			path : '/',
@@ -152,17 +153,54 @@ if ( Meteor.isClient ) {
 
 				var twitterHandlers = [];
 				_.each( names, function( name ) {
-					twitterHandlers.push( NameToTwitterID[ name ] );
+						if( _.has( NameToTwitterID, name ) ) {
+							twitterHandlers.push( NameToTwitterID[ name ] );
+						}
 				} );
 
-				var handle = Meteor.subscribe( "summaries", twitterHandlers, startEnd.depth );
-				reactiveSubscriptionHandle.set( handle );
+				console.assert( _.isUndefined( startEnd.depth ) == false );
+				console.assert( _.isUndefined( startEnd.interval ) == false );
+
+				Session.set( "CurrentDepth", startEnd.depth );
+				Session.set( "CurrentInterval", startEnd.interval );
+
+				if( startEnd.depth != lastDepth ) {
+
+					subscriptionsHandles = {};
+					lastDepth = startEnd.depth;
+
+				} else {
+
+					//
+					// Unsubscribing to handles that are no longer part of current
+					// user selection
+					// 
+					_.each( subscriptionsHandles, function( sub, handle ) {
+						if( contains( twitterHandlers, handle ) == false ) {
+							subscriptionsHandles[ handle ] .stop();
+							delete subscriptionsHandles[ handle ];
+						}
+					} );
+
+					//
+					// We will subscribe only to the handlers that we have not yet
+					// subscribed to
+					//
+					twitterHandlers = _.filter( twitterHandlers, function( handle ) {
+						return _.has( subscriptionsHandles, handle ) == false;
+					} );
+
+				}
+
+				_.each( twitterHandlers, function( handle ) {
+					subscriptionsHandles[ handle ] = 
+						Meteor.subscribe( "summary:" + handle, startEnd.depth );
+				} );
 
 				var plots = {};
 				_.each( reactiveSelectedNames.get(), function( name ) { 
 					plots[ name ] = Plot(); 
 				});
-
 				reactivePlots.set( plots );
 			}
 		});
@@ -170,22 +208,32 @@ if ( Meteor.isClient ) {
 };
 
 if (Meteor.isServer) { 
+
 	Meteor.startup(function () { }); 
-	Meteor.publish("summaries", function ( handles, depth ) {
-			var query = { depth : depth , twitter_handle : { $in : handles } };
-			var options = {
-				fields : {
-					// "_id" : 0,
-					// "date" : true,
-					// "depth" : true,
-					// "twitter_handle" : true,
-					// "counter" : 0,
-					// "sentiment" : 0,
-					"expire" : 0,
-				}
-			}
-  		return TwitterCollection.find( query, options );
-	});
+
+	var options = { limit : 600, fields : {  "person/twitterid" : true,  } };
+	var politicians = AccountsCollection.find( { }, options ).fetch();
+
+	_.each( politicians, function( politician ) {
+
+		//
+		// Twitter identifier
+		//
+		var handle = "@" + politician["person/twitterid"].toLowerCase();
+
+		//
+		// Publishing the date for each politician 
+		// subscription identification: "summary:@twitter_handle"
+		//
+		Meteor.publish("summary:" + handle, function ( depth ) {
+				var query = { depth : depth , twitter_handle : handle };
+				var options = { fields : { "expire" : 0, } };
+	  		return TwitterCollection.find( query, options );
+			} );
+	} );
+
+	
+
 	Meteor.publish("accounts", function() {
 		var options = { 
 				limit : 600, fields : { 
