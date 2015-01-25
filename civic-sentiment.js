@@ -28,7 +28,7 @@ if ( Meteor.isClient ) {
 	});
 
 	function updateTimeInterval( ) {
-		if( reactiveNow.get() === true ) {
+		// if( reactiveNow.get() === true ) {
 			var startEnd = reactiveStartEndDates.get();
 			var end = new Date();
 			var diff = +startEnd.end - (+startEnd.start);
@@ -40,7 +40,7 @@ if ( Meteor.isClient ) {
 				interval : startEnd.interval
 			};
 			reactiveStartEndDates.set( tmp );
-		}
+		// }
 	}
 
 	function updatePlotScale() {
@@ -49,7 +49,6 @@ if ( Meteor.isClient ) {
 		var start = startEnd.start;
 		var domain = [ start, end ];
 		var plots = reactivePlots.get();
-		var data = reactiveData.get();
 
 		if(_.isEmpty(startEnd))
 			return;
@@ -166,35 +165,24 @@ if ( Meteor.isClient ) {
 
 				if( startEnd.depth != lastDepth ) {
 
-					subscriptionsHandles = {};
 					lastDepth = startEnd.depth;
 
 				} else {
-
-					//
-					// Unsubscribing to handles that are no longer part of current
-					// user selection
-					// 
-					_.each( subscriptionsHandles, function( sub, handle ) {
-						if( contains( twitterHandlers, handle ) == false ) {
-							subscriptionsHandles[ handle ] .stop();
-							delete subscriptionsHandles[ handle ];
-						}
-					} );
 
 					//
 					// We will subscribe only to the handlers that we have not yet
 					// subscribed to
 					//
 					twitterHandlers = _.filter( twitterHandlers, function( handle ) {
-						return _.has( subscriptionsHandles, handle ) == false;
+						return Session.equals( "sub:" + handle, undefined );
 					} );
 
 				}
 
 				_.each( twitterHandlers, function( handle ) {
-					subscriptionsHandles[ handle ] = 
-						Meteor.subscribe( "summary:" + handle, startEnd.depth );
+					var subscriptionHandler = Meteor.subscribe( "summary:" + handle, startEnd.depth );
+					Session.set( "sub:" + handle, subscriptionHandler );
+					Tracker.autorun( function() { Session.set( "sub:ready:" + handle, subscriptionHandler.ready() ); })
 				} );
 
 				var plots = {};
