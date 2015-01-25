@@ -9,13 +9,17 @@ reactiveStartEndDates = new ReactiveVar( {}, _.isEqual );
 reactiveTimeframe = new ReactiveVar( "", _.isEqual );
 reactiveNow = new ReactiveVar( false, _.isEqual );
 
+Session.setDefault( "CurrentDepth", undefined );
+Session.setDefault( "CurrentInterval", undefined );
+
 // The purpose of these reactive variable is to store 
 // the data loaded from SelectedNames and StartEndDates
 reactiveData = new ReactiveVar( {}, _.isEqual );
 reactivePlots = new ReactiveVar( {}, _.isEqual );
-reactiveTweetCount = new ReactiveVar( {}, _.isEqual );
 
 NameToTwitterID = {};
+
+NameToCursor = {};
 
 updateAddressBar = function() {
 	//
