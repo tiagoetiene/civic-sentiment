@@ -1,5 +1,6 @@
 Template.AccountT.helpers({
 	subscriptionIsReady : function() {
-		return reactiveSubscriptionHandle.get().ready();
+		var handle = twitterIdKey( this[ "person/twitterid" ] );
+		return Session.get( "sub:ready:" + handle );
 	}
 });
