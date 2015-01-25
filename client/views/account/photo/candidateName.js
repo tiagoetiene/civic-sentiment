@@ -6,7 +6,6 @@ Template.CandidateNameT.helpers({
 		return "black";
 	},
 	tweets_count : function() {
-		var tweetCount = reactiveTweetCount.get();
-		return tweetCount[ this["person/name"] ] + ' ';
+		return Session.get( "tweets:" + this["person/name"] ) + ' ';
 	}
 });
