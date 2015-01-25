@@ -20,7 +20,7 @@ NameToTwitterID = {};
 updateAddressBar = function() {
 	//
 	Tracker.autorun( function() { pathUpdater();  } );
-	Tracker.autorun( function() { updateData(); } );
+	Tracker.autorun( function() { newUpdateData(); } );
 
 	// These two methods are there in order to track changes made to the address bar that should
 	// be reflected into the widgets
