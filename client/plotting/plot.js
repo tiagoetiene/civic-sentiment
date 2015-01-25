@@ -19,8 +19,6 @@ Plot = function() {
 	function chart( selection ) {
 		if(svg === undefined) {
 
-			console.log( "####" )
-
 			width = parseInt(selection.style('width'));
 
 			// We retrieve the current svg attached to the
