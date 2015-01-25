@@ -67,7 +67,7 @@ Plot = function() {
 			.range( [ height - 10, 10 ] )
 			.domain( [-1, 1] );
 
-		plotCurves(plot.select('#pos'), data, y_pos_valuer, colors[0], 0.5);
+		plotCurves( plot.select('#pos'), data, y_pos_valuer, colors[ 0 ], 0.5 );
 		// plotCurves(plot.select('#neg').select('path'), data, y_neg_valuer, colors[1], 0.5);    
 		// plotCurves(plot.select('#neu').select('path'), data, y_sum_valuer, 'darkgreen', 0.5);    
 		
