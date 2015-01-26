@@ -45,7 +45,7 @@ newUpdateData = function() {
 				//
 				// Stop listening
 				// 
-				console.log( "* stopping handler" );
+				// console.log( "* stopping handler" );
 				handlers[ key ].stop();
 
 				// 
@@ -65,7 +65,7 @@ newUpdateData = function() {
 	
 	}
 
-	console.log( "* List of names to be updated: ", names );
+	// console.log( "* List of names to be updated: ", names );
 
 	//
 	// Observing changes
@@ -106,7 +106,7 @@ newUpdateData = function() {
 		} );
 	});
 
-	console.log( "* current data: ", data );
+	// console.log( "* current data: ", data );
 }
 
 // updateData = function() {
