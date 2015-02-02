@@ -1,9 +1,15 @@
 <template name="CandidateNameT">
 	<br/>
+	<h5 class="text-center positionCSS" style="{{color}};"> 
+		{{position}}
+	</h5>
 	<h4 class="text-center cadidateName" style="{{color}};"> 
 		{{name}}
 	</h4>
-	<h4 class="text-center">
+	<h4 class="text-center tweets">
 		{{tweets_count}} {{i18n "tweets"}}
+	</h4>
+	<h4 class="text-center">
+		<img src={{party_icon}} style="height:30px; " />
 	</h4>
 </template>

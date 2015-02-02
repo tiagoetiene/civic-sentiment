@@ -4,8 +4,10 @@ Template.OptionsT.helpers({
 	dataIsLoaded : function() {
 		return reactivePoliticianSubscriptionHandler.get().ready();
 	},
-	group : function() {
-		var options = { sort : { "state" : 1 }, fields : { "state" : true } };
+	state : function() {
+		var options = { sort : { "state" : 1 }, 
+			fields : { "state" : true }
+		};
 		var politicians = AccountsCollection.find( {}, options ).fetch();
 		return _.uniq( politicians.map( function( d ) { return d["state"]; } ) );
 	},
@@ -16,21 +18,49 @@ Template.OptionsT.helpers({
 		}
 		return i18n( "options." + String( this ) );
 	},
-	listOfPoliticians : function() {
-		var options = { sort : {"person/name" : 1}, fields : { "person/name" : true, "person/twitterid" : true } };
+	politiciansPerState : function() {
+		var options = { 
+			sort : {"person/name" : 1}, 
+			fields : { "person/name" : true, "person/twitterid" : true },
+		};
 		return AccountsCollection.find( { "state" : String( this ) }, options).fetch();
 	}
 });
 
 Template.OptionsT.created = function() {
-	Session.set( "politicianCount", 0 );
 }
 
-Template.OptionsT.rendered = function() {
+Template.ListOfPoliticiansT.rendered = function() {
+
+	//
+	// Hack needed to 
+	//
+	var handle = setInterval( function() {
+		var selection = $( "#e1" );
+		if( _.isUndefined( selection[ 0 ] ) == false ) {
+
+			selection
+				.selectpicker()
+				.selectpicker( "refresh" )
+				.selectpicker( "render" )
+				.on( "change", function( e ) {
+					
+					var names = []
+					_.each(e.target, function( t ) {
+						if( t.selected === true ) {
+							names.push( t.value );
+						}
+					});
+
+					reactiveUserSelectedNames.set( names );
+
+				});
+				clearInterval( handle );
+		}
+	}, 200 );
 }
 
 Template.OptionT.rendered = function() {
-	Session.set( "politicianCount" , Session.get( "politicianCount" ) + 1);
 }
 
 Template.OptionT.helpers({
@@ -47,39 +77,7 @@ Template.OptionT.helpers({
 Template.OptionT.helpers( {
 	name : function() {
 		// return this["person/name"].replace(/ *\[.*\]/, "");
-		NameToTwitterID[ this["person/name"] ]  = "@"+ this["person/twitterid"].toLowerCase();
+		NameToTwitterID[ this["person/name"] ] = "@"+ this["person/twitterid"].toLowerCase();
 		return this["person/name"];
 	}
 });
-
-updateCandidateOptionsCombobox = function( ) {
-
-	Tracker.autorun( function() {
-		if( Session.get( "politicianCount" ) == AccountsCollection.find( {} ).count() ) {
-			$( "#e1" )
-				.selectpicker( "render" )
-				.selectpicker( "refresh" );
-			$( "#e1" )
-				.on( "change", function( e ) {
-					var names = []
-					_.each(e.target, function( t ) {
-						if( t.selected === true ) {
-							names.push( t.value );
-						}
-					});
-					reactiveUserSelectedNames.set( names );
-				});
-			Session.set( "politicianCount", 0 );
-		}
-	});
-
-	Meteor.setTimeout( function() {
-		var names = reactiveSelectedNames.get();
-		if( names.length ) {
-			$("#e1")
-				.selectpicker( "val",  names)
-				.selectpicker( "render" )
-				.selectpicker( "refresh" );
-		}
-	}, 5000);
-}

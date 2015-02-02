@@ -27,33 +27,18 @@ if ( Meteor.isClient ) {
 		}
 	});
 
-	function updateTimeInterval( ) {
-		// if( reactiveNow.get() === true ) {
-			var startEnd = reactiveStartEndDates.get();
-			var end = new Date();
-			var diff = +startEnd.end - (+startEnd.start);
-			var start = new Date( +end - diff );
-			var tmp = {
-				start : start,
-				end : end,
-				depth : startEnd.depth,
-				interval : startEnd.interval
-			};
-			reactiveStartEndDates.set( tmp );
-		// }
-	}
+	updateAddressBar();
 
 	function updatePlotScale() {
-		var startEnd = reactiveStartEndDates.get();
-		var end = startEnd.end;
-		var start = startEnd.start;
-		var domain = [ start, end ];
-		var plots = reactivePlots.get();
 
-		if(_.isEmpty(startEnd))
+		var end = new Date( now() );
+		var start = new Date( now() - 100 * Session.get( "CurrentInterval" ) );
+		var domain = [ start, end ];
+
+		if( _.isDate( start ) == false || _.isDate( end  == false) )
 			return;
 
-		_.each( reactiveSelectedNames.get() , function( name ) {
+		_.each( reactiveUserSelectedNames.get() , function( name ) {
 			var plot = plots[ name ];
 			if(plot !== undefined) {
 				plot
@@ -79,29 +64,19 @@ if ( Meteor.isClient ) {
 				// We only create a plot iff the div has been created
 				if( div[ 0 ][ 0 ] != null ) {
 					plot( div );
-					plot.domain( [  start , end ]  ).data( data[ name ] ).update();
+					var summaries = data[ name ].fetch();
+					var tweetsCount = 0;
+					_.each( summaries, function( summary ) { tweetsCount += summary.counter; } );
+					Session.set( "tweets:" + name, tweetsCount );
+					plot.domain( [ start , end ]  ).data( summaries ).update();
 				}	
 			}
 		});
 	}
 
-	var intervalPlotHandler, intervalTimeHandler, interval;
-	Tracker.autorun( function() {
-		var startEnd = reactiveStartEndDates.get();
+	
+	var intervalPlotHandler = Meteor.setInterval( function() { updatePlotScale(); }, 1000 );
 
-		if(interval == startEnd.interval) 
-			return;
-
-		interval = startEnd.interval;
-
-		clearInterval( intervalTimeHandler );
-		clearInterval( intervalPlotHandler );
-
-		intervalPlotHandler = Meteor.setInterval( function() { updatePlotScale(); }, 1000 );
-		intervalTimeHandler = Meteor.setInterval( function() { updateTimeInterval(); }, 1000 );
-	});
-
-	var lastDepth = -1;
 	Router.map( function () {
 		this.route('home', { 
 			path : '/',
@@ -116,81 +91,6 @@ if ( Meteor.isClient ) {
 		this.route('AccountsT', { 
 			layoutTemplate : "CandidateSelectionT",
 			path : 'realtime',
-			waitOn : function() {
-				return Meteor.subscribe( "accounts" );
-			},
-			data : function() {
-				var names;
-				var startEnd;
-
-				// I. Processing URL parameters. We expect two parameters: selected candidates and timeframe
-				// The parsed parameters  will be stored into the reactive vars
-				if(this.params.query.p) {
-					names = _.filter( this.params.query.p.split(','), function(name) { 
-						return _.isEmpty(name) == false; 
-					} );
-					reactiveSelectedNames.set( names );
-				}
-
-				// If no candidades are selected, we do a housekeeping and 
-				// return ....
-				if( names == undefined  ) {
-					reactiveSelectedNames.set( [] );
-				}
-
-				if( this.params.query.t ) {
-					startEnd = timeUpdater( this.params.query.t );
-					reactiveUserSelectedTimeframe.set( this.params.query.t );
-				}
-				else {
-					reactiveUserSelectedTimeframe.set("past month");
-					return;
-				}
-
-				if( names == undefined )
-					return;
-
-				var twitterHandlers = [];
-				_.each( names, function( name ) {
-						if( _.has( NameToTwitterID, name ) ) {
-							twitterHandlers.push( NameToTwitterID[ name ] );
-						}
-				} );
-
-				console.assert( _.isUndefined( startEnd.depth ) == false );
-				console.assert( _.isUndefined( startEnd.interval ) == false );
-
-				Session.set( "CurrentDepth", startEnd.depth );
-				Session.set( "CurrentInterval", startEnd.interval );
-
-				if( startEnd.depth != lastDepth ) {
-
-					lastDepth = startEnd.depth;
-
-				} else {
-
-					//
-					// We will subscribe only to the handlers that we have not yet
-					// subscribed to
-					//
-					twitterHandlers = _.filter( twitterHandlers, function( handle ) {
-						return Session.equals( "sub:" + handle, undefined );
-					} );
-
-				}
-
-				_.each( twitterHandlers, function( handle ) {
-					var subscriptionHandler = Meteor.subscribe( "summary:" + handle, startEnd.depth );
-					Session.set( "sub:" + handle, subscriptionHandler );
-					Tracker.autorun( function() { Session.set( "sub:ready:" + handle, subscriptionHandler.ready() ); })
-				} );
-
-				var plots = {};
-				_.each( reactiveSelectedNames.get(), function( name ) { 
-					plots[ name ] = Plot(); 
-				});
-				reactivePlots.set( plots );
-			}
 		});
 	});
 };
@@ -214,9 +114,21 @@ if (Meteor.isServer) {
 		// subscription identification: "summary:@twitter_handle"
 		//
 		Meteor.publish("summary:" + handle, function ( depth ) {
-				var query = { depth : depth , twitter_handle : handle };
+				var histogramBins = 100; 
+				var interval = Math.pow( 4, depth ) * 1000;
+				var query = { 
+					depth : depth, 
+					twitter_handle : handle, 
+					date : { 
+						$gte : +(+(new Date())- histogramBins *  interval) 
+					} 
+				};
 				var options = { fields : { "expire" : 0, } };
-	  		return TwitterCollection.find( query, options );
+				var cursor = TwitterCollection.find( query, options );
+				// console.log( "Query:", query, options );
+				// console.log( "Count:", TwitterCollection.find( query, options ).count() );
+				// console.log( "\n" );
+	  		return cursor;
 			} );
 	} );
 

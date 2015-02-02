@@ -1,11 +1,8 @@
 Template.AccountsT.helpers({
 	accounts : function() {
-		var array = AccountsCollection.find( { "person/name" : { $in : reactiveSelectedNames.get() } } ).fetch();
-		console.log( array, reactiveSelectedNames.get() );
+		var names = reactiveUserSelectedNames.get();
+		var query = { "person/name" : { $in : names } };
+		var array = AccountsCollection.find( query ).fetch();
 		return array;
 	},
 });
-
-Template.AccountsT.rendered = function() {
-	updateAddressBar();
-}

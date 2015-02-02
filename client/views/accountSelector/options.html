@@ -1,9 +1,3 @@
-<!--
-OptionT is separated because we need to call .selectpicker()
-everytime an option is rendered. If we do not do that, then 
-we will have to figure out a way to wait for the option to load
-and only then call .selectpicker()
--->
 <template name="OptionT">
 	<option data-icon="./resource/democrat.svg" data-subtext="{{partyIcon}}" value={{name}}> 
 		{{name}} 
@@ -13,9 +7,9 @@ and only then call .selectpicker()
 <template name="OptionsT">
 	{{#if dataIsLoaded}}
 		<select id="e1" class="col-md-12" multiple data-size="10" data-show-subtext="true" data-live-search="true">	
-			{{#each group}}
+			{{#each state}}
 				<optgroup label={{label}}>
-					{{#each listOfPoliticians}} 
+					{{#each politiciansPerState}} 
 						{{> OptionT}}
 					{{/each}}
 				</optgroup> 
@@ -24,4 +18,8 @@ and only then call .selectpicker()
 	{{else}}
 		<h3> Hang on, loading the list of politicians... </h3>
 	{{/if}}
+</template>
+
+<template name="ListOfPoliticiansT">
+	{{> OptionsT}}
 </template>

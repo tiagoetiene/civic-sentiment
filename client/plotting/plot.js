@@ -65,7 +65,7 @@ Plot = function() {
 		y = d3.scale
 			.linear()
 			.range( [ height - 10, 10 ] )
-			.domain( [-1, 1] );
+			.domain( [ d3.min( data, y_pos_valuer ) , d3.max( data, y_pos_valuer ) ] );
 
 		plotCurves( plot.select('#pos'), data, y_pos_valuer, colors[ 0 ], 0.5 );
 		// plotCurves(plot.select('#neg').select('path'), data, y_neg_valuer, colors[1], 0.5);    
@@ -177,7 +177,7 @@ Plot = function() {
                 .attr("text-anchor", "start")
                 .attr("y", 6)
                 .attr("font-size", 20)
-                .attr("fill", colors[0])
+                // .attr("fill", colors[0])
                 .attr("transform", "translate(" + (10) + "," + (height * 0.48) + ")" + "rotate(-90)")
                 .text(i18n("like"));
 
@@ -186,7 +186,7 @@ Plot = function() {
                 .attr("text-anchor", "start")
                 .attr("y", 6)
                 .attr("font-size", 20)
-                .attr("fill", colors[1])
+                // .attr("fill", colors[1])
                 .attr("transform", "translate(" + (10) + "," + (height*0.52) + ")" + "rotate(90)")
                 .text(i18n("dislike"));
 
@@ -200,16 +200,15 @@ Plot = function() {
                  .attr('stroke-width', 3)
                  .attr('stroke-opacity', 0.5)
                  .attr('fill', 'white')
-                 .attr('pointer-events', 'none')
-                 .each(function() { d3.select(this).text( forceLocalization( d3.select(this).text() ) ); });
+                 .attr('pointer-events', 'none');
+                 
             axis.append('g')
                  .attr('transform', 'translate(' + 0 + ',' + height / 2 + ')')
                  .attr('fill', 'lightgray')
                  .call(d3.svg.axis().ticks([8]).scale(x).orient("bottom"))
                  .selectAll('text')
                  .attr('fill', 'black')
-                 .attr('pointer-events', 'none')
-                 .each(function() { d3.select(this).text( forceLocalization( d3.select(this).text() ) ); });
+                 .attr('pointer-events', 'none');
 
 	}
 
