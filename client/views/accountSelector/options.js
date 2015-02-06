@@ -40,8 +40,6 @@ Template.ListOfPoliticiansT.rendered = function() {
 		if( _.isUndefined( selection[ 0 ] ) == false ) {
 
 			selection
-				.selectpicker()
-				.selectpicker( "refresh" )
 				.selectpicker( "render" )
 				.on( "change", function( e ) {
 					
