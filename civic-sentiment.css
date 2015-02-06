@@ -5,6 +5,12 @@
 	box-shadow: inset 1px -1px 1px #444, inset -1px 1px 1px #444;
 }*/
 
+.myAlignVertically {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
 .nopadding {
    padding: 0 !important;
    margin: 0 !important;

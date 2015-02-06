@@ -142,6 +142,8 @@ if (Meteor.isServer) {
 				limit : 600, fields : { 
 				"person/name" : true, 
 				"person/twitterid" : true, 
+				"person/firstname" : true, 
+				"party" : true, 
 				"state" : true, 
 			}
 		};
