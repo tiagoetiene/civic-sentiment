@@ -5,11 +5,11 @@ Template.CandidateNameT.helpers({
 			return "Senator";
 		} else if ( name.match( /Rep\./g ) ) {
 			return "Representative";
-		} else if ( name.match( /President/g ) ) {
-			return "President";
 		} else if ( name.match( /Vice President/g ) ) {
 			return "Vice President";
-		}
+		} else if ( name.match( /President/g ) ) {
+			return "President";
+		} 
 		return "";
 	},
 	name : function() {
