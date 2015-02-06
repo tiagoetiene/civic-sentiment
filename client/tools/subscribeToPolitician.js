@@ -66,7 +66,8 @@ subscribeToUserSelectedPoliticians = function( ) {
 			if( subscriptionHandle.ready() ) {
 				console.log( "\t* Subsciption is ready!" );
 				Session.set( "sub:ready:" + nameDepth, true );
-				trackerHandle.stop();
+				if( _.isUndefined( trackerHandle ) == false )
+					trackerHandle.stop();
 			} else {
 				console.log( "\t* Hang on.... Subscription is not ready..." );
 			}
