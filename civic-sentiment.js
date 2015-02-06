@@ -61,13 +61,16 @@ if ( Meteor.isClient ) {
 					.replace( /\[/g, "_" )
 					.replace( /\]/g, "_" ) );
 
+
+
+				var summaries = data[ name ].fetch();
+				var tweetsCount = 0;
+				_.each( summaries, function( summary ) { tweetsCount += summary.counter; } );
+				Session.set( "tweets:" + name, tweetsCount );
+
 				// We only create a plot iff the div has been created
 				if( div[ 0 ][ 0 ] != null ) {
 					plot( div );
-					var summaries = data[ name ].fetch();
-					var tweetsCount = 0;
-					_.each( summaries, function( summary ) { tweetsCount += summary.counter; } );
-					Session.set( "tweets:" + name, tweetsCount );
 					plot.domain( [ start , end ]  ).data( summaries ).update();
 				}	
 			}
