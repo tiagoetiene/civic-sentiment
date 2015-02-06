@@ -113,8 +113,9 @@ if (Meteor.isServer) {
 
 	Meteor.startup(function () { }); 
 
+	var nonEmptyTwitterIds = { "person/twitterid" : { $ne : "" } };
 	var options = { limit : 600, fields : {  "person/twitterid" : true,  } };
-	var politicians = AccountsCollection.find( { }, options ).fetch();
+	var politicians = AccountsCollection.find( nonEmptyTwitterIds, options ).fetch();
 
 	_.each( politicians, function( politician ) {
 
@@ -158,7 +159,7 @@ if (Meteor.isServer) {
 				"state" : true, 
 			}
 		};
-		return AccountsCollection.find( { }, options );
+		return AccountsCollection.find( nonEmptyTwitterIds, options );
 	});
 }
 
