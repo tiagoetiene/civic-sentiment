@@ -71,7 +71,7 @@ Plot = function() {
 		// plotCurves(plot.select('#neg').select('path'), data, y_neg_valuer, colors[1], 0.5);    
 		// plotCurves(plot.select('#neu').select('path'), data, y_sum_valuer, 'darkgreen', 0.5);    
 		
-		selectionHandler(plot.select('#pos').select('#selection'), data, y_pos_valuer, colors[0]);
+		selectionHandler(plot.select('#pos').select('#selection'), data, y_pos_valuer, colors[1]);
 		selectionHandler(plot.select('#neg').select('#selection'), data, y_neg_valuer, colors[1]);
 
 		renderAxis(svg.select('#axis'));
