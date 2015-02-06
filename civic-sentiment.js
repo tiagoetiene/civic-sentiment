@@ -129,7 +129,7 @@ if (Meteor.isServer) {
 		// subscription identification: "summary:@twitter_handle"
 		//
 		Meteor.publish("summary:" + handle, function ( depth ) {
-				var histogramBins = 100; 
+				var histogramBins = 400; 
 				var interval = Math.pow( 4, depth ) * 1000;
 				var query = { 
 					depth : depth, 
@@ -140,9 +140,6 @@ if (Meteor.isServer) {
 				};
 				var options = { fields : { "expire" : 0, } };
 				var cursor = TwitterCollection.find( query, options );
-				// console.log( "Query:", query, options );
-				// console.log( "Count:", TwitterCollection.find( query, options ).count() );
-				// console.log( "\n" );
 	  		return cursor;
 			} );
 	} );

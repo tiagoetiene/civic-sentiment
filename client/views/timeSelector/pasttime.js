@@ -4,7 +4,7 @@ Template.PastTimeT.rendered = function() {
 		var milliseconds = getTimeFrame("past month");
 		var depthIntervalPair = findDepthAndInterval( Math.abs( milliseconds ) / HistogramBins );
 
-		Session.set( "CurrentDepth", depthIntervalPair.depth );
+		Session.set( "CurrentDepth", depthIntervalPair.depth-1 );
 		Session.set( "CurrentInterval", Math.abs( milliseconds ) / HistogramBins );
 	});
 	$("#pastWeek").change( function(e) { 
@@ -12,7 +12,7 @@ Template.PastTimeT.rendered = function() {
 		var milliseconds = getTimeFrame("past week");
 		var depthIntervalPair = findDepthAndInterval( Math.abs( milliseconds ) / HistogramBins  );
 
-		Session.set( "CurrentDepth", depthIntervalPair.depth );
+		Session.set( "CurrentDepth", depthIntervalPair.depth-1 );
 		Session.set( "CurrentInterval", Math.abs( milliseconds ) / HistogramBins );
 	});
 	$("#past3Day").change( function(e) { 
@@ -20,7 +20,7 @@ Template.PastTimeT.rendered = function() {
 		var milliseconds = getTimeFrame("past 3 days");
 		var depthIntervalPair = findDepthAndInterval( Math.abs( milliseconds ) / HistogramBins  );
 
-		Session.set( "CurrentDepth", depthIntervalPair.depth );
+		Session.set( "CurrentDepth", depthIntervalPair.depth-1 );
 		Session.set( "CurrentInterval", Math.abs( milliseconds ) / HistogramBins );
 	});
 	$("#pastDay").change( function(e) { 
@@ -28,7 +28,7 @@ Template.PastTimeT.rendered = function() {
 		var milliseconds = getTimeFrame("past day");
 		var depthIntervalPair = findDepthAndInterval( Math.abs( milliseconds ) / HistogramBins  );
 
-		Session.set( "CurrentDepth", depthIntervalPair.depth );
+		Session.set( "CurrentDepth", depthIntervalPair.depth-1 );
 		Session.set( "CurrentInterval", Math.abs( milliseconds ) / HistogramBins );
 	});
 	$("#past8Hour").change( function(e) { 
@@ -36,7 +36,7 @@ Template.PastTimeT.rendered = function() {
 		var milliseconds = getTimeFrame("past 8 hours");
 		var depthIntervalPair = findDepthAndInterval( Math.abs( milliseconds ) / HistogramBins  );
 
-		Session.set( "CurrentDepth", depthIntervalPair.depth );
+		Session.set( "CurrentDepth", depthIntervalPair.depth-1 );
 		Session.set( "CurrentInterval", Math.abs( milliseconds ) / HistogramBins );
 	});
 	$("#past1Hour").change( function(e) { 
@@ -44,7 +44,7 @@ Template.PastTimeT.rendered = function() {
 		var milliseconds = getTimeFrame("past hour");
 		var depthIntervalPair = findDepthAndInterval( Math.abs( milliseconds ) / HistogramBins  );
 
-		Session.set( "CurrentDepth", depthIntervalPair.depth );
+		Session.set( "CurrentDepth", depthIntervalPair.depth-1 );
 		Session.set( "CurrentInterval", Math.abs( milliseconds ) / HistogramBins );
 	});
 	$("#past5Min").change( function(e) { 
@@ -52,7 +52,7 @@ Template.PastTimeT.rendered = function() {
 		var milliseconds = getTimeFrame("past 5 min");
 		var depthIntervalPair = findDepthAndInterval( Math.abs( milliseconds ) / HistogramBins  );
 
-		Session.set( "CurrentDepth", depthIntervalPair.depth );
+		Session.set( "CurrentDepth", depthIntervalPair.depth-1 );
 		Session.set( "CurrentInterval", Math.abs( milliseconds ) / HistogramBins );
 	});
 }
