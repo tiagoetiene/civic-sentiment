@@ -31,7 +31,7 @@ subscribeToUserSelectedPoliticians = function( ) {
 	// We store in this variable all subscriptions that still need to be loaded
 	//
 	var newSub = _.filter( nameDepthList, function( nameDepth ) {
-		return _.has( currentSubscrptionHandles, nameDepth ) == false;
+		return true;
 	} );
 	console.log( "\t* Subscribing to", newSub );
 
