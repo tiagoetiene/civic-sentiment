@@ -5,6 +5,17 @@ reactiveSubscriptionHandle = new ReactiveVar(undefined, _.isEqual);
 
 if ( Meteor.isClient ) {
 
+	var DEBUG_MODE_ON = false;
+	if ( DEBUG_MODE_ON == false ) {
+	    console = console || {};
+	    console.log = function(){};
+
+	    console.log = function(){};
+	    console.error = function(){};
+	    console.count = function(){};
+	    console.info = function(){};
+	}
+
 	ruler = Ruler();
 
 	configInternationalization();
