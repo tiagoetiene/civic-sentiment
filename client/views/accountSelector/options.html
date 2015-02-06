@@ -5,19 +5,29 @@
 </template>
 
 <template name="OptionsT">
+	<div class="row" style="min-height:45px">
 	{{#if dataIsLoaded}}
-		<select id="e1" class="col-md-12" multiple data-size="10" data-show-subtext="true" data-live-search="true">	
-			{{#each state}}
-				<optgroup label={{label}}>
-					{{#each politiciansPerState}} 
-						{{> OptionT}}
-					{{/each}}
-				</optgroup> 
-			{{/each}}
-		</select>
+		<div class="col-12-sm">
+			<select id="e1" class="col-md-12" style="display:none" multiple data-size="10" data-show-subtext="true" data-live-search="true">	
+				{{#each state}}
+					<optgroup label={{label}}>
+						{{#each politiciansPerState}} 
+							{{> OptionT}}
+						{{/each}}
+					</optgroup> 
+				{{/each}}
+			</select>
+		</div>
 	{{else}}
-		<h3> Hang on, loading the list of politicians... </h3>
+		<div class="col-12-sm">
+			<div class="progress">
+	  	<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="70"
+	  aria-valuemin="0" aria-valuemax="100" style="width:100%">
+	  	</div>
+	  	</div>
+		</div>
 	{{/if}}
+	</div>
 </template>
 
 <template name="ListOfPoliticiansT">
