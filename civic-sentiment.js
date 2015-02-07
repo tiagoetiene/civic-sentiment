@@ -72,11 +72,29 @@ if ( Meteor.isClient ) {
 					.replace( /\[/g, "_" )
 					.replace( /\]/g, "_" ) );
 
-
-
-				var summaries = data[ name ].fetch();
 				var tweetsCount = 0;
-				_.each( summaries, function( summary ) { tweetsCount += summary.counter; } );
+				var summaries = data[ name ].fetch();
+				var map = {};
+				_.each( summaries, function( summary, idx ) { 
+					tweetsCount += summary.counter; 
+					map[ summary.date ] = idx;
+				} );
+				var more = [];
+				var interval = 1000 * Math.round( Math.pow( 4, Session.get( "CurrentDepth" ) ) );
+				currentTime = Math.round( Math.floor( start / interval ) * interval );
+				for( var i = 0; i < 300; ++i ) {
+					if( currentTime > end ) {
+						break;
+					}
+					if( _.has( map, currentTime ) ) {
+						more.push( summaries[ map[ currentTime ] ] );	
+					} else {
+						more.push( { counter : 0, date : currentTime, sentiment : 0 } );	
+					}
+					currentTime += interval;
+				}
+				summaries = more;
+
 				Session.set( "tweets:" + name, tweetsCount );
 
 				// We only create a plot iff the div has been created
