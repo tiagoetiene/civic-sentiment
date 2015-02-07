@@ -5,16 +5,16 @@ reactiveSubscriptionHandle = new ReactiveVar(undefined, _.isEqual);
 
 if ( Meteor.isClient ) {
 
-	var DEBUG_MODE_ON = false;
-	if ( DEBUG_MODE_ON == false ) {
-	    console = console || {};
-	    console.log = function(){};
+	// var DEBUG_MODE_ON = false;
+	// if ( DEBUG_MODE_ON == false ) {
+	//     console = console || {};
+	//     console.log = function(){};
 
-	    console.log = function(){};
-	    console.error = function(){};
-	    console.count = function(){};
-	    console.info = function(){};
-	}
+	//     console.log = function(){};
+	//     console.error = function(){};
+	//     console.count = function(){};
+	//     console.info = function(){};
+	// }
 
 	ruler = Ruler();
 
@@ -25,18 +25,6 @@ if ( Meteor.isClient ) {
 	Template.Ruler.rendered = function() {
 		ruler(d3.select('#ruler'));
 	}
-
-	Template.home.helpers({
-		coverImage : function() {
-			return 'background : url(' + i18n('images.coverImage') + ') no-repeat; background-size:cover;';
-		}
-	});
-
-	Template.jumbotron.helpers({
-		background_image : function() {
-			return i18n('images.backgroundImage');
-		}
-	});
 
 	updateAddressBar();
 
@@ -124,7 +112,7 @@ if ( Meteor.isClient ) {
 	var intervalPlotHandler = Meteor.setInterval( function() { updatePlotScale(); }, 1000 );
 
 	Router.map( function () {
-		this.route('home', { 
+		this.route('HomeT', { 
 			path : '/',
 			waitOn : function() {
 				return Meteor.subscribe( "accounts" );
