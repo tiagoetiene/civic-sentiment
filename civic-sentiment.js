@@ -66,7 +66,9 @@ if ( Meteor.isClient ) {
 					.onmouseover( function( x ) { ruler.x( x ); } )
 					.onmouseout( function( x ) { ruler.x( 0.0 ); } );
 				var div = d3
-					.select( "#plot-"+ name
+					.select( "#plot-"+ nameDepth
+					.replace( "@", "" )
+					.replace( ":", "_" )
 					.replace( / /g, "_" )
 					.replace( /\./g, "_" )
 					.replace( /\[/g, "_" )
