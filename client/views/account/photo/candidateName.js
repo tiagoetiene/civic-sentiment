@@ -22,7 +22,9 @@ Template.CandidateNameT.helpers({
 		return "black";
 	},
 	tweets_count : function() {
-		return Session.get( "tweets:" + this["person/name"] ) + ' ';
+		var name = this["person/name"];
+		var depth = Session.get( "CurrentDepth" );
+		return Session.get( "tweets:" + twitterHandleDepthPair( name, depth ) );
 	},
 	party_icon : function() {
 		var name = this["person/name"];
