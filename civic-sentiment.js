@@ -42,6 +42,7 @@ if ( Meteor.isClient ) {
 
 	function updatePlotScale() {
 
+		var depth = Session.get( "CurrentDepth" );
 		var end = new Date( now() );
 		var start = new Date( now() - 100 * Session.get( "CurrentInterval" ) );
 		var domain = [ start, end ];
@@ -49,8 +50,15 @@ if ( Meteor.isClient ) {
 		if( _.isDate( start ) == false || _.isDate( end  == false) )
 			return;
 
-		_.each( reactiveUserSelectedNames.get() , function( name ) {
-			var plot = plots[ name ];
+		var names = reactiveUserSelectedNames.get();
+
+		var nameDepthList = [];
+		_.each( names, function( name ) {
+			nameDepthList.push( twitterHandleDepthPair( name, depth ) );	
+		} );
+
+		_.each( nameDepthList , function( nameDepth ) {
+			var plot = plots[ nameDepth ];
 			if(plot !== undefined) {
 				plot
 					.x( function(d) { return d.date; } )
@@ -74,16 +82,20 @@ if ( Meteor.isClient ) {
 					.replace( /\[/g, "_" )
 					.replace( /\]/g, "_" ) );
 
+				var summaries = [];
+
+				if( _.has( data, nameDepth ) == true )
+					summaries = data[ nameDepth ];
+
 				var tweetsCount = 0;
-				var summaries = data[ name ].fetch();
 				var map = {};
 				_.each( summaries, function( summary, idx ) { 
 					tweetsCount += summary.counter; 
 					map[ summary.date ] = idx;
 				} );
 				var more = [];
-				var interval = 1000 * Math.round( Math.pow( 4, Session.get( "CurrentDepth" ) ) );
-				currentTime = Math.round( Math.floor( start / interval ) * interval );
+				var interval = 1000 * Math.round( Math.pow( 4, depth ) );
+				var currentTime = Math.round( Math.floor( start / interval ) * interval );
 				for( var i = 0; i < 300; ++i ) {
 					if( currentTime > end ) {
 						break;
@@ -97,7 +109,7 @@ if ( Meteor.isClient ) {
 				}
 				summaries = more;
 
-				Session.set( "tweets:" + name, tweetsCount );
+				Session.set( "tweets:" + nameDepth, tweetsCount );
 
 				// We only create a plot iff the div has been created
 				if( div[ 0 ][ 0 ] != null ) {
