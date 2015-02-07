@@ -7,8 +7,8 @@
 <template name="OptionsT">
 	<div class="row" style="min-height:45px">
 	{{#if dataIsLoaded}}
-		<div class="col-12-sm">
 			<select id="e1" class="col-md-12" style="display:none" multiple data-size="10" data-show-subtext="true" data-live-search="true">	
+		<div class="col-sm-12">
 				{{#each state}}
 					<optgroup label={{label}}>
 						{{#each politiciansPerState}} 
@@ -19,7 +19,7 @@
 			</select>
 		</div>
 	{{else}}
-		<div class="col-12-sm" style="height:35px;">
+		<div class="col-sm-12" style="height:35px;">
 			<div class="progress" style="height:35px;">
 	  	<div class="progress-bar progress-bar-striped progress-bar-warning active" role="progressbar" 
 	  aria-valuemin="0" aria-valuemax="100" style="width:100%;">
