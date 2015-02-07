@@ -62,10 +62,13 @@ Plot = function() {
 			.range( [ 35 , width-padding ] )
 			.domain( domain );
 
+		var max = Math.max( d3.max( data, y_pos_valuer ), Math.abs( d3.min( data, y_pos_valuer ) ) );
+		if( max == 0 ) max = 1;
+
 		y = d3.scale
 			.linear()
 			.range( [ height - 10, 10 ] )
-			.domain( [ d3.min( data, y_pos_valuer ) , d3.max( data, y_pos_valuer ) ] );
+			.domain( [ -max , +max ] );
 
 		plotCurves( plot.select('#pos'), data, y_pos_valuer, colors[ 0 ], 0.5 );
 		// plotCurves(plot.select('#neg').select('path'), data, y_neg_valuer, colors[1], 0.5);    
