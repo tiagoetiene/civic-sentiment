@@ -72,6 +72,10 @@ body {
     /*background-color: #eee;*/
 }
 
+.politicianPhotoHeight {
+  height:165px;
+}
+
 /* Extra markup and styles for table-esque vertical and horizontal centering */
 .site-wrapper {
   display: table;
