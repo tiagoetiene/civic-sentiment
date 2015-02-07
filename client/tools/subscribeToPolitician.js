@@ -1,87 +1,59 @@
-var currentSubscrptionHandles = {};
-var currentNameDepthList = [];
+var subscriptionHandleList = {};
 
-function key( name, depth ) {
-	return NameToTwitterID[ name ] + ":" + depth;
+subscribeToPolitician = function( twitterHandle, depth ) {
+	console.log( "* subscribeToPolitician", twitterHandle, depth );
+	var handleDepthPair = twitterHandle + ":" + depth;
+	Session.set( "sub:ready:" + handleDepthPair, false );	
+	console.log( "* End (subscribeToPolitician)\n\n" );
+	return Meteor.subscribe( "summary:" + twitterHandle, depth, function() {
+			Session.set( "sub:ready:" + handleDepthPair, true );					
+	} );
+	console.log( "* End (subscribeToPolitician)" );
 }
 
 subscribeToUserSelectedPoliticians = function( ) {
-	console.log( "* subscribeToPolitician method" );
+	console.log( "* subscribeToUserSelectedPoliticians" );
 
 	var depth = Session.get( "CurrentDepth" );
+	var names = reactiveUserSelectedNames.get();
+
 
 	//
 	// Build the list of names that we will work with
+	// We will subscribe only to names that have not been yet subscribed to
 	// 
 	var nameDepthList = [];
-	_.each( reactiveUserSelectedNames.get(), function( name ) {
-		nameDepthList.push( key( name, depth ) );
+	_.each( names, function( name ) {
+		var key = twitterHandleDepthPair( name, depth );
+		if( _.has( subscriptionHandleList, key ) == false ) {
+			nameDepthList.push( key );	
+		}
 	} );
 
-	//
-	// We store in this variable all subscriptions that are no longer needed.
-	//
-	var unusedSub = _.filter( currentNameDepthList, function( nameDepth ) {
-		return contains( nameDepthList, nameDepth ) == false;
-	} );
-	console.log( "\t* Unsubscribing to", unusedSub );
-
 
 	//
-	// We store in this variable all subscriptions that still need to be loaded
+	// Unsubscribe to some of the current subscriptions
 	//
-	var newSub = _.filter( nameDepthList, function( nameDepth ) {
-		return true;
-	} );
-	console.log( "\t* Subscribing to", newSub );
-
-
-	//
-	// Stop listenting to any changes to the unused subscriptions
-	//
-	_.each( unusedSub, function( nameDepth ) {
-		
-		currentSubscrptionHandles[ nameDepth ].stop()
-		
-		delete currentSubscrptionHandles[ nameDepth ];
-		delete Session.keys[ "sub:ready:" + nameDepth ];
-
-		console.log( "\t\t* Removing session var", "sub:ready:" + nameDepth );
+	_.each( subscriptionHandleList, function( handle, nameDepth ) {
+		if( _.has( nameDepthList, nameDepth ) == false ) {
+			// handle.stop();
+			delete subscriptionHandleList[ nameDepth ];
+		}
 	} );
 
-	
-	_.each( newSub, function( nameDepth ) {
+
+	//
+	// Subscribing to those names
+	//	
+	_.each( nameDepthList, function( nameDepth ) {
 		var twitterHandle = nameDepth.substring(0,nameDepth.indexOf(":"));
-		var subscriptionHandle = Meteor.subscribe( "summary:" + twitterHandle, depth );
-		currentSubscrptionHandles[ nameDepth ] = subscriptionHandle;
-	
-		Session.set( "sub:ready:" + nameDepth, false );		
-
-		//
-		// Set session variable "sub:read:@...." to true when the subscripton data is
-		// ready and stop the autorun
-		//
-		var trackerHandle = Tracker.autorun( function waitForSubscription() {
-			console.log( "* Tracker.autorun waitForSubscription" );
-			if( subscriptionHandle.ready() ) {
-				console.log( "\t* Subsciption is ready!" );
-				Session.set( "sub:ready:" + nameDepth, true );
-				if( _.isUndefined( trackerHandle ) == false )
-					trackerHandle.stop();
-			} else {
-				console.log( "\t* Hang on.... Subscription is not ready..." );
-			}
-			console.log( "* End (Tracker)" );
+		Meteor.defer( function() {
+				var handle = subscribeToPolitician( twitterHandle, depth );
+				console.assert( _.has( subscriptionHandleList, nameDepth ) == false );
+				subscriptionHandleList[ nameDepth ] = handle;
 		} );
 	} );
 	
-	currentNameDepthList = [];
-	_.each( nameDepthList, function( nameDepth ) {
-		currentNameDepthList.push( nameDepth );
-	} );
-	
-
-	console.log( "\t* Current names", currentNameDepthList );
-	console.log( "\t* Current sub handles", currentSubscrptionHandles );
-	console.log( "* End\n\n");
+	console.log( "* End (subscribeToUserSelectedPoliticians)\n\n");
 }
+

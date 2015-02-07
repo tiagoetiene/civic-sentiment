@@ -1,14 +1,33 @@
 data = { };
 plots = { }
-var handlers = { };
-var lastDepth = -1;
 
 HistogramBins = 100;
 
-newUpdateData = function() {
+function observeData( twitterHandle, depth, start, onAdd ) {
+	console.log( "* observeData");
+	var query = { 
+		depth : depth,
+		twitter_handle : twitterHandle,
+		date : { $gte: +start }
+	};
 
-	var names = reactiveUserSelectedNames.get();
-	var depth = Session.get( "CurrentDepth" );
+	var options = {
+		fields : {
+			depth : false,
+			twitter_handle : false,
+		}
+	};
+
+	var handle = TwitterCollection.find( query, options );
+	handle.observeChanges( { added : onAdd } );
+
+	console.log( "* End (observeData)\n\n");
+	return handle;
+}
+
+newUpdateData = function() {
+	console.log( "* Data updater");
+
 	var start = new Date( now() - HistogramBins * Session.get( "CurrentInterval" ) );
 
 	//
@@ -17,86 +36,51 @@ newUpdateData = function() {
 	if( _.isDate( start ) == false ) { return; }
 
 
-	if( lastDepth != depth ) {
+	var names = reactiveUserSelectedNames.get();
+	var depth = Session.get( "CurrentDepth" );
 
-		//
-		// We no longer need to listening to changes to any of the current names
-		//
-		_.each( handlers, function( value, key ) { value.stop(); } );
 
-		//
-		// If the current depth differs from previous,
-		// then we must retrieve data from scratch
-		//
-		data = {};
-		plots = {};
-		handlers = {};
-		lastDepth = depth;
+	//
+	// Build the list of names that we will work with
+	// We will subscribe only to names that have not been yet subscribed to
+	// 
+	var nameDepthList = [];
+	_.each( names, function( name ) {
+		var key = twitterHandleDepthPair( name, depth );
+		if( _.has( data, key ) == false ) {
+			nameDepthList.push( key );	
+		}
+	} );
 
-	} else {
 
-		//
-		// Step I: Stop listening to changes of some of the already retrieved names
-		//
-		_.each( data, function( value, key ) {
-			if( contains( names, key ) == false ) {
+	//
+	// Delete unused data
+	//
+	_.each( data, function( datum, nameDepth ) {
+		if( _.has( nameDepthList, nameDepth ) == false ) {
+			delete data[ nameDepth ];
+			delete plots[ nameDepth ];
+		}
+	} );
 
-				//
-				// Stop listening
-				// 
-				handlers[ key ].stop();
-
-				// 
-				// delete unused data
-				//
-				delete data[ key ];
-				delete plots[ key ];
-				delete handlers[ key ];
-			}
-		} );
-
-		//
-		// Step II: remove names that do not need to be loaded
-		//
-		names = _.filter( names, function( name ) {
-			return _.has( data, name ) == false;
-		} );
-	
-	}
-
-	console.log( "* dataUpdater:" ); 
-	console.log( "\t* Missing data for the following names:", names )
-	console.log( "\t* Current depth:", depth );
 
 	//
 	// Observing changes
 	// 
-	_.each( names, function( name ) { 
+	_.each( nameDepthList, function( nameDepth ) { 
+			
+			var twitterHandle = nameDepth.substring( 0, nameDepth.indexOf( ":" ) );
 
-		var ready = Session.get( "sub:ready:" + NameToTwitterID[ name ] + ":" + depth );
+			plots[ nameDepth ] = Plot();
+			data[ nameDepth ] = [];
+			
+			function onAdd( id, summary ) {
+				data[ nameDepth ].push( summary );
+			}
 
-		console.log( "\t* Name:", "sub:ready:" + NameToTwitterID[ name ] + ":" + depth );
-		console.log( "\t\t* Is subscription ready?:", ready );
-
-		if( ready == true ) {
-
-			var query = { 
-				depth : depth,
-				twitter_handle : NameToTwitterID[ name ],
-				date : { $gte: +start }
-			};
-			var options = {
-				fields : {
-					depth : false,
-					twitter_handle : false,
-				}
-			};		
-
-			plots[ name ] = Plot();
-			console.log( "\t* Querying params", query, options );			
-			data[ name ] = TwitterCollection.find( query, options );
-			Session.set( "tweets:" + name, 0 );
-		}
+			Meteor.defer( function() {
+				observeData( twitterHandle, depth, start, onAdd );
+			} );
 	} );
 
 	console.log( "* Session keys:", Session.keys );
