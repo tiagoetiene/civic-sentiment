@@ -1,3 +1,7 @@
+twitterHandleDepthPair = function( name, depth ) {
+	return NameToTwitterID[ name ] + ":" + depth;
+}
+
 getPast = function( ref, milliseconds ) {
 	return new Date(ref.valueOf() + milliseconds);
 }
