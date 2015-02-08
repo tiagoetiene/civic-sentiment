@@ -1,71 +1,41 @@
 <template name="twitter">
-	<a href="https://twitter.com/tiagoetiene" class="twitter-follow-button" data-show-count="true">Follow @tiagoetiene</a>
+	<a href="https://twitter.com/tiagoetiene" class="twitter-follow-button" data-show-count="true">@tiagoetiene</a>
 </template>
 <template name="about">
 <div id="about" class="site-wrapper explanation-image" >
 	<div class="site-wrapper-inner">
 		<div class="cover-container">
 			<div class="inner cover">
-				<h1> {{i18n "aboutHeadline"}} </h1>
+
+				<h1> About Civic Sentiment </h1>
+
 				<p class="lead">
-					{{i18n "aboutLeadParagraph"}}
+					The idea for this web app was born during the <a href="http://www.rjionline.org/hackathon" target="_blank"> Social Journalism Hackaton</a> promoted by the <a href="http://www.rjionline.org" target="_blank">Reynolds Journalism Institute</a>. The theme of the event was <em>Hack the Future of Journalism</em>. Our team - Kristen Nevious, Deepesh Kuruppath, Lorraine Dechter, Amy Eaton, and Tiago Etiene - presented an idea for a website that tracks what people say about candidates on the web - in the same way companies track how people react to their brand on social media. As more and more people choose to express their opinions online, the information contained on social media becomes a valuable indicator of what people think about candidates in a given moment. <a href="http://challengepost.com/software/civic-sentiment" target="_blank">Read more.</a>
 				</p>
+
+				<p>
+				Developed by <a href="http://www.tiagoetiene.net" target="_blank">Tiago Etiene</a> 
+				<br/>{{> twitter}}.
+				</p>
+
+				<p>
+				This web app was developed with 
+				<a href="https://dev.twitter.com" target="_blank" >Twitter API</a>, 
+				<a href="https://www.meteor.com" target="_blank">Meteor</a>, 
+				<a href="http://www.mongodb.org/" target="_blank">mongoDB</a>, 
+				<a href="http://d3js.org/" target="_blank">D3</a>, 
+				and <a href="https://github.com/tiagoetiene/chom" target="_blank">chom</a>. 
+				</p>
+
+				<p> 
 				
-				<div class="row" >
-					<div class="col-md-3">
-						<img src="./resource/about_etiene.jpg" width="100%"/>
-					</div>
-					<div class="col-md-9">
-						<p id="aboutEtiene" class="lead">
-							{{{i18n "bio.etiene"}}}
-							<br/>{{> twitter}} 
-						</p>
-					</div>
-				</div>
-				<div class="row" >
-					<div class="col-md-3">
-						<img src="./resource/black.jpg" width="100%"/>
-					</div>
-					<div class="col-md-9">
-						<p class="lead">
-							{{{i18n "bio.kristen"}}}
-							<br/>
-						</p>
-					</div>
-				</div>
-				<div class="row" >
-					<div class="col-md-3">
-						<img src="./resource/black.jpg" width="100%"/>
-					</div>
-					<div class="col-md-9">
-						<p class="lead">
-							{{{i18n "bio.deepesh"}}}
-							<br/>
-						</p>
-					</div>
-				</div>
-				<div class="row" >
-					<div class="col-md-3">
-						<img src="./resource/black.jpg" width="100%"/>
-					</div>
-					<div class="col-md-9">
-						<p class="lead">
-							{{{i18n "bio.lorraine"}}}
-							<br/>
-						</p>
-					</div>
-				</div>
-				<div class="row" >
-					<div class="col-md-3">
-						<img src="./resource/black.jpg" width="100%"/>
-					</div>
-					<div class="col-md-9">
-						<p class="lead">
-							{{{i18n "bio.amy"}}}
-							<br/>
-						</p>
-					</div>
-				</div>
+				</p>
+
+				<p> 
+				<a href="http://thenounproject.com/moshiah/" target="_blank">Benjamin Harlow</a> designed both <img src="resource/republican.svg" style="height:20px;"/> and <img src="resource/democrat.svg" style="height:20px;" /> icons.
+				</p>
+
+
 			</div>
 		</div>
 	</div>
