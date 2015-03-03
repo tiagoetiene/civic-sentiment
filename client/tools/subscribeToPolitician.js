@@ -19,8 +19,17 @@ subscribeToUserSelectedPoliticians = function( ) {
 
 
 	//
+	//
+	//
+	var nameDepthAll = [];
+	_.each( names, function( name ) {
+		nameDepthAll.push( twitterHandleDepthPair( name, depth ) ); 
+	} );
+
+	//
 	// Build the list of names that we will work with
 	// We will subscribe only to names that have not been yet subscribed to
+	// A subscription is identified by concatenating "@screen_name + depth"
 	// 
 	var nameDepthList = [];
 	_.each( names, function( name ) {
@@ -35,8 +44,9 @@ subscribeToUserSelectedPoliticians = function( ) {
 	// Unsubscribe to some of the current subscriptions
 	//
 	_.each( subscriptionHandleList, function( handle, nameDepth ) {
-		if( _.has( nameDepthList, nameDepth ) == false ) {
-			// handle.stop();
+		if( _.contains( nameDepthAll, nameDepth ) == false ) {
+			console.log( "\t* deleting handle", nameDepth )
+			handle.stop();
 			delete subscriptionHandleList[ nameDepth ];
 		}
 	} );
