@@ -75,7 +75,7 @@ Template.OptionT.helpers({
 Template.OptionT.helpers( {
 	name : function() {
 		// return this["person/name"].replace(/ *\[.*\]/, "");
-		NameToTwitterID[ this["person/name"] ] = "@"+ this["person/twitterid"].toLowerCase();
+		NameToTwitterID[ this["person/name"] ] = this["person/twitterid"].toLowerCase();
 		return this["person/name"];
 	}
 });

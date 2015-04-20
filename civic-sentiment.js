@@ -142,7 +142,7 @@ if (Meteor.isServer) {
 		//
 		// Twitter identifier
 		//
-		var handle = "@" + politician["person/twitterid"].toLowerCase();
+		var handle = politician["person/twitterid"].toLowerCase();
 
 		//
 		// Publishing the date for each politician 
