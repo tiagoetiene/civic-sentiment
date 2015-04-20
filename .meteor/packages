@@ -11,9 +11,6 @@ mizzao:bootstrap-3
 mrt:bootstrap-select
 spiderable
 iron:router
-accounts-ui
-accounts-twitter
-accounts-facebook
 reactive-var
 
 underscore
