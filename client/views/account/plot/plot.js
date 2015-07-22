@@ -3,7 +3,7 @@ Template.PlotT.created =  function() {
 
 Template.PlotT.helpers({
 	plot : function() {
-		var name = this["person/name"];
+		var name = this["person"]["name"];
 		var depth = Session.get( "CurrentDepth" );
 		var nameDepth = twitterHandleDepthPair( name, depth );
 

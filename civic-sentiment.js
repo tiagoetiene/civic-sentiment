@@ -133,16 +133,18 @@ if (Meteor.isServer) {
 
 	Meteor.startup(function () { }); 
 
-	var nonEmptyTwitterIds = { "person/twitterid" : { $ne : "" } };
-	var options = { limit : 600, fields : {  "person/twitterid" : true,  } };
+	var nonEmptyTwitterIds = { "person.twitterid" : { $ne : null } };
+	var options = { limit : 600, fields : {  "person.twitterid" : true,  } };
 	var politicians = AccountsCollection.find( nonEmptyTwitterIds, options ).fetch();
 
 	_.each( politicians, function( politician ) {
 
+		console.log( politician );
+
 		//
 		// Twitter identifier
 		//
-		var handle = politician["person/twitterid"].toLowerCase();
+		var handle = politician["person"]["twitterid"].toLowerCase();
 
 		//
 		// Publishing the date for each politician 
@@ -169,9 +171,9 @@ if (Meteor.isServer) {
 	Meteor.publish("accounts", function() {
 		var options = { 
 				limit : 600, fields : { 
-				"person/name" : true, 
-				"person/twitterid" : true, 
-				"person/firstname" : true, 
+				"person.name" : true, 
+				"person.twitterid" : true, 
+				"person.firstname" : true, 
 				"party" : true, 
 				"state" : true, 
 			}

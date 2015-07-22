@@ -20,8 +20,8 @@ Template.OptionsT.helpers({
 	},
 	politiciansPerState : function() {
 		var options = { 
-			sort : {"person/name" : 1}, 
-			fields : { "person/name" : true, "person/twitterid" : true },
+			sort : {"person.name" : 1}, 
+			fields : { "person.name" : true, "person.twitterid" : true },
 		};
 		return AccountsCollection.find( { "state" : String( this ) }, options).fetch();
 	}
@@ -63,7 +63,7 @@ Template.OptionT.rendered = function() {
 
 Template.OptionT.helpers({
 	partyIcon : function() {
-		var name = this["person/name"];
+		var name = this["person"]["name"];
 		if( name.search(/\[D.*\]/ ) != -1 )
 			return "Dem";
 		else if( name.search(/\[R.*\]/ ) != -1 )
@@ -75,7 +75,7 @@ Template.OptionT.helpers({
 Template.OptionT.helpers( {
 	name : function() {
 		// return this["person/name"].replace(/ *\[.*\]/, "");
-		NameToTwitterID[ this["person/name"] ] = this["person/twitterid"].toLowerCase();
-		return this["person/name"];
+		NameToTwitterID[ this["person"]["name"] ] = this["person"]["twitterid"].toLowerCase();
+		return this["person"]["name"];
 	}
 });

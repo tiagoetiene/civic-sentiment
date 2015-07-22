@@ -1,6 +1,6 @@
 Template.CandidateNameT.helpers({
 	position : function() {
-		var name = this["person/name"];
+		var name = this["person"]["name"];
 		if( name.match( /Sen\./g ) ) {
 			return "Senator";
 		} else if ( name.match( /Rep\./g ) ) {
@@ -15,19 +15,19 @@ Template.CandidateNameT.helpers({
 	name : function() {
 		var cleanNameRegex = /Sen.|Rep.|Vice President|President/;
 		var cleanParty = /\[.+\]/;
-		return this["person/name"].replace( cleanNameRegex, "" )
+		return this["person"]["name"].replace( cleanNameRegex, "" )
 														  .replace( cleanParty, "" ) ;
 	},
 	color : function() {
 		return "black";
 	},
 	tweets_count : function() {
-		var name = this["person/name"];
+		var name = this["person"]["name"];
 		var depth = Session.get( "CurrentDepth" );
 		return Session.get( "tweets:" + twitterHandleDepthPair( name, depth ) );
 	},
 	party_icon : function() {
-		var name = this["person/name"];
+		var name = this["person"]["name"];
 		if ( name.match( /\[D.*\]/ ) ) {
 			return "resource/democrat.svg";
 		} else if ( name.match( /\[R.*\]/ ) ) {
