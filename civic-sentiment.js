@@ -139,8 +139,6 @@ if (Meteor.isServer) {
 
 	_.each( politicians, function( politician ) {
 
-		console.log( politician );
-
 		//
 		// Twitter identifier
 		//
@@ -160,7 +158,7 @@ if (Meteor.isServer) {
 						$gte : +(+(new Date())- histogramBins *  interval) 
 					} 
 				};
-				var options = { fields : { "expire" : 0, } };
+				var options = { fields : { "expireAt" : 0 } };
 				var cursor = TwitterCollection.find( query, options );
 	  		return cursor;
 			} );
