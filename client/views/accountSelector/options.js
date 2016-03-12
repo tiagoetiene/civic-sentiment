@@ -65,9 +65,11 @@ Template.OptionT.helpers({
 	partyIcon : function() {
 		var name = this["person"]["name"];
 		if( name.search(/\[D.*\]/ ) != -1 )
-			return "Dem";
+			return "Democrat";
 		else if( name.search(/\[R.*\]/ ) != -1 )
-			return "Rep";
+			return "Republican";
+		else if( name.search(/\[I.*\]/ ) != -1 )
+			return "Independent";
 		return "";
 	}
 });

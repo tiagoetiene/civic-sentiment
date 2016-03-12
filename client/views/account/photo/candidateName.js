@@ -1,6 +1,19 @@
 Template.CandidateNameT.helpers({
 	position : function() {
 		var name = this["person"]["name"];
+
+		if ( name.match( /Hillary Clinton/g ) ) {
+			return "Presidential Candidate";
+		} else if ( name.match( /Donald Trump/g ) ) {
+			return "Presidential Candidate";
+		} else if ( name.match( /Bernie/g ) ) {
+			return "Presidential Candidate";
+		} else if ( name.match( /Rubio/g ) ) {
+			return "Presidential Candidate";
+		} else if ( name.match( /Ted Cruz/g ) ) {
+			return "Presidential Candidate";
+		} 
+
 		if( name.match( /Sen\./g ) ) {
 			return "Senator";
 		} else if ( name.match( /Rep\./g ) ) {
@@ -9,11 +22,11 @@ Template.CandidateNameT.helpers({
 			return "Vice President";
 		} else if ( name.match( /President/g ) ) {
 			return "President";
-		} 
+		}
 		return "";
 	},
 	name : function() {
-		var cleanNameRegex = /Sen.|Rep.|Vice President|President/;
+		var cleanNameRegex = /Sen.|Rep.|Vice President|President|Secstate/;
 		var cleanParty = /\[.+\]/;
 		return this["person"]["name"].replace( cleanNameRegex, "" )
 														  .replace( cleanParty, "" ) ;
@@ -32,6 +45,8 @@ Template.CandidateNameT.helpers({
 			return "resource/democrat.svg";
 		} else if ( name.match( /\[R.*\]/ ) ) {
 			return "resource/republican.svg";
+		} else if ( name.match( /Hillary Clinton/ ) ) {
+			return "resource/democrat.svg";
 		}
 		return "";
 	}
