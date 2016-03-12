@@ -12,6 +12,8 @@ Template.CandidateNameT.helpers({
 			return "Presidential Candidate";
 		} else if ( name.match( /Ted Cruz/g ) ) {
 			return "Presidential Candidate";
+		} else if ( name.match( /John Kasich/g ) ) {
+			return "Presidential Candidate";
 		} 
 
 		if( name.match( /Sen\./g ) ) {
