@@ -33,7 +33,7 @@ Template.PastTimeT.rendered = function() {
 	});
 	$("#past8Hour").change( function(e) { 
 
-		var milliseconds = getTimeFrame("past 8 hours");
+		var milliseconds = getTimeFrame("past 5 hours");
 		var depthIntervalPair = findDepthAndInterval( Math.abs( milliseconds ) / HistogramBins  );
 
 		Session.set( "CurrentDepth", depthIntervalPair.depth-1 );
