@@ -28,7 +28,7 @@ Template.CandidateNameT.helpers({
 		return "";
 	},
 	name : function() {
-		var cleanNameRegex = /Sen.|Rep.|Vice President|President|Secstate/;
+		var cleanNameRegex = /Sen.|Rep.|Vice President|President/;
 		var cleanParty = /\[.+\]/;
 		return this["person"]["name"].replace( cleanNameRegex, "" )
 														  .replace( cleanParty, "" ) ;
