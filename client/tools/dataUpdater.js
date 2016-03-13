@@ -1,5 +1,6 @@
-data = { };
+data = { }
 plots = { }
+visited = { }
 
 HistogramBins = 100;
 
@@ -68,19 +69,21 @@ newUpdateData = function() {
 	// Observing changes
 	// 
 	_.each( nameDepthList, function( nameDepth ) { 
-			
 			var twitterHandle = nameDepth.substring( 0, nameDepth.indexOf( ":" ) );
-
-			plots[ nameDepth ] = Plot();
-			data[ nameDepth ] = [];
 			
+			plots[ nameDepth ] = Plot()
+			data[ nameDepth ] = []
+			visited[ nameDepth ] = {}
+
 			function onAdd( id, summary ) {
-				data[ nameDepth ].push( summary );
+				if(_.has(visited[ nameDepth ], id) == false){
+					visited[ nameDepth ][ id ] = true;
+					data[ nameDepth ].push( summary );
+				}
+				
 			}
 
-			Meteor.defer( function() {
-				observeData( twitterHandle, depth, start, onAdd );
-			} );
+			Meteor.defer(()=>observeData( twitterHandle, depth, start, onAdd ))
 	} );
 
 	console.log( "* Session keys:", Session.keys );
