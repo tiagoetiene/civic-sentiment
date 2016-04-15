@@ -3,17 +3,17 @@ Template.CandidateNameT.helpers({
 		var name = this["person"]["name"];
 
 		if ( name.match( /Hillary Clinton/g ) ) {
-			return "Presidential Candidate";
+			return "Candidate for Democratic Nomination";
 		} else if ( name.match( /Donald Trump/g ) ) {
-			return "Presidential Candidate";
+			return "Candidate for Republican Nomination";
 		} else if ( name.match( /Bernie/g ) ) {
-			return "Presidential Candidate";
+			return "Candidate for Democratic Nomination";
 		} else if ( name.match( /Rubio/g ) ) {
-			return "Presidential Candidate";
+			return "Former Candidate for Republican Nomination";
 		} else if ( name.match( /Ted Cruz/g ) ) {
-			return "Presidential Candidate";
+			return "Candidate for Republican Nomination";
 		} else if ( name.match( /John Kasich/g ) ) {
-			return "Presidential Candidate";
+			return "Candidate for Republican Nomination";
 		} 
 
 		if( name.match( /Sen\./g ) ) {
