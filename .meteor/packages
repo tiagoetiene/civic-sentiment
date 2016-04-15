@@ -14,5 +14,6 @@ iron:router
 reactive-var
 
 underscore
-standard-minifiers
 ecmascript
+standard-minifier-css
+standard-minifier-js
